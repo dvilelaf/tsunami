@@ -26,6 +26,7 @@
         "skill/valory/registration_abci/0.1.0": "bafybeif3ln6eg53ebrfe6uicjew4uqp2ynyrcxkw5wi4jm3ixqv3ykte4a",
         "skill/valory/abstract_round_abci/0.1.0": "bafybeigjrepaqpb3m7zunmt4hryos4vto4yyj3u6iyofdb2fotwho3bqvm",
         "skill/valory/termination_abci/0.1.0": "bafybeie6h7j4hyhgj2wte64n3xyudxq4pgqcqjmslxi5tff4mb6vce2tay",
-        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeid57tozt5f3kgzmu22nbr3c3oy4p7bi2bu66rqsgnlylq6xgh2ixe"
+        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeid57tozt5f3kgzmu22nbr3c3oy4p7bi2bu66rqsgnlylq6xgh2ixe",
+        "skill/valory/twitter_write_abci/0.1.0": "bafybeia6aspguv7elqa4c7apwqoegk37zxunrdprvwrwgmsgume6k5wtja"
     }
 }

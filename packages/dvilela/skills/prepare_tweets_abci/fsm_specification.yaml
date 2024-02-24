@@ -1,0 +1,21 @@
+alphabet_in:
+- DONE
+- ERROR
+- NO_MAJORITY
+- RETRY
+- ROUND_TIMEOUT
+default_start_state: PrepareTweetsRound
+final_states:
+- FinishedPrepareTweetsRound
+label: PrepareTweetsAbciApp
+start_states:
+- PrepareTweetsRound
+states:
+- PrepareTweetsRound
+- FinishedPrepareTweetsRound
+transition_func:
+    (PrepareTweetsRound, DONE): FinishedPrepareTweetsRound
+    (PrepareTweetsRound, ERROR): PrepareTweetsRound
+    (PrepareTweetsRound, NO_MAJORITY): PrepareTweetsRound
+    (PrepareTweetsRound, RETRY): PrepareTweetsRound
+    (PrepareTweetsRound, ROUND_TIMEOUT): PrepareTweetsRound
