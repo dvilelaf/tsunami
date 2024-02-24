@@ -20,3 +20,7 @@ open-autonomy = "==0.14.6"
 typing_extensions = ">=3.10.0.2"
 toml = "==0.10.2"
 tomte = {version = "==0.2.15", extras = ["cli", "tests"]}
+open-aea = "1.48.0"
+black = "^24.2.0"
+isort = "^5.13.2"
+peewee = "3.17.1"

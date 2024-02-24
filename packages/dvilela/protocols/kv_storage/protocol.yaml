@@ -1,0 +1,20 @@
+name: kv_storage
+author: dvilela
+version: 0.1.0
+protocol_specification_id: dvilela/kv_storage:0.1.0
+type: protocol
+description: A protocol for simple key-value storage.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeidnb4jujk2tqagmziivf7frpzyolkjpqzmbn54fd6yq4dqjsj3dge
+  dialogues.py: bafybeia6vugyp7lfxs3l5ikgtnkobmpajjweksiibixtuyn6fftvvusmru
+  kv_storage.proto: bafybeigfvurb36yd4go7e3v7566fdcbjmsqm7gixskqsttcvc4l52xsnqi
+  kv_storage_pb2.py: bafybeiajebeoh7igjhbvhi7p53gfj3gulyk5lfrhe5i7v3gdaqn3xlyu2y
+  message.py: bafybeidxegmkh4pu755fgv2pg7pt4yciiykx26egpt3vik4yaonijh3gou
+  serialization.py: bafybeifgf3plwznsjspzn6yrrt7nqu3pdhlwot5zzfydm6irqknsv7uicq
+  tests/test_kv_storage_dialogues.py: bafybeiac5hzzahawhdqugu4ubwxlnbsjq4jlyiqi6x25oywpelma7zgnf4
+  tests/test_kv_storage_messages.py: bafybeigmkm4jn32r2ypw5c3s2q4ujlwwp4ej25dvytcfcklwmkovcirb3q
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

@@ -1,0 +1,24 @@
+name: kv_store
+author: dvilela
+version: 0.1.0
+type: connection
+description: Connection for interacting with a key-value store.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
+  connection.py: bafybeigyjxqsyu3e7x6dhvjlmb4xvdkikxkts6ik5v7thwpq5i2blixvta
+  readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- dvilela/kv_storage:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
+class_name: KvStoreConnection
+config: []
+excluded_protocols: []
+restricted_to_protocols: []
+dependencies:
+  peewee:
+    version: ==3.17.1
+is_abstract: false
+cert_requests: []
