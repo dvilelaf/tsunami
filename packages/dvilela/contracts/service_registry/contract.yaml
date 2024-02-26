@@ -1,0 +1,19 @@
+name: service_registry
+author: dvilela
+version: 0.1.0
+type: contract
+description: service registry contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
+  build/service_registry.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
+  contract.py: bafybeib52j57zi2tsm7g4bnv75nxdbmbmsxmf7coxw3cyzgrdxzctlzgmy
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: ServiceRegistryContract
+contract_interface_paths:
+  ethereum: build/service_registry.json
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.48.0

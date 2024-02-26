@@ -20,7 +20,7 @@
 """This module contains the transaction payloads of the PrepareTweetsAbciApp."""
 
 from dataclasses import dataclass
-
+from typing import List, Dict
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
@@ -28,5 +28,5 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class PrepareTweetsPayload(BaseTxPayload):
     """Represent a transaction payload for the PrepareTweetsRound."""
 
-    # TODO: define your attributes
+    write_data: List[Dict]
 

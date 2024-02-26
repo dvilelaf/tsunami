@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.dvilela.skills.prepare_tweets_abci.rounds import PrepareTweetsAbciApp
-
+from typing import Any
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
@@ -36,6 +36,17 @@ class SharedState(BaseSharedState):
     abci_app_cls = PrepareTweetsAbciApp
 
 
-Params = BaseParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+
+
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+
+        self.twitter_credentials = self._ensure(
+            "twitter_credentials", kwargs, int
+        )
+        super().__init__(*args, **kwargs)

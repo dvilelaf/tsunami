@@ -20,16 +20,18 @@
 """This package contains the rounds of PrepareTweetsAbciApp."""
 
 from enum import Enum
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import cast, Dict, FrozenSet, Set, Mapping
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
     DegenerateRound,
     EventToTimeout,
+    CollectSameUntilThresholdRound,
+    get_name,
+    CollectionRound
 )
 
 from packages.dvilela.skills.prepare_tweets_abci.payloads import (
@@ -43,7 +45,6 @@ class Event(Enum):
     DONE = "done"
     ERROR = "error"
     NO_MAJORITY = "no_majority"
-    RETRY = "retry"
     ROUND_TIMEOUT = "round_timeout"
 
 
@@ -54,31 +55,29 @@ class SynchronizedData(BaseSynchronizedData):
     This data is replicated by the tendermint application.
     """
 
+    @property
+    def write_data(self) -> list:
+        """Get the write_stream_id."""
+        return cast(list, self.db.get_strict("write_data"))
 
-class PrepareTweetsRound(AbstractRound):
+    @property
+    def participant_to_tweet_preparation(self) -> Mapping[str, PrepareTweetsPayload]:
+        """Get the `participant_to_tweet_preparation`."""
+        serialized = self.db.get_strict("participant_to_tweet_preparation")
+        deserialized = CollectionRound.deserialize_collection(serialized)
+        return cast(Mapping[str, PrepareTweetsPayload], deserialized)
+
+
+class PrepareTweetsRound(CollectSameUntilThresholdRound):
     """PrepareTweetsRound"""
 
     payload_class = PrepareTweetsPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
-
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
-
-    def check_payload(self, payload: PrepareTweetsPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
-
-    def process_payload(self, payload: PrepareTweetsPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    none_event = Event.ERROR
+    selection_key = get_name(SynchronizedData.write_data)
+    collection_key = get_name(SynchronizedData.participant_to_tweet_preparation)
 
 
 class FinishedPrepareTweetsRound(DegenerateRound):
@@ -95,7 +94,6 @@ class PrepareTweetsAbciApp(AbciApp[Event]):
             Event.DONE: FinishedPrepareTweetsRound,
             Event.ERROR: PrepareTweetsRound,
             Event.NO_MAJORITY: PrepareTweetsRound,
-            Event.RETRY: PrepareTweetsRound,
             Event.ROUND_TIMEOUT: PrepareTweetsRound
         },
         FinishedPrepareTweetsRound: {}

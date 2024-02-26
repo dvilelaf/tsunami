@@ -126,6 +126,7 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
+      twitter_credentials: {}
     class_name: Params
   requests:
     args: {}
