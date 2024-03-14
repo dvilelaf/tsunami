@@ -14,7 +14,8 @@ connections: []
 protocols:
 - dvilela/kv_storage:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 class_name: KvStoreConnection
-config: []
+config:
+  db_path: null
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:

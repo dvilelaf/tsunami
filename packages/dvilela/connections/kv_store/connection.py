@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """Scaffold connection and channel."""
+from pathlib import Path
 from typing import Any, Callable, cast
 
 from aea.configurations.base import PublicId
@@ -9,18 +10,16 @@ from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
+from peewee import CharField, Model, SqliteDatabase
 
 from packages.dvilela.protocols.kv_storage.dialogues import KvStorageDialogue
 from packages.dvilela.protocols.kv_storage.dialogues import (
     KvStorageDialogues as BaseKvStorageDialogues,
 )
 from packages.dvilela.protocols.kv_storage.message import KvStorageMessage
-from peewee import Model
-from peewee import CharField, SqliteDatabase
-from pathlib import Path
+
 
 PUBLIC_ID = PublicId.from_str("valory/kv_store:0.1.0")
-DB_PATH = Path()
 
 
 db = SqliteDatabase(None)
@@ -98,6 +97,7 @@ class KvStoreConnection(BaseSyncConnection):
         """
         super().__init__(*args, **kwargs)
         self.dialogues = KvStorageDialogues(connection_id=PUBLIC_ID)
+        self.db_path = self.configuration.config.get("db_path")
 
     def main(self) -> None:
         """
@@ -135,16 +135,16 @@ class KvStoreConnection(BaseSyncConnection):
 
         if kv_storage_message.performative not in [
             KvStorageMessage.Performative.READ_REQUEST,
-            KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST
+            KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST,
         ]:
             self.logger.error(
                 f"Performative `{kv_storage_message.performative.value}` is not supported."
             )
             return
 
-        handler: Callable[[KvStorageMessage, KvStorageDialogue], KvStorageMessage] = getattr(
-            self, kv_storage_message.performative.value
-        )
+        handler: Callable[
+            [KvStorageMessage, KvStorageDialogue], KvStorageMessage
+        ] = getattr(self, kv_storage_message.performative.value)
         response = handler(kv_storage_message, dialogue)
         response_envelope = Envelope(
             to=envelope.sender,
@@ -180,7 +180,9 @@ class KvStoreConnection(BaseSyncConnection):
         """Write several key-value pairs."""
 
         with db.atomic():
-            Store.insert_many(message.data.items(), fields=[Store.key, Store.value]).execute()
+            Store.insert_many(
+                message.data.items(), fields=[Store.key, Store.value]
+            ).execute()
 
         return cast(
             KvStorageMessage,
@@ -192,7 +194,7 @@ class KvStoreConnection(BaseSyncConnection):
 
     def on_connect(self) -> None:
         """Set up the connection"""
-        db.init(DB_PATH)
+        db.init(self.db_path)
         db.connect()
         db.create_tables([Store])
 

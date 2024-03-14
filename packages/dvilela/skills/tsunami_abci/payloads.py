@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,15 +25,15 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class GetEventsPayload(BaseTxPayload):
-    """Represent a transaction payload for the GetEventsRound."""
+class PrepareTweetsPayload(BaseTxPayload):
+    """Represent a transaction payload for the PrepareTweetsRound."""
 
-    # TODO: define your attributes
+    tweets: list
 
 
 @dataclass(frozen=True)
 class PublishTweetsPayload(BaseTxPayload):
     """Represent a transaction payload for the PublishTweetsRound."""
 
-    # TODO: define your attributes
+    tweets: list
 

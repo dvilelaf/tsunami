@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,21 +20,21 @@
 """This package contains the rounds of TsunamiAbciApp."""
 
 from enum import Enum
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Dict, FrozenSet, cast, Optional, Set, Tuple
 
+from packages.dvilela.skills.tsunami_abci.payloads import (
+    PrepareTweetsPayload,
+    PublishTweetsPayload,
+)
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
+    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
     DegenerateRound,
     EventToTimeout,
-)
-
-from packages.dvilela.skills.tsunami_abci.payloads import (
-    GetEventsPayload,
-    PublishTweetsPayload,
+    get_name
 )
 
 
@@ -55,57 +55,33 @@ class SynchronizedData(BaseSynchronizedData):
     This data is replicated by the tendermint application.
     """
 
+    @property
+    def tweets(self) -> list:
+        """Get the tweets."""
+        return cast(list, self.db.get("tweets", []))
 
-class GetEventsRound(AbstractRound):
-    """GetEventsRound"""
 
-    payload_class = GetEventsPayload
-    payload_attribute = ""  # TODO: update
+class PrepareTweetsRound(CollectSameUntilThresholdRound):
+    """PrepareTweetsRound"""
+
+    payload_class = PrepareTweetsPayload
     synchronized_data_class = SynchronizedData
-
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
-
-    def check_payload(self, payload: GetEventsPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
-
-    def process_payload(self, payload: GetEventsPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_preparation)
+    selection_key = get_name(SynchronizedData.tweets)
 
 
-class PublishTweetsRound(AbstractRound):
+class PublishTweetsRound(CollectSameUntilThresholdRound):
     """PublishTweetsRound"""
 
     payload_class = PublishTweetsPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_publication)
+    selection_key = get_name(SynchronizedData.tweets)
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
-
-    def check_payload(self, payload: PublishTweetsPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
-
-    def process_payload(self, payload: PublishTweetsPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
 
 
 class FinishedPublishRound(DegenerateRound):
@@ -115,30 +91,30 @@ class FinishedPublishRound(DegenerateRound):
 class TsunamiAbciApp(AbciApp[Event]):
     """TsunamiAbciApp"""
 
-    initial_round_cls: AppState = GetEventsRound
-    initial_states: Set[AppState] = {GetEventsRound}
+    initial_round_cls: AppState = PrepareTweetsRound
+    initial_states: Set[AppState] = {PrepareTweetsRound}
     transition_function: AbciAppTransitionFunction = {
-        GetEventsRound: {
+        PrepareTweetsRound: {
             Event.DONE: PublishTweetsRound,
-            Event.ERROR: GetEventsRound,
-            Event.NO_MAJORITY: GetEventsRound,
-            Event.RETRY: GetEventsRound,
-            Event.ROUND_TIMEOUT: GetEventsRound
+            Event.ERROR: PrepareTweetsRound,
+            Event.NO_MAJORITY: PrepareTweetsRound,
+            Event.RETRY: PrepareTweetsRound,
+            Event.ROUND_TIMEOUT: PrepareTweetsRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,
             Event.ERROR: PublishTweetsRound,
             Event.NO_MAJORITY: PublishTweetsRound,
             Event.RETRY: PublishTweetsRound,
-            Event.ROUND_TIMEOUT: PublishTweetsRound
+            Event.ROUND_TIMEOUT: PublishTweetsRound,
         },
-        FinishedPublishRound: {}
+        FinishedPublishRound: {},
     }
     final_states: Set[AppState] = {FinishedPublishRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        GetEventsRound: [],
+        PrepareTweetsRound: [],
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedPublishRound: [],

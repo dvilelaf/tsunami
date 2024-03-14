@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 """This module contains the shared state for the abci skill of TsunamiAbciApp."""
 
+from packages.dvilela.skills.tsunami_abci.rounds import TsunamiAbciApp
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -27,7 +28,6 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.dvilela.skills.tsunami_abci.rounds import TsunamiAbciApp
 
 
 class SharedState(BaseSharedState):

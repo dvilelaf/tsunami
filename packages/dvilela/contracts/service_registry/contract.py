@@ -53,4 +53,7 @@ class ServiceRegistryContract(Contract):
             account=owner_address,
         )
 
-        return {"last_parsed_block": last_parsed_block, "create_service_events": create_service_events}
+        return {
+            "last_parsed_block": last_parsed_block,
+            "create_service_events": create_service_events,
+        }

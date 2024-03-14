@@ -7,6 +7,7 @@ from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -479,9 +480,9 @@ _KVSTORAGEMESSAGE_READ_REQUEST_PERFORMATIVE.containing_type = _KVSTORAGEMESSAGE
 _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE_DATAENTRY.containing_type = (
     _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE
 )
-_KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE.fields_by_name["data"].message_type = (
-    _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE_DATAENTRY
-)
+_KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE.fields_by_name[
+    "data"
+].message_type = _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE_DATAENTRY
 _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE.containing_type = _KVSTORAGEMESSAGE
 _KVSTORAGEMESSAGE_CREATE_OR_UPDATE_REQUEST_PERFORMATIVE_DATAENTRY.containing_type = (
     _KVSTORAGEMESSAGE_CREATE_OR_UPDATE_REQUEST_PERFORMATIVE
@@ -494,51 +495,51 @@ _KVSTORAGEMESSAGE_CREATE_OR_UPDATE_REQUEST_PERFORMATIVE.containing_type = (
 )
 _KVSTORAGEMESSAGE_SUCCESS_PERFORMATIVE.containing_type = _KVSTORAGEMESSAGE
 _KVSTORAGEMESSAGE_ERROR_PERFORMATIVE.containing_type = _KVSTORAGEMESSAGE
-_KVSTORAGEMESSAGE.fields_by_name["create_or_update_request"].message_type = (
-    _KVSTORAGEMESSAGE_CREATE_OR_UPDATE_REQUEST_PERFORMATIVE
-)
-_KVSTORAGEMESSAGE.fields_by_name["error"].message_type = (
-    _KVSTORAGEMESSAGE_ERROR_PERFORMATIVE
-)
-_KVSTORAGEMESSAGE.fields_by_name["read_request"].message_type = (
-    _KVSTORAGEMESSAGE_READ_REQUEST_PERFORMATIVE
-)
-_KVSTORAGEMESSAGE.fields_by_name["read_response"].message_type = (
-    _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE
-)
-_KVSTORAGEMESSAGE.fields_by_name["success"].message_type = (
-    _KVSTORAGEMESSAGE_SUCCESS_PERFORMATIVE
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "create_or_update_request"
+].message_type = _KVSTORAGEMESSAGE_CREATE_OR_UPDATE_REQUEST_PERFORMATIVE
+_KVSTORAGEMESSAGE.fields_by_name[
+    "error"
+].message_type = _KVSTORAGEMESSAGE_ERROR_PERFORMATIVE
+_KVSTORAGEMESSAGE.fields_by_name[
+    "read_request"
+].message_type = _KVSTORAGEMESSAGE_READ_REQUEST_PERFORMATIVE
+_KVSTORAGEMESSAGE.fields_by_name[
+    "read_response"
+].message_type = _KVSTORAGEMESSAGE_READ_RESPONSE_PERFORMATIVE
+_KVSTORAGEMESSAGE.fields_by_name[
+    "success"
+].message_type = _KVSTORAGEMESSAGE_SUCCESS_PERFORMATIVE
 _KVSTORAGEMESSAGE.oneofs_by_name["performative"].fields.append(
     _KVSTORAGEMESSAGE.fields_by_name["create_or_update_request"]
 )
-_KVSTORAGEMESSAGE.fields_by_name["create_or_update_request"].containing_oneof = (
-    _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "create_or_update_request"
+].containing_oneof = _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
 _KVSTORAGEMESSAGE.oneofs_by_name["performative"].fields.append(
     _KVSTORAGEMESSAGE.fields_by_name["error"]
 )
-_KVSTORAGEMESSAGE.fields_by_name["error"].containing_oneof = (
-    _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "error"
+].containing_oneof = _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
 _KVSTORAGEMESSAGE.oneofs_by_name["performative"].fields.append(
     _KVSTORAGEMESSAGE.fields_by_name["read_request"]
 )
-_KVSTORAGEMESSAGE.fields_by_name["read_request"].containing_oneof = (
-    _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "read_request"
+].containing_oneof = _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
 _KVSTORAGEMESSAGE.oneofs_by_name["performative"].fields.append(
     _KVSTORAGEMESSAGE.fields_by_name["read_response"]
 )
-_KVSTORAGEMESSAGE.fields_by_name["read_response"].containing_oneof = (
-    _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "read_response"
+].containing_oneof = _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
 _KVSTORAGEMESSAGE.oneofs_by_name["performative"].fields.append(
     _KVSTORAGEMESSAGE.fields_by_name["success"]
 )
-_KVSTORAGEMESSAGE.fields_by_name["success"].containing_oneof = (
-    _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
-)
+_KVSTORAGEMESSAGE.fields_by_name[
+    "success"
+].containing_oneof = _KVSTORAGEMESSAGE.oneofs_by_name["performative"]
 DESCRIPTOR.message_types_by_name["KvStorageMessage"] = _KVSTORAGEMESSAGE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
