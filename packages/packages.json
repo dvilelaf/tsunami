@@ -10,6 +10,7 @@
         "protocol/valory/ipfs/0.1.0": "bafybeiftxi2qhreewgsc5wevogi7yc5g6hbcbo4uiuaibauhv3nhfcdtvm",
         "protocol/valory/tendermint/0.1.0": "bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra",
         "protocol/valory/twitter/0.1.0": "bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4",
+        "protocol/valory/srr/0.1.0": "bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4",
         "contract/valory/service_registry/0.1.0": "bafybeiby5x4wfdywlenmoudbykdxohpq2nifqxfep5niqgxrjyrekyahzy",
         "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeie6ynnoavvk2fpbn426nlp32sxrj7pz5esgebtlezy4tmx5gjretm",
         "contract/valory/multisend/0.1.0": "bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y",
