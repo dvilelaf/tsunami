@@ -1,0 +1,19 @@
+name: kv_store
+author: dvilela
+version: 0.1.0
+protocol_specification_id: dvilela/kv_store:0.1.0
+type: protocol
+description: A protocol for simple key-value storage.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiaclv6zlc72yjdmif35eag3skp5orymdazqzutxfo3pxtovsr4jqy
+  __init__.py: bafybeiep5deijcglaywkm3y6spa7xtajklluh7mrvoyfj673vujg3mxbiq
+  dialogues.py: bafybeidcnrhbe6flwxqk7edawnj37ry7eeibombqau6oqt2lh6qzfk7gyq
+  kv_store.proto: bafybeiep2xzwwisio7woispucdp63qvjsi6oaprjfbnketyt5gh2xmw7vi
+  kv_store_pb2.py: bafybeic5dmwtfzx737eguytlvfkikjgz6sy6rnqplikiqc5zwtjjj4qsw4
+  message.py: bafybeibkwwkim4xgupy2xcdag62o6rx45xobkai543fzkmqkbhsi2ifyay
+  serialization.py: bafybeiboxagcjty7ktwnvvi2jhsal6ptgqkuy2gpdsxus2dfh7u2qleg4u
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

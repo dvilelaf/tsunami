@@ -19,8 +19,10 @@
 
 """This module contains the shared state for the abci skill of TsunamiAbciApp."""
 
+from typing import Any
+import json
 from packages.dvilela.skills.tsunami_abci.rounds import TsunamiAbciApp
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -36,6 +38,22 @@ class SharedState(BaseSharedState):
     abci_app_cls = TsunamiAbciApp
 
 
-Params = BaseParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+
+
+class RandomnessApi(ApiSpecs):
+    """A model that wraps ApiSpecs for randomness api specifications."""
+
+
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+        self.publish_twitter = self._ensure("publish_twitter", kwargs, bool)
+        self.publish_farcaster = self._ensure("publish_farcaster", kwargs, bool)
+        self.service_registry_address_ethereum = self._ensure("service_registry_address_ethereum", kwargs, str)
+        self.initial_block_ethereum = self._ensure("initial_block_ethereum", kwargs, int)
+        self.twitter_credentials = json.loads(self._ensure("twitter_credentials", kwargs, str))
+        super().__init__(*args, **kwargs)

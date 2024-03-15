@@ -78,4 +78,10 @@ common-checks-1:
 	tomte check-doc-links
 	tox -p -e check-hash -e check-packages -e check-doc-hashes
 
+.PHONY: tm
+tm:
+	rm -r ~/.tendermint
+	tendermint init
+	tendermint node --proxy_app=tcp://127.0.0.1:26658 --rpc.laddr=tcp://127.0.0.1:26657 --p2p.laddr=tcp://0.0.0.0:26656 --p2p.seeds= --consensus.create_empty_blocks=true
+
 v := $(shell pip -V | grep virtualenvs)

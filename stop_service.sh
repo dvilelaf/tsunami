@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/bin/bash
+
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 David Vilela Freire
@@ -17,14 +18,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the kv_storage protocol.
-
-It was created with protocol buffer compiler version `libprotoc 3.12.4` and aea protocol generator version `1.0.0`.
-"""
-
-from packages.dvilela.protocols.kv_storage.message import KvStorageMessage
-from packages.dvilela.protocols.kv_storage.serialization import KvStorageSerializer
-
-
-KvStorageMessage.serializer = KvStorageSerializer
+poetry run autonomy deploy stop --build-dir tsunami/abci_build; cd ..

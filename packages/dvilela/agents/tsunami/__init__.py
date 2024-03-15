@@ -17,23 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+"""Package for dvilela/tsunami agent."""
+from pathlib import Path
 
 
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
-
-
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
-
-    tweets: str
-
+PACKAGE_DIR = Path(__file__).parent

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 dvilela
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains kv_storage's message definition."""
+"""This module contains kv_store's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
 import logging
@@ -28,19 +28,19 @@ from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message  # type: ignore
 
 
-_default_logger = logging.getLogger("aea.packages.dvilela.protocols.kv_storage.message")
+_default_logger = logging.getLogger("aea.packages.dvilela.protocols.kv_store.message")
 
 DEFAULT_BODY_SIZE = 4
 
 
-class KvStorageMessage(Message):
+class KvStoreMessage(Message):
     """A protocol for simple key-value storage."""
 
-    protocol_id = PublicId.from_str("dvilela/kv_storage:0.1.0")
-    protocol_specification_id = PublicId.from_str("dvilela/kv_storage:0.1.0")
+    protocol_id = PublicId.from_str("dvilela/kv_store:0.1.0")
+    protocol_specification_id = PublicId.from_str("dvilela/kv_store:0.1.0")
 
     class Performative(Message.Performative):
-        """Performatives for the kv_storage protocol."""
+        """Performatives for the kv_store protocol."""
 
         CREATE_OR_UPDATE_REQUEST = "create_or_update_request"
         ERROR = "error"
@@ -81,7 +81,7 @@ class KvStorageMessage(Message):
         **kwargs: Any,
     ):
         """
-        Initialise an instance of KvStorageMessage.
+        Initialise an instance of KvStoreMessage.
 
         :param message_id: the message id.
         :param dialogue_reference: the dialogue reference.
@@ -93,7 +93,7 @@ class KvStorageMessage(Message):
             dialogue_reference=dialogue_reference,
             message_id=message_id,
             target=target,
-            performative=KvStorageMessage.Performative(performative),
+            performative=KvStoreMessage.Performative(performative),
             **kwargs,
         )
 
@@ -118,7 +118,7 @@ class KvStorageMessage(Message):
     def performative(self) -> Performative:  # type: ignore # noqa: F821
         """Get the performative of the message."""
         enforce(self.is_set("performative"), "performative is not set.")
-        return cast(KvStorageMessage.Performative, self.get("performative"))
+        return cast(KvStoreMessage.Performative, self.get("performative"))
 
     @property
     def target(self) -> int:
@@ -145,7 +145,7 @@ class KvStorageMessage(Message):
         return cast(str, self.get("message"))
 
     def _is_consistent(self) -> bool:
-        """Check that the message follows the kv_storage protocol."""
+        """Check that the message follows the kv_store protocol."""
         try:
             enforce(
                 isinstance(self.dialogue_reference, tuple),
@@ -181,7 +181,7 @@ class KvStorageMessage(Message):
             # Light Protocol Rule 2
             # Check correct performative
             enforce(
-                isinstance(self.performative, KvStorageMessage.Performative),
+                isinstance(self.performative, KvStoreMessage.Performative),
                 "Invalid 'performative'. Expected either of '{}'. Found '{}'.".format(
                     self.valid_performatives, self.performative
                 ),
@@ -190,7 +190,7 @@ class KvStorageMessage(Message):
             # Check correct contents
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
-            if self.performative == KvStorageMessage.Performative.READ_REQUEST:
+            if self.performative == KvStoreMessage.Performative.READ_REQUEST:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.keys, tuple),
@@ -202,7 +202,7 @@ class KvStorageMessage(Message):
                     all(isinstance(element, str) for element in self.keys),
                     "Invalid type for tuple elements in content 'keys'. Expected 'str'.",
                 )
-            elif self.performative == KvStorageMessage.Performative.READ_RESPONSE:
+            elif self.performative == KvStoreMessage.Performative.READ_RESPONSE:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.data, dict),
@@ -225,7 +225,7 @@ class KvStorageMessage(Message):
                     )
             elif (
                 self.performative
-                == KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST
+                == KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST
             ):
                 expected_nb_of_contents = 1
                 enforce(
@@ -247,7 +247,7 @@ class KvStorageMessage(Message):
                             type(value_of_data)
                         ),
                     )
-            elif self.performative == KvStorageMessage.Performative.SUCCESS:
+            elif self.performative == KvStoreMessage.Performative.SUCCESS:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.message, str),
@@ -255,7 +255,7 @@ class KvStorageMessage(Message):
                         type(self.message)
                     ),
                 )
-            elif self.performative == KvStorageMessage.Performative.ERROR:
+            elif self.performative == KvStoreMessage.Performative.ERROR:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.message, str),

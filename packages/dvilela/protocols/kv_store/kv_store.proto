@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package aea.dvilela.kv_storage.v0_1_0;
+package aea.dvilela.kv_store.v0_1_0;
 
-message KvStorageMessage{
+message KvStoreMessage{
 
   // Performatives and contents
   message Read_Request_Performative{

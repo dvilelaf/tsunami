@@ -20,6 +20,7 @@
 """This module contains the class to connect to the wveolas contract."""
 import logging
 from typing import Optional
+from web3.types import BlockIdentifier
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -27,7 +28,7 @@ from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
 
 
-PUBLIC_ID = PublicId.from_str("valory/service_registry:0.1.0")
+PUBLIC_ID = PublicId.from_str("dvilela/service_registry:0.1.0")
 
 _logger = logging.getLogger(
     f"aea.packages.{PUBLIC_ID.author}.contracts.{PUBLIC_ID.name}.contract"
@@ -41,19 +42,57 @@ class ServiceRegistryContract(Contract):
     contract_id = PUBLIC_ID
 
     @classmethod
-    def get_create_events(
-        cls, ledger_api: EthereumApi, contract_address: str, from_block: int
+    def get_events(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        event_name: str,
+        from_block: BlockIdentifier = "earliest",
+        to_block: BlockIdentifier = "latest",
     ) -> Optional[JSONLike]:
-        """Get CreateService events."""
+        """Get events."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
 
-        create_service_events = ledger_api.contract_method_call(
-            contract_instance=contract_instance,
-            method_name="getVotes",
-            account=owner_address,
+        # Avoid parsing too many blocks at a time. This might take too long and
+        # the connection could time out.
+        MAX_BLOCKS = 300000
+
+        to_block = (
+            ledger_api.api.eth.get_block_number() - 1 if to_block == "latest" else to_block
+        )
+        ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
+
+        # Event loop
+        event = getattr(contract_instance.events, event_name)
+        events = []
+        for i in range(len(ranges) - 1):
+            from_block = ranges[i]
+            to_block = ranges[i + 1]
+
+            new_events = event.create_filter(
+                fromBlock=from_block,  # exclusive
+                toBlock=to_block,  # inclusive
+            ).get_all_entries()  # limited to 10k entries for now: https://github.com/valory-xyz/contribution-service/issues/13
+
+            events += new_events
+
+        return dict(
+            events=events,
+            last_block=int(to_block),
         )
 
-        return {
-            "last_parsed_block": last_parsed_block,
-            "create_service_events": create_service_events,
-        }
+
+    @classmethod
+    def get_token_uri(
+        cls, ledger_api: EthereumApi, contract_address: str, unit_id: int
+    ) -> Optional[JSONLike]:
+        """Get events."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+
+        result = ledger_api.contract_method_call(
+            contract_instance=contract_instance,
+            method_name="tokenURI",
+            unitId=unit_id,
+        )
+
+        return {"result": result}

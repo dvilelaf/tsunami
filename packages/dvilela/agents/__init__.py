@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 David Vilela Freire
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,23 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
-
-
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
-
-    tweets: str
-
+"""Agents authored by 'dvilela'."""

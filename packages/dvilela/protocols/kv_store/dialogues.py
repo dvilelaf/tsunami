@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 dvilela
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@
 # ------------------------------------------------------------------------------
 
 """
-This module contains the classes required for kv_storage dialogue management.
+This module contains the classes required for kv_store dialogue management.
 
-- KvStorageDialogue: The dialogue class maintains state of a dialogue and manages it.
-- KvStorageDialogues: The dialogues class keeps track of all dialogues.
+- KvStoreDialogue: The dialogue class maintains state of a dialogue and manages it.
+- KvStoreDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
@@ -31,48 +31,48 @@ from aea.common import Address
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
 
-from packages.dvilela.protocols.kv_storage.message import KvStorageMessage
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage
 
 
-class KvStorageDialogue(Dialogue):
-    """The kv_storage dialogue class maintains state of a dialogue and manages it."""
+class KvStoreDialogue(Dialogue):
+    """The kv_store dialogue class maintains state of a dialogue and manages it."""
 
     INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {
-            KvStorageMessage.Performative.READ_REQUEST,
-            KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST,
+            KvStoreMessage.Performative.READ_REQUEST,
+            KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST,
         }
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {
-            KvStorageMessage.Performative.READ_RESPONSE,
-            KvStorageMessage.Performative.SUCCESS,
-            KvStorageMessage.Performative.ERROR,
+            KvStoreMessage.Performative.READ_RESPONSE,
+            KvStoreMessage.Performative.SUCCESS,
+            KvStoreMessage.Performative.ERROR,
         }
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
-        KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST: frozenset(
-            {KvStorageMessage.Performative.SUCCESS, KvStorageMessage.Performative.ERROR}
+        KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST: frozenset(
+            {KvStoreMessage.Performative.SUCCESS, KvStoreMessage.Performative.ERROR}
         ),
-        KvStorageMessage.Performative.ERROR: frozenset(),
-        KvStorageMessage.Performative.READ_REQUEST: frozenset(
+        KvStoreMessage.Performative.ERROR: frozenset(),
+        KvStoreMessage.Performative.READ_REQUEST: frozenset(
             {
-                KvStorageMessage.Performative.READ_RESPONSE,
-                KvStorageMessage.Performative.ERROR,
+                KvStoreMessage.Performative.READ_RESPONSE,
+                KvStoreMessage.Performative.ERROR,
             }
         ),
-        KvStorageMessage.Performative.READ_RESPONSE: frozenset(),
-        KvStorageMessage.Performative.SUCCESS: frozenset(),
+        KvStoreMessage.Performative.READ_RESPONSE: frozenset(),
+        KvStoreMessage.Performative.SUCCESS: frozenset(),
     }
 
     class Role(Dialogue.Role):
-        """This class defines the agent's role in a kv_storage dialogue."""
+        """This class defines the agent's role in a kv_store dialogue."""
 
         CONNECTION = "connection"
         SKILL = "skill"
 
     class EndState(Dialogue.EndState):
-        """This class defines the end states of a kv_storage dialogue."""
+        """This class defines the end states of a kv_store dialogue."""
 
         SUCCESSFUL = 0
 
@@ -81,7 +81,7 @@ class KvStorageDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[KvStorageMessage] = KvStorageMessage,
+        message_class: Type[KvStoreMessage] = KvStoreMessage,
     ) -> None:
         """
         Initialize a dialogue.
@@ -100,10 +100,10 @@ class KvStorageDialogue(Dialogue):
         )
 
 
-class KvStorageDialogues(Dialogues, ABC):
-    """This class keeps track of all kv_storage dialogues."""
+class KvStoreDialogues(Dialogues, ABC):
+    """This class keeps track of all kv_store dialogues."""
 
-    END_STATES = frozenset({KvStorageDialogue.EndState.SUCCESSFUL})
+    END_STATES = frozenset({KvStoreDialogue.EndState.SUCCESSFUL})
 
     _keep_terminal_state_dialogues = False
 
@@ -111,7 +111,7 @@ class KvStorageDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[KvStorageDialogue] = KvStorageDialogue,
+        dialogue_class: Type[KvStoreDialogue] = KvStoreDialogue,
     ) -> None:
         """
         Initialize dialogues.
@@ -124,7 +124,7 @@ class KvStorageDialogues(Dialogues, ABC):
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
-            message_class=KvStorageMessage,
+            message_class=KvStoreMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )

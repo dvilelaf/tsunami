@@ -6,9 +6,9 @@ description: service registry contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
-  build/service_registry.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
-  contract.py: bafybeib52j57zi2tsm7g4bnv75nxdbmbmsxmf7coxw3cyzgrdxzctlzgmy
+  __init__.py: bafybeigamvqh7r3mwwqiof4szq423cbfqvnlv6jlz3rfa5u7p4tf7ov3bq
+  build/service_registry.json: bafybeidka5jw54xw6s6xzgsbu3hm7q7vqcrlw73w2b2novc55qrrocr6h4
+  contract.py: bafybeifguq3ilbumhntz2wnu2gfxykexpk2vl7r7ly3jsjwrgwgeshg25m
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: ServiceRegistryContract
@@ -16,4 +16,4 @@ contract_interface_paths:
   ethereum: build/service_registry.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.48.0
+    version: ==1.49.0

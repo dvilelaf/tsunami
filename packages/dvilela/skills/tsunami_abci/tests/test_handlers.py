@@ -17,23 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
+"""Test the handlers.py module of the Tsunami."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+import packages.dvilela.skills.tsunami_abci.handlers  # noqa
 
 
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
-
-
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
-
-    tweets: str
-
+def test_import() -> None:
+    """Test that the 'handlers.py' of the Tsunami can be imported."""

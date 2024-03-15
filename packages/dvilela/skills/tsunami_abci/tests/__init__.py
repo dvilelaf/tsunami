@@ -16,24 +16,3 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
-
-
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
-
-    tweets: str
-

@@ -17,23 +17,14 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
+"""
+This module contains the support resources for the kv_store protocol.
 
-from dataclasses import dataclass
+It was created with protocol buffer compiler version `libprotoc 26.0` and aea protocol generator version `1.0.0`.
+"""
 
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage
+from packages.dvilela.protocols.kv_store.serialization import KvStoreSerializer
 
 
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
-
-    tweets: str
-
+KvStoreMessage.serializer = KvStoreSerializer

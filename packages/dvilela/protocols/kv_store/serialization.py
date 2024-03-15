@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 dvilela
+#   Copyright 2024 David Vilela Freire
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Serialization module for kv_storage protocol."""
+"""Serialization module for kv_store protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import Any, Dict, cast
@@ -27,27 +27,25 @@ from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
 from aea.protocols.base import Message  # type: ignore
 from aea.protocols.base import Serializer  # type: ignore
 
-from packages.dvilela.protocols.kv_storage import kv_storage_pb2  # type: ignore
-from packages.dvilela.protocols.kv_storage.message import (  # type: ignore
-    KvStorageMessage,
-)
+from packages.dvilela.protocols.kv_store import kv_store_pb2  # type: ignore
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage  # type: ignore
 
 
-class KvStorageSerializer(Serializer):
-    """Serialization for the 'kv_storage' protocol."""
+class KvStoreSerializer(Serializer):
+    """Serialization for the 'kv_store' protocol."""
 
     @staticmethod
     def encode(msg: Message) -> bytes:
         """
-        Encode a 'KvStorage' message into bytes.
+        Encode a 'KvStore' message into bytes.
 
         :param msg: the message object.
         :return: the bytes.
         """
-        msg = cast(KvStorageMessage, msg)
+        msg = cast(KvStoreMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        kv_storage_msg = kv_storage_pb2.KvStorageMessage()  # type: ignore
+        kv_store_msg = kv_store_pb2.KvStoreMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -56,35 +54,35 @@ class KvStorageSerializer(Serializer):
         dialogue_message_pb.target = msg.target
 
         performative_id = msg.performative
-        if performative_id == KvStorageMessage.Performative.READ_REQUEST:
-            performative = kv_storage_pb2.KvStorageMessage.Read_Request_Performative()  # type: ignore
+        if performative_id == KvStoreMessage.Performative.READ_REQUEST:
+            performative = kv_store_pb2.KvStoreMessage.Read_Request_Performative()  # type: ignore
             keys = msg.keys
             performative.keys.extend(keys)
-            kv_storage_msg.read_request.CopyFrom(performative)
-        elif performative_id == KvStorageMessage.Performative.READ_RESPONSE:
-            performative = kv_storage_pb2.KvStorageMessage.Read_Response_Performative()  # type: ignore
+            kv_store_msg.read_request.CopyFrom(performative)
+        elif performative_id == KvStoreMessage.Performative.READ_RESPONSE:
+            performative = kv_store_pb2.KvStoreMessage.Read_Response_Performative()  # type: ignore
             data = msg.data
             performative.data.update(data)
-            kv_storage_msg.read_response.CopyFrom(performative)
-        elif performative_id == KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST:
-            performative = kv_storage_pb2.KvStorageMessage.Create_Or_Update_Request_Performative()  # type: ignore
+            kv_store_msg.read_response.CopyFrom(performative)
+        elif performative_id == KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST:
+            performative = kv_store_pb2.KvStoreMessage.Create_Or_Update_Request_Performative()  # type: ignore
             data = msg.data
             performative.data.update(data)
-            kv_storage_msg.create_or_update_request.CopyFrom(performative)
-        elif performative_id == KvStorageMessage.Performative.SUCCESS:
-            performative = kv_storage_pb2.KvStorageMessage.Success_Performative()  # type: ignore
+            kv_store_msg.create_or_update_request.CopyFrom(performative)
+        elif performative_id == KvStoreMessage.Performative.SUCCESS:
+            performative = kv_store_pb2.KvStoreMessage.Success_Performative()  # type: ignore
             message = msg.message
             performative.message = message
-            kv_storage_msg.success.CopyFrom(performative)
-        elif performative_id == KvStorageMessage.Performative.ERROR:
-            performative = kv_storage_pb2.KvStorageMessage.Error_Performative()  # type: ignore
+            kv_store_msg.success.CopyFrom(performative)
+        elif performative_id == KvStoreMessage.Performative.ERROR:
+            performative = kv_store_pb2.KvStoreMessage.Error_Performative()  # type: ignore
             message = msg.message
             performative.message = message
-            kv_storage_msg.error.CopyFrom(performative)
+            kv_store_msg.error.CopyFrom(performative)
         else:
             raise ValueError("Performative not valid: {}".format(performative_id))
 
-        dialogue_message_pb.content = kv_storage_msg.SerializeToString()
+        dialogue_message_pb.content = kv_store_msg.SerializeToString()
 
         message_pb.dialogue_message.CopyFrom(dialogue_message_pb)
         message_bytes = message_pb.SerializeToString()
@@ -93,13 +91,13 @@ class KvStorageSerializer(Serializer):
     @staticmethod
     def decode(obj: bytes) -> Message:
         """
-        Decode bytes into a 'KvStorage' message.
+        Decode bytes into a 'KvStore' message.
 
         :param obj: the bytes object.
-        :return: the 'KvStorage' message.
+        :return: the 'KvStore' message.
         """
         message_pb = ProtobufMessage()
-        kv_storage_pb = kv_storage_pb2.KvStorageMessage()  # type: ignore
+        kv_store_pb = kv_store_pb2.KvStoreMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (
@@ -108,32 +106,32 @@ class KvStorageSerializer(Serializer):
         )
         target = message_pb.dialogue_message.target
 
-        kv_storage_pb.ParseFromString(message_pb.dialogue_message.content)
-        performative = kv_storage_pb.WhichOneof("performative")
-        performative_id = KvStorageMessage.Performative(str(performative))
+        kv_store_pb.ParseFromString(message_pb.dialogue_message.content)
+        performative = kv_store_pb.WhichOneof("performative")
+        performative_id = KvStoreMessage.Performative(str(performative))
         performative_content = dict()  # type: Dict[str, Any]
-        if performative_id == KvStorageMessage.Performative.READ_REQUEST:
-            keys = kv_storage_pb.read_request.keys
+        if performative_id == KvStoreMessage.Performative.READ_REQUEST:
+            keys = kv_store_pb.read_request.keys
             keys_tuple = tuple(keys)
             performative_content["keys"] = keys_tuple
-        elif performative_id == KvStorageMessage.Performative.READ_RESPONSE:
-            data = kv_storage_pb.read_response.data
+        elif performative_id == KvStoreMessage.Performative.READ_RESPONSE:
+            data = kv_store_pb.read_response.data
             data_dict = dict(data)
             performative_content["data"] = data_dict
-        elif performative_id == KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST:
-            data = kv_storage_pb.create_or_update_request.data
+        elif performative_id == KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST:
+            data = kv_store_pb.create_or_update_request.data
             data_dict = dict(data)
             performative_content["data"] = data_dict
-        elif performative_id == KvStorageMessage.Performative.SUCCESS:
-            message = kv_storage_pb.success.message
+        elif performative_id == KvStoreMessage.Performative.SUCCESS:
+            message = kv_store_pb.success.message
             performative_content["message"] = message
-        elif performative_id == KvStorageMessage.Performative.ERROR:
-            message = kv_storage_pb.error.message
+        elif performative_id == KvStoreMessage.Performative.ERROR:
+            message = kv_store_pb.error.message
             performative_content["message"] = message
         else:
             raise ValueError("Performative not valid: {}.".format(performative_id))
 
-        return KvStorageMessage(
+        return KvStoreMessage(
             message_id=message_id,
             dialogue_reference=dialogue_reference,
             target=target,

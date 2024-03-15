@@ -19,6 +19,9 @@
 
 """This module contains the handlers for the skill of TsunamiAbciApp."""
 
+from typing import Optional
+from aea.configurations.data_types import PublicId
+from packages.valory.skills.abstract_round_abci.handlers import AbstractResponseHandler
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
@@ -40,6 +43,9 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
+from packages.valory.protocols.twitter.message import TwitterMessage
+from packages.valory.protocols.srr.message import SrrMessage
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage
 
 
 ABCIHandler = BaseABCIRoundHandler
@@ -49,3 +55,43 @@ LedgerApiHandler = BaseLedgerApiHandler
 ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
+
+
+class TwitterHandler(AbstractResponseHandler):
+    """A class for handling twitter messages."""
+
+    SUPPORTED_PROTOCOL: Optional[PublicId] = TwitterMessage.protocol_id
+    allowed_response_performatives = frozenset(
+        {
+            TwitterMessage.Performative.CREATE_TWEET,
+            TwitterMessage.Performative.TWEET_CREATED,
+            TwitterMessage.Performative.ERROR,
+        }
+    )
+
+
+class FarcasterHandler(AbstractResponseHandler):
+    """A class for handling Farcaster messages."""
+
+    SUPPORTED_PROTOCOL: Optional[PublicId] = SrrMessage.protocol_id
+    allowed_response_performatives = frozenset(
+        {
+            SrrMessage.Performative.REQUEST,
+            SrrMessage.Performative.RESPONSE,
+        }
+    )
+
+
+class KvStoreHandler(AbstractResponseHandler):
+    """A class for handling Farcaster messages."""
+
+    SUPPORTED_PROTOCOL: Optional[PublicId] = KvStoreMessage.protocol_id
+    allowed_response_performatives = frozenset(
+        {
+            KvStoreMessage.Performative.READ_REQUEST,
+            KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST,
+            KvStoreMessage.Performative.READ_RESPONSE,
+            KvStoreMessage.Performative.SUCCESS,
+            KvStoreMessage.Performative.ERROR,
+        }
+    )

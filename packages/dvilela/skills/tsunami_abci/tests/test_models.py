@@ -17,23 +17,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TsunamiAbciApp."""
+"""Test the models.py module of the Tsunami."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
-
-    tweets: str
+from packages.dvilela.skills.tsunami_abci.models import SharedState
+from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
 
 
-@dataclass(frozen=True)
-class PublishTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PublishTweetsRound."""
+class TestSharedState:
+    """Test SharedState of Tsunami."""
 
-    tweets: str
-
+    def test_initialization(self) -> None:
+        """Test initialization."""
+        SharedState(name="", skill_context=DummyContext())

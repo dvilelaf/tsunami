@@ -12,14 +12,14 @@ from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
 from peewee import CharField, Model, SqliteDatabase
 
-from packages.dvilela.protocols.kv_storage.dialogues import KvStorageDialogue
-from packages.dvilela.protocols.kv_storage.dialogues import (
-    KvStorageDialogues as BaseKvStorageDialogues,
+from packages.dvilela.protocols.kv_store.dialogues import KvStoreDialogue
+from packages.dvilela.protocols.kv_store.dialogues import (
+    KvStoreDialogues as BaseKvStoreDialogues,
 )
-from packages.dvilela.protocols.kv_storage.message import KvStorageMessage
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage
 
 
-PUBLIC_ID = PublicId.from_str("valory/kv_store:0.1.0")
+PUBLIC_ID = PublicId.from_str("dvilela/kv_store:0.1.0")
 
 
 db = SqliteDatabase(None)
@@ -37,12 +37,12 @@ class BaseModel(Model):
 class Store(BaseModel):
     """Database Store table"""
 
-    key = CharField()
+    key = CharField(unique=True)
     value = CharField()
 
 
-class KvStorageDialogues(BaseKvStorageDialogues):
-    """A class to keep track of KvStorage dialogues."""
+class KvStoreDialogues(BaseKvStoreDialogues):
+    """A class to keep track of KvStore dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
         """
@@ -60,9 +60,9 @@ class KvStorageDialogues(BaseKvStorageDialogues):
             :param receiver_address: the address of the receiving agent
             :return: The role of the agent
             """
-            return KvStorageDialogue.Role.CONNECTION
+            return KvStoreDialogue.Role.CONNECTION
 
-        BaseKvStorageDialogues.__init__(
+        BaseKvStoreDialogues.__init__(
             self,
             self_address=str(kwargs.pop("connection_id")),
             role_from_first_message=role_from_first_message,
@@ -96,7 +96,7 @@ class KvStoreConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        self.dialogues = KvStorageDialogues(connection_id=PUBLIC_ID)
+        self.dialogues = KvStoreDialogues(connection_id=PUBLIC_ID)
         self.db_path = self.configuration.config.get("db_path")
 
     def main(self) -> None:
@@ -130,22 +130,22 @@ class KvStoreConnection(BaseSyncConnection):
 
         :param envelope: the envelope to send.
         """
-        kv_storage_message = cast(KvStorageMessage, envelope.message)
-        dialogue = self.dialogues.update(kv_storage_message)
+        kv_store_message = cast(KvStoreMessage, envelope.message)
+        dialogue = self.dialogues.update(kv_store_message)
 
-        if kv_storage_message.performative not in [
-            KvStorageMessage.Performative.READ_REQUEST,
-            KvStorageMessage.Performative.CREATE_OR_UPDATE_REQUEST,
+        if kv_store_message.performative not in [
+            KvStoreMessage.Performative.READ_REQUEST,
+            KvStoreMessage.Performative.CREATE_OR_UPDATE_REQUEST,
         ]:
             self.logger.error(
-                f"Performative `{kv_storage_message.performative.value}` is not supported."
+                f"Performative `{kv_store_message.performative.value}` is not supported."
             )
             return
 
         handler: Callable[
-            [KvStorageMessage, KvStorageDialogue], KvStorageMessage
-        ] = getattr(self, kv_storage_message.performative.value)
-        response = handler(kv_storage_message, dialogue)
+            [KvStoreMessage, KvStoreDialogue], KvStoreMessage
+        ] = getattr(self, kv_store_message.performative.value)
+        response = handler(kv_store_message, dialogue)
         response_envelope = Envelope(
             to=envelope.sender,
             sender=envelope.to,
@@ -156,27 +156,28 @@ class KvStoreConnection(BaseSyncConnection):
 
     def read_request(
         self,
-        message: KvStorageMessage,
-        dialogue: KvStorageDialogue,
-    ) -> KvStorageMessage:
+        message: KvStoreMessage,
+        dialogue: KvStoreDialogue,
+    ) -> KvStoreMessage:
         """Read several keys."""
-
-        data = Store.select().where(Store.key in message.keys)
+        keys = message.keys if isinstance(message.keys, tuple) else (message.keys)
+        query = Store.select().where(Store.key in keys)
+        response_data = {entry.key: entry.value for entry in query}
 
         return cast(
-            KvStorageMessage,
+            KvStoreMessage,
             dialogue.reply(
-                performative=KvStorageMessage.Performative.READ_RESPONSE,
+                performative=KvStoreMessage.Performative.READ_RESPONSE,
                 target_message=message,
-                data=data,
+                data=response_data,
             ),
         )
 
     def create_or_update_request(
         self,
-        message: KvStorageMessage,
-        dialogue: KvStorageDialogue,
-    ) -> KvStorageMessage:
+        message: KvStoreMessage,
+        dialogue: KvStoreDialogue,
+    ) -> KvStoreMessage:
         """Write several key-value pairs."""
 
         with db.atomic():
@@ -185,9 +186,9 @@ class KvStoreConnection(BaseSyncConnection):
             ).execute()
 
         return cast(
-            KvStorageMessage,
+            KvStoreMessage,
             dialogue.reply(
-                performative=KvStorageMessage.Performative.SUCCESS,
+                performative=KvStoreMessage.Performative.SUCCESS,
                 target_message=message,
             ),
         )

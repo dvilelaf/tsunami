@@ -20,8 +20,8 @@
 """This package contains the rounds of TsunamiAbciApp."""
 
 from enum import Enum
-from typing import Dict, FrozenSet, cast, Optional, Set, Tuple
-
+from typing import Dict, FrozenSet, cast, Set
+import json
 from packages.dvilela.skills.tsunami_abci.payloads import (
     PrepareTweetsPayload,
     PublishTweetsPayload,
@@ -34,7 +34,9 @@ from packages.valory.skills.abstract_round_abci.base import (
     BaseSynchronizedData,
     DegenerateRound,
     EventToTimeout,
-    get_name
+    get_name,
+    DeserializedCollection,
+    CollectionRound
 )
 
 
@@ -55,10 +57,25 @@ class SynchronizedData(BaseSynchronizedData):
     This data is replicated by the tendermint application.
     """
 
+    def _get_deserialized(self, key: str) -> DeserializedCollection:
+        """Strictly get a collection and return it deserialized."""
+        serialized = self.db.get_strict(key)
+        return CollectionRound.deserialize_collection(serialized)
+
     @property
     def tweets(self) -> list:
         """Get the tweets."""
-        return cast(list, self.db.get("tweets", []))
+        return cast(list, json.loads(self.db.get("tweets", "[]")))
+
+    @property
+    def participant_to_preparation(self) -> DeserializedCollection:
+        """Get the participants to the tweet preparation round."""
+        return self._get_deserialized("participant_to_preparation")
+
+    @property
+    def participant_to_publication(self) -> DeserializedCollection:
+        """Get the participants to the tweet publication round."""
+        return self._get_deserialized("participant_to_publication")
 
 
 class PrepareTweetsRound(CollectSameUntilThresholdRound):
@@ -114,8 +131,8 @@ class TsunamiAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        PrepareTweetsRound: [],
+        PrepareTweetsRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedPublishRound: [],
+        FinishedPublishRound: set(),
     }
