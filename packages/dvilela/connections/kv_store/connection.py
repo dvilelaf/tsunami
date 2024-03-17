@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 """Key-value connection and channel."""
-from pathlib import Path
 from typing import Any, Callable, cast
 
 from aea.configurations.base import PublicId
@@ -97,7 +96,7 @@ class KvStoreConnection(BaseSyncConnection):
         """
         super().__init__(*args, **kwargs)
         self.dialogues = KvStoreDialogues(connection_id=PUBLIC_ID)
-        self.db_path = Path(self.configuration.config.get("db_path"))
+        self.db_path = self.configuration.config.get("db_path")
 
     def main(self) -> None:
         """

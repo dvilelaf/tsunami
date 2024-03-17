@@ -18,8 +18,8 @@ fingerprint:
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeieq5mtvobmwr4vmni46q7m36dkpfys66xew3hadwz6aqcput265gu
-- dvilela/llama:0.1.0:bafybeiea56rjonibluz5zx5die6pas4a6tr64fgiol3swuosqfqaevl2ai
+- dvilela/kv_store:0.1.0:bafybeiflpjqi47db3k3jwdhlz2twqverpx4ccu7me6gxg7uzb7k63y624e
+- dvilela/llama:0.1.0:bafybeictdja7oeufksrmpdhmzrulannm6pc44qruoegb4esal7pp7i454u
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:

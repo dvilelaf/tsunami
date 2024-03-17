@@ -95,10 +95,12 @@ class LlamaConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
+        repo_id = self.configuration.config.get(
+            "repo_id", "TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF"
+        )
+        self.logger.info(f"Downloading LLM model {repo_id}...")
         self.llm = Llama.from_pretrained(
-            repo_id=self.configuration.config.get(
-                "repo_id", "TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF"
-            ),
+            repo_id=repo_id,
             filename=self.configuration.config.get("filename", "*Q2_K.gguf"),
             verbose=False,
         )

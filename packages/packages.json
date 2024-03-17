@@ -2,12 +2,12 @@
     "dev": {
         "protocol/dvilela/kv_store/0.1.0": "bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge",
         "contract/dvilela/service_registry/0.1.0": "bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom",
-        "connection/dvilela/kv_store/0.1.0": "bafybeieq5mtvobmwr4vmni46q7m36dkpfys66xew3hadwz6aqcput265gu",
-        "connection/dvilela/llama/0.1.0": "bafybeiea56rjonibluz5zx5die6pas4a6tr64fgiol3swuosqfqaevl2ai",
-        "skill/dvilela/tsunami_abci/0.1.0": "bafybeiemfr5kgwft6x2wul77isdvhddgmwyo2tymi3rldmjwtsv6q4g4ny",
-        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeihkedwayxlaqhhztwb3cn3f4bfmqcx7gymcnw7bjhbvqp6obnioq4",
-        "agent/dvilela/tsunami/0.1.0": "bafybeiaupile5r24pgqrz43f3imncyc7r44ofs3h5wbakbpkp4jjblno24",
-        "service/dvilela/tsunami/0.1.0": "bafybeicowoq5vsnhme7a3f4s4sflhpcvhf64tiz7ls3odxammhdhx62l4q"
+        "connection/dvilela/kv_store/0.1.0": "bafybeiflpjqi47db3k3jwdhlz2twqverpx4ccu7me6gxg7uzb7k63y624e",
+        "connection/dvilela/llama/0.1.0": "bafybeictdja7oeufksrmpdhmzrulannm6pc44qruoegb4esal7pp7i454u",
+        "skill/dvilela/tsunami_abci/0.1.0": "bafybeibrf2h4cqudgdzvtorb67pou4xyikgpbk37vs5cclykbi32cftnpa",
+        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeif2kcsxdg4cxe4qdddxize5oigolmrpedcrxaapeslc4wd5lhrsai",
+        "agent/dvilela/tsunami/0.1.0": "bafybeigxehbhihaf3byi66vnjcgvvsudxk4hinqvzvixajtpwh3bqwn6qe",
+        "service/dvilela/tsunami/0.1.0": "bafybeibqfiv2so77m6ruteh54txgkpz7ruvzap227tifkwnnrqxtuuodmy"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
