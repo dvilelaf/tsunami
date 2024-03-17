@@ -2,7 +2,8 @@ name: tsunami_abci
 author: dvilela
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: A skill that tracks events on the Olas ecosystem and autonomously reports
+  on it on it on Twitter and Farcaster.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -17,16 +18,16 @@ fingerprint:
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeihlx47qkbwkhf6ao4tuonsiphrzhxqxexef7gm4dzodzrhjhzze3q
-- dvilela/llama:0.1.0:bafybeiczdkeq5q7zinqcgqp2v26x62m2wnuqvdft7nqryflit7yop43r5m
+- dvilela/kv_store:0.1.0:bafybeieq5mtvobmwr4vmni46q7m36dkpfys66xew3hadwz6aqcput265gu
+- dvilela/llama:0.1.0:bafybeiea56rjonibluz5zx5die6pas4a6tr64fgiol3swuosqfqaevl2ai
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
-- dvilela/service_registry:0.1.0:bafybeieryuif77icvgh23x4pvtbb3cobo57yzuuttf44df6us4rey4bf5m
+- dvilela/service_registry:0.1.0:bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-- dvilela/kv_store:0.1.0:bafybeihx2arb5lxvk7ujwvu63ccoy366kcss33ks7hml4owxjiu7zc5txy
+- dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe

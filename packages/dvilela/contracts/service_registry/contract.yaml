@@ -2,13 +2,13 @@ name: service_registry
 author: dvilela
 version: 0.1.0
 type: contract
-description: service registry contract
+description: Olas service registry contract package
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigamvqh7r3mwwqiof4szq423cbfqvnlv6jlz3rfa5u7p4tf7ov3bq
   build/service_registry.json: bafybeidka5jw54xw6s6xzgsbu3hm7q7vqcrlw73w2b2novc55qrrocr6h4
-  contract.py: bafybeigjvmecgjvlp6g3a5k3lvrauuvvqnaiu7p4ms3vsmu5j4sydnfjvm
+  contract.py: bafybeihqsr3fkyenhfry35becoqtr6apemwn7wc4gmbiugqlzhvpp7n7ce
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: ServiceRegistryContract

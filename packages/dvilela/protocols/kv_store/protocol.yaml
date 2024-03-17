@@ -3,7 +3,7 @@ author: dvilela
 version: 0.1.0
 protocol_specification_id: dvilela/kv_store:0.1.0
 type: protocol
-description: A protocol for simple key-value storage.
+description: A protocol for simple key-value storage communications.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

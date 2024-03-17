@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Scaffold connection and channel."""
+"""Key-value connection and channel."""
 from pathlib import Path
 from typing import Any, Callable, cast
 

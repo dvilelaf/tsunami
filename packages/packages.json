@@ -1,13 +1,13 @@
 {
     "dev": {
-        "protocol/dvilela/kv_store/0.1.0": "bafybeihx2arb5lxvk7ujwvu63ccoy366kcss33ks7hml4owxjiu7zc5txy",
-        "contract/dvilela/service_registry/0.1.0": "bafybeieryuif77icvgh23x4pvtbb3cobo57yzuuttf44df6us4rey4bf5m",
-        "connection/dvilela/kv_store/0.1.0": "bafybeihlx47qkbwkhf6ao4tuonsiphrzhxqxexef7gm4dzodzrhjhzze3q",
-        "connection/dvilela/llama/0.1.0": "bafybeiczdkeq5q7zinqcgqp2v26x62m2wnuqvdft7nqryflit7yop43r5m",
-        "skill/dvilela/tsunami_abci/0.1.0": "bafybeigau2jqzthn3eyusvav7ftgywi2vsgdqk34oolnfcj4ckwoytjl4e",
-        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeigcabtvzlqtidkwbdk3ymy6g6pngk2qqdhdmjy3anjyt73kikt7nu",
-        "agent/dvilela/tsunami/0.1.0": "bafybeigj2otkcda2iqvlyg7w6h26nupk4jci26iuvsbpowc45cipnbse3i",
-        "service/dvilela/tsunami/0.1.0": "bafybeiaok6zexcthapdows4lebcnv7mgcew6adeinv4sb2xldenwcxp3qm"
+        "protocol/dvilela/kv_store/0.1.0": "bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge",
+        "contract/dvilela/service_registry/0.1.0": "bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom",
+        "connection/dvilela/kv_store/0.1.0": "bafybeieq5mtvobmwr4vmni46q7m36dkpfys66xew3hadwz6aqcput265gu",
+        "connection/dvilela/llama/0.1.0": "bafybeiea56rjonibluz5zx5die6pas4a6tr64fgiol3swuosqfqaevl2ai",
+        "skill/dvilela/tsunami_abci/0.1.0": "bafybeiemfr5kgwft6x2wul77isdvhddgmwyo2tymi3rldmjwtsv6q4g4ny",
+        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeihkedwayxlaqhhztwb3cn3f4bfmqcx7gymcnw7bjhbvqp6obnioq4",
+        "agent/dvilela/tsunami/0.1.0": "bafybeiaupile5r24pgqrz43f3imncyc7r44ofs3h5wbakbpkp4jjblno24",
+        "service/dvilela/tsunami/0.1.0": "bafybeicowoq5vsnhme7a3f4s4sflhpcvhf64tiz7ls3odxammhdhx62l4q"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",

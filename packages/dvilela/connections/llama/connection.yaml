@@ -2,7 +2,7 @@ name: llama
 author: dvilela
 version: 0.1.0
 type: connection
-description: The Llama connection provides a wrapper around Llama-cpp-python library.
+description: A connection that provides a wrapper around Llama-cpp-python library.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

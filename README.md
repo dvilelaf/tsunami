@@ -1,6 +1,6 @@
-# Dev-template
+# Tsunami service
 
-A template for development with the open-autonomy framework. Find the documentation [here](https://docs.autonolas.network).
+An [Olas service](https://olas.network/) that tracks on-chain events on the Olas ecosystem and autonomously reports on it on Twitter and Farcaster.
 
 ## System requirements
 
@@ -20,25 +20,3 @@ Alternatively, you can fetch this docker image with the relevant requirements sa
 docker pull valory/open-autonomy-user:latest
 docker container run -it valory/open-autonomy-user:latest
 ```
-
-## This repository contains:
-
-- Empty directory `packages` which acts as the local registry
-
-- .env file with Python path updated to include packages directory
-
-## How to use
-
-Create a virtual environment with all development dependencies:
-
-```bash
-poetry shell
-poetry install
-```
-
-Get developing...
-
-## Useful commands:
-
-Check out the `Makefile` for useful commands, e.g. `make formatters`, `make generators`, `make code-checks`, as well
-as `make common-checks-1`. To run tests use the `autonomy test` command. Run `autonomy test --help` for help about its usage.

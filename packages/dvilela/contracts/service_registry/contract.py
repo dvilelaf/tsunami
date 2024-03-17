@@ -73,8 +73,7 @@ class ServiceRegistryContract(Contract):
             new_events = event.create_filter(
                 fromBlock=from_block,  # exclusive
                 toBlock=to_block,  # inclusive
-            ).get_all_entries()  # limited to 10k entries for now: https://github.com/valory-xyz/contribution-service/issues/13
-
+            ).get_all_entries()  # limited to 10k entries for now
             events += new_events
 
         return dict(

@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
+"""This package contains round behaviours of TsunamiChainedSkillAbciApp."""
 
 import packages.dvilela.skills.tsunami_abci.rounds as TsunamiAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci

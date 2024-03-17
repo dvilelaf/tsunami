@@ -2,17 +2,17 @@ name: kv_store
 author: dvilela
 version: 0.1.0
 type: connection
-description: Connection for interacting with a key-value store.
+description: Connection for interacting with a key-value storage.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeig2uzkwmyfyqip5uhswjbxm3r5qlunn4m32kmgi24w3imiotecrmi
-  connection.py: bafybeic5mrv5uioctdt4kpez2w7zq6jmqajjtsqtusz64x3mufpq5vgcrm
+  connection.py: bafybeidji6fofm7giahlg6xawyqwongk42ob5u7r7ctvr3helzsxllz4oe
   readme.md: bafybeigyb5o5tymr2cl6mgdf2mcb74v66iuc4m4rwvxox5wtydsqxy7dmm
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- dvilela/kv_store:0.1.0:bafybeihx2arb5lxvk7ujwvu63ccoy366kcss33ks7hml4owxjiu7zc5txy
+- dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
 class_name: KvStoreConnection
 config:
   db_path: null

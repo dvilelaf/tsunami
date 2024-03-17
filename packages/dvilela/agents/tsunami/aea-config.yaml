@@ -3,7 +3,7 @@ author: dvilela
 version: 0.1.0
 license: Apache-2.0
 description: An agent that tracks events on the Olas ecosystem and autonomously reports
-  on it.
+  on it on it on Twitter and Farcaster.
 aea_version: '>=1.19.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeih5r6madrsgamzbvz7mfcoooxev7vtquoieoj6zex4hmq4eknj52i
@@ -16,14 +16,14 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
-- dvilela/kv_store:0.1.0:bafybeihlx47qkbwkhf6ao4tuonsiphrzhxqxexef7gm4dzodzrhjhzze3q
-- dvilela/llama:0.1.0:bafybeiczdkeq5q7zinqcgqp2v26x62m2wnuqvdft7nqryflit7yop43r5m
+- dvilela/kv_store:0.1.0:bafybeieq5mtvobmwr4vmni46q7m36dkpfys66xew3hadwz6aqcput265gu
+- dvilela/llama:0.1.0:bafybeiea56rjonibluz5zx5die6pas4a6tr64fgiol3swuosqfqaevl2ai
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeif3n23srpc7kouvry6c5h3qmd4h63vtd3gg7el2upjm6xac6mligi
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeic5f3vnd3pkzlhapkzgtrfmer7otjg3xxaflxkadpz6prjxk3salq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeibtaa6tvhzoo4osu3moilxtwxbfwqo3vt7rsr3ugjugzwndzkkmd4
-- dvilela/service_registry:0.1.0:bafybeieryuif77icvgh23x4pvtbb3cobo57yzuuttf44df6us4rey4bf5m
+- dvilela/service_registry:0.1.0:bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -34,7 +34,7 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/tendermint:0.1.0:bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-- dvilela/kv_store:0.1.0:bafybeihx2arb5lxvk7ujwvu63ccoy366kcss33ks7hml4owxjiu7zc5txy
+- dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
 - valory/abstract_abci:0.1.0:bafybeibvz3hi25ktgdzm25kih25o5osml62zk4kzpgmzmyrem3hzo2vtnm
@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeigau2jqzthn3eyusvav7ftgywi2vsgdqk34oolnfcj4ckwoytjl4e
-- dvilela/tsunami_chained_abci:0.1.0:bafybeigcabtvzlqtidkwbdk3ymy6g6pngk2qqdhdmjy3anjyt73kikt7nu
+- dvilela/tsunami_abci:0.1.0:bafybeiemfr5kgwft6x2wul77isdvhddgmwyo2tymi3rldmjwtsv6q4g4ny
+- dvilela/tsunami_chained_abci:0.1.0:bafybeihkedwayxlaqhhztwb3cn3f4bfmqcx7gymcnw7bjhbvqp6obnioq4
 default_ledger: ethereum
 required_ledgers:
 - ethereum

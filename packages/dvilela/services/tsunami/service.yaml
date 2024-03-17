@@ -1,14 +1,14 @@
 name: tsunami
 author: dvilela
 version: 0.1.0
-description: An service that tracks events on the Olas ecosystem and autonomously
-  reports on it.
+description: A service that tracks events on the Olas ecosystem and autonomously reports
+  on it on Twitter and Farcaster.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
   README.md: bafybeielzpw77btndekig6wcsmu47br7kf5acrlrpauya72qsvveckalhy
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeigj2otkcda2iqvlyg7w6h26nupk4jci26iuvsbpowc45cipnbse3i
+agent: dvilela/tsunami:0.1.0:bafybeiaupile5r24pgqrz43f3imncyc7r44ofs3h5wbakbpkp4jjblno24
 number_of_agents: 1
 deployment:
   agent:
@@ -62,7 +62,6 @@ models:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
       keeper_timeout: 30.0
       max_attempts: 10
@@ -78,7 +77,7 @@ models:
       request_timeout: 10.0
       round_timeout_seconds: 30.0
       tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
-      service_id: impact_evaluator
+      service_id: tsunami
       service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
       share_tm_config_on_startup: ${USE_ACN:bool:false}
       sleep_time: 1
@@ -86,7 +85,7 @@ models:
       tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-      tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:impactevaluator_tm_0:26656}
+      tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:tsunami_tm_0:26656}
       token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost

@@ -2,13 +2,13 @@ name: tsunami_chained_abci
 author: dvilela
 version: 0.1.0
 type: skill
-description: The chained abci for tsunami skill.
+description: The chained abci for the tsunami skill.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeid3dfxtr5ct2cxdhyzqsplkcio5idj74hw5wbekuychahve6qak7a
   behaviours.py: bafybeiaunn4by5r6y6rhc7kzyslh7cz7lvqgjcxnpltj3okjpbjrnj4f6q
-  composition.py: bafybeifvqxoyedhqbvl352ossvqrk3zrj7igop4oyqxcfeeremnrlpqnia
+  composition.py: bafybeigsupdf7ais6bgkoptbopwkzl4lmsdwsz6v5xmeqa7t7lkwwikcl4
   dialogues.py: bafybeifztypshmkfnkn445xnhzdcmnwalduts7kubuksfn3ggm6nl75fsa
   fsm_specification.yaml: bafybeiag7ve5xxfefusjpm6wm33msl3s6fdwge24krellqxpfofqqsj6pe
   handlers.py: bafybeiey53s2hlypgfhb54qwmig4tt3yzy4pauiknybnuzinpvwly3zmgi
@@ -22,7 +22,7 @@ skills:
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
-- dvilela/tsunami_abci:0.1.0:bafybeigau2jqzthn3eyusvav7ftgywi2vsgdqk34oolnfcj4ckwoytjl4e
+- dvilela/tsunami_abci:0.1.0:bafybeiemfr5kgwft6x2wul77isdvhddgmwyo2tymi3rldmjwtsv6q4g4ny
 behaviours:
   main:
     args: {}
