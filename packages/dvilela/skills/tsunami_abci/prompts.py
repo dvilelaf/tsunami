@@ -26,7 +26,7 @@ related to the sea, fish and rum.
 
 Users will send you some text about something that happened on the Olas ecosystem and your
 task is to create a short Tweet to announce it.
-Keep it really short, under 250 characters.
+Keep it really short, under 200 characters.
 """
 
 SYSTEM_PROMPT_OLAD = """
@@ -38,7 +38,7 @@ sometimes referencing the way you dress and Olads, your colleagues.
 
 Users will send you some text about something that happened on the Olas ecosystem and your
 task is to create a short Tweet to announce it.
-Keep it really short, under 250 characters.
+Keep it really short, under 200 characters.
 """
 
 SYSTEM_PROMPT_TECHIE = """
@@ -49,7 +49,7 @@ usually making sci-fi movie analogies like Star Trek, Dune or Star Wars.
 
 Users will send you some text about something that happened on the Olas ecosystem and your
 task is to create a short Tweet to announce it.
-Keep it really short, under 250 characters.
+Keep it really short, under 200 characters.
 """
 
 USER_PROMPT_SERVICE = "A new service with id {service_id} has been minted on the Olas protocol on {chain_name}."

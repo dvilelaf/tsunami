@@ -12,7 +12,7 @@ fingerprint:
   dialogues.py: bafybeifztypshmkfnkn445xnhzdcmnwalduts7kubuksfn3ggm6nl75fsa
   fsm_specification.yaml: bafybeiag7ve5xxfefusjpm6wm33msl3s6fdwge24krellqxpfofqqsj6pe
   handlers.py: bafybeiey53s2hlypgfhb54qwmig4tt3yzy4pauiknybnuzinpvwly3zmgi
-  models.py: bafybeifm3xmzoziaimdyy7n6z6npub6ypwkchy2l2ia7hvolmkbzmrk44m
+  models.py: bafybeihmkcafhcaoa3jo7kond3zdsd7mgizgu4ssu7nhqpcjbnpr5ncm7u
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -22,7 +22,7 @@ skills:
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
-- dvilela/tsunami_abci:0.1.0:bafybeibrf2h4cqudgdzvtorb67pou4xyikgpbk37vs5cclykbi32cftnpa
+- dvilela/tsunami_abci:0.1.0:bafybeig3q2w55qdvnoflrsebfuqhjpzakziv2f2y6mfpdh3jry2ea6hvim
 behaviours:
   main:
     args: {}
@@ -143,7 +143,7 @@ models:
       publish_twitter: true
       publish_farcaster: true
       service_registry_address_ethereum: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
-      initial_block_ethereum: 19318114
+      initial_block_ethereum: 18500000
       twitter_credentials: '{}'
     class_name: Params
   randomness_api:

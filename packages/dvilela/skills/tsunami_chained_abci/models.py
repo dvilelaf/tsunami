@@ -42,7 +42,7 @@ BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = TsunamiRandomnessApi
 
 MARGIN = 5
-MULTIPLIER = 2
+MULTIPLIER = 10
 
 
 class SharedState(BaseSharedState):

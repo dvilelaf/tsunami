@@ -8,13 +8,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeifupfbboudenvhot5j6ltbfwxxbmeiula2snaaxbx3xz7he6k625i
+  behaviours.py: bafybeicx42ic2wx7a5zzie2blqd4q25qgm2j45noyf6fac6eq6m3enluby
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
   models.py: bafybeibve42pf2dsjxbds3k4b6ao3cfebb4sjttwkca45w2u52ewslggdm
   payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
-  prompts.py: bafybeiaiojw5kcacmxh33mi62bksrihzgshot2xqn6wbgojw773slyeepi
+  prompts.py: bafybeigfdlgmstarwq3lvhqczenw464xeho3ajjoojgfkcy6zyp2lzmsbi
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
@@ -142,7 +142,7 @@ models:
       publish_twitter: true
       publish_farcaster: true
       service_registry_address_ethereum: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
-      initial_block_ethereum: 19318114
+      initial_block_ethereum: 18500000
       twitter_credentials: '{}'
     class_name: Params
   requests:

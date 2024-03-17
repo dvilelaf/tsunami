@@ -286,6 +286,16 @@ class PrepareTweetsBehaviour(
         # TODO: Loop registries
         # TODO: common last block for every call
 
+        tweets = self.synchronized_data.tweets
+
+        # If there are no tweets in the synchronized_data, this might be the first period.
+        # We need to check the db
+        if not tweets:
+            response = yield from self._read_kv(keys=("tweets",))
+            if response["tweets"]:
+                tweets = json.loads(response["tweets"])
+                self.context.logger.info(f"Loaded tweets from db: {tweets}")
+
         # Get from_block
         db_data = yield from self._read_kv(keys=("from_block",))
         from_block = int(
@@ -299,6 +309,9 @@ class PrepareTweetsBehaviour(
         events, last_block = yield from self.get_events(
             contract_id, contract_address, "CreateService", from_block
         )
+
+        # Write from block
+        yield from self._write_kv({"from_block": str(last_block)})
 
         tweets = []
         for event in events:
@@ -347,10 +360,10 @@ class PrepareTweetsBehaviour(
                     }
                 )
 
-        self.context.logger.info(f"Prepared tweets: {tweets}")
+        # Save tweets to the db
+        yield from self._write_kv({"tweets": json.dumps(tweets)})
 
-        # Write from block
-        yield from self._write_kv({"from_block": str(last_block)})
+        self.context.logger.info(f"Prepared tweets: {tweets}")
 
         return tweets
 
@@ -475,6 +488,9 @@ class PublishTweetsBehaviour(
             tweets = [
                 t for t in tweets if t["twitter_published"] and t["farcaster_published"]
             ]
+
+            # Save tweets to the db
+            yield from self._write_kv({"tweets": json.dumps(tweets)})
 
             payload = PublishTweetsPayload(
                 sender=self.context.agent_address, tweets=json.dumps(tweets)
