@@ -7,24 +7,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeigeanmziw4gt5n5tg6fkeos2anelyv65q6wbrvbjaj6xydznbzamq
+  behaviours.py: bafybeifupfbboudenvhot5j6ltbfwxxbmeiula2snaaxbx3xz7he6k625i
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
-  fsm_specification.yaml: bafybeienbo7qnwpnlrril35x4stzoseor3mxrw3sz7uhcwi5gvc4ag47ae
+  fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
   models.py: bafybeibve42pf2dsjxbds3k4b6ao3cfebb4sjttwkca45w2u52ewslggdm
   payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
   prompts.py: bafybeiaiojw5kcacmxh33mi62bksrihzgshot2xqn6wbgojw773slyeepi
-  rounds.py: bafybeifeqrdirsr75ztjr7e524kyr36aoubbw6o74hdxiddya3lvoheefu
-  tests/__init__.py: bafybeihp6kpsvb25xuq7hz6gmq5pizbodmpw7qblavu53g4bonhim3nbdy
-  tests/test_behaviours.py: bafybeibi3dcr73rcg3wigppwdoh5csv6kamftcf4hhrugkab4t44njsb6q
-  tests/test_dialogues.py: bafybeihdh4rmtkdqjkhccgnjtzqtw5yhcswrxgnmiexiubi4qpe66t46ce
-  tests/test_handlers.py: bafybeifo6kiga53lddg7iqgjywopleszzfz2mqmaozbahjtc4wl7o2l2qq
-  tests/test_models.py: bafybeifq4huc2b57esq3eddfmglglxlg2zbaqutcj5dvicsvllrubvntsu
-  tests/test_payloads.py: bafybeigakbjhzmkbdfnp6alvzuckeeqbadipztqfds3pvqnztzmqniiwr4
-  tests/test_rounds.py: bafybeibcdct5qlu6xs5lfvt4npdxnyw3kunlwhepf4bkby5twqwvc2ztd4
+  rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeicl3d5x22g7yoqhidh6m3vl3mo5qcnosq4qmnjaj2en7ieyymamaq
+- dvilela/kv_store:0.1.0:bafybeihlx47qkbwkhf6ao4tuonsiphrzhxqxexef7gm4dzodzrhjhzze3q
 - dvilela/llama:0.1.0:bafybeiczdkeq5q7zinqcgqp2v26x62m2wnuqvdft7nqryflit7yop43r5m
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
@@ -33,7 +26,7 @@ contracts:
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-- dvilela/kv_store:0.1.0:bafybeidxnjkkp7bwbf3dxca65va2nlyoltxjgpmffzzskmqjggdrzae2fi
+- dvilela/kv_store:0.1.0:bafybeihx2arb5lxvk7ujwvu63ccoy366kcss33ks7hml4owxjiu7zc5txy
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe

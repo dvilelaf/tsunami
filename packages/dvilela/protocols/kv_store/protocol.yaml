@@ -13,7 +13,7 @@ fingerprint:
   kv_store.proto: bafybeiep2xzwwisio7woispucdp63qvjsi6oaprjfbnketyt5gh2xmw7vi
   kv_store_pb2.py: bafybeic3nx73uman2leycjdxpnhkoyjqe3a45wo2lxibtjf2htp2bj3g5e
   message.py: bafybeibkwwkim4xgupy2xcdag62o6rx45xobkai543fzkmqkbhsi2ifyay
-  serialization.py: bafybeiboxagcjty7ktwnvvi2jhsal6ptgqkuy2gpdsxus2dfh7u2qleg4u
+  serialization.py: bafybeidhoj3jkyci3fdoh5ewrkowjg4vgsothxcq3uwlrmb6xowzb3433i
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

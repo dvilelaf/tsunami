@@ -27,7 +27,6 @@ from packages.dvilela.skills.tsunami_abci.rounds import Event as TsunamiEvent
 from packages.dvilela.skills.tsunami_chained_abci.composition import (
     TsunamiChainedSkillAbciApp,
 )
-from packages.valory.skills.abstract_round_abci.models import ApiSpecs
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )

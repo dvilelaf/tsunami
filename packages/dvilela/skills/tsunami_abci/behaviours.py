@@ -22,7 +22,7 @@
 import json
 import random
 from abc import ABC
-from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from aea.protocols.base import Message
 from twitter_text import parse_tweet
@@ -79,7 +79,7 @@ MAX_TWEET_CHARS = 280
 HTTP_OK = 200
 
 
-class TsunamiBaseBehaviour(BaseBehaviour, ABC):
+class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
     """Base behaviour for the tsunami_abci skill."""
 
     @property
@@ -105,9 +105,9 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):
                 f"Writing tweet failed with following error message: {response.message}"
             )
             return {"success": False, "tweet_id": None}
-        else:
-            self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
-            return {"success": True, "tweet_id": response.tweet_id}
+
+        self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
+        return {"success": True, "tweet_id": response.tweet_id}
 
     def publish_cast(self, text) -> Generator[None, None, Dict]:
         """Publish cast"""
@@ -122,9 +122,9 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):
                 f"Writing cast failed with following error message: {response.payload}"
             )
             return {"success": False, "cast_id": None}
-        else:
-            self.context.logger.info(f"Posted cast with ID: {response_data['cast_id']}")
-            return {"success": True, "cast_id": response_data["cast_id"]}
+
+        self.context.logger.info(f"Posted cast with ID: {response_data['cast_id']}")
+        return {"success": True, "cast_id": response_data["cast_id"]}
 
     def _create_tweet(
         self,
@@ -255,7 +255,9 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):
         return response
 
 
-class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
+class PrepareTweetsBehaviour(
+    TsunamiBaseBehaviour
+):  # pylint: disable=too-many-ancestors
     """PrepareTweetsBehaviour"""
 
     matching_round: Type[AbstractRound] = PrepareTweetsRound
@@ -275,7 +277,9 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
 
         self.set_done()
 
-    def build_tweets(self) -> Generator[None, None, List[str]]:
+    def build_tweets(
+        self,
+    ) -> Generator[None, None, List[str]]:  # pylint: disable=too-many-locals
         """Build tweets"""
 
         # TODO: Loop chains
@@ -296,9 +300,6 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
             contract_id, contract_address, "CreateService", from_block
         )
 
-        # Write from block
-        # from_block = yield from self._write_kv({"from_block": str(last_block)})
-
         tweets = []
         for event in events:
             self.context.logger.info(f"Processing event {event}")
@@ -309,7 +310,7 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
             uri = yield from self.get_token_uri(contract_id, contract_address, unit_id)
 
             # Get unit data
-            self.context.logger.info(f"Getting token data...")
+            self.context.logger.info("Getting token data...")
             response = yield from self.get_http_response(method="GET", url=uri)
 
             if response.status_code != HTTP_OK:
@@ -333,7 +334,7 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
                 }
             )
 
-            user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is '{unit_description}'"
+            user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
 
             tweet = yield from self.build_tweet(user_prompt)
 
@@ -347,6 +348,9 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
                 )
 
         self.context.logger.info(f"Prepared tweets: {tweets}")
+
+        # Write from block
+        yield from self._write_kv({"from_block": str(last_block)})
 
         return tweets
 
@@ -444,7 +448,9 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
         return tweet
 
 
-class PublishTweetsBehaviour(TsunamiBaseBehaviour):
+class PublishTweetsBehaviour(
+    TsunamiBaseBehaviour
+):  # pylint: disable=too-many-ancestors
     """PublishTweetsBehaviour"""
 
     matching_round: Type[AbstractRound] = PublishTweetsRound

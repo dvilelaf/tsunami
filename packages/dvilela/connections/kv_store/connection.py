@@ -97,7 +97,7 @@ class KvStoreConnection(BaseSyncConnection):
         """
         super().__init__(*args, **kwargs)
         self.dialogues = KvStoreDialogues(connection_id=PUBLIC_ID)
-        self.db_path = self.configuration.config.get("db_path")
+        self.db_path = Path(self.configuration.config.get("db_path"))
 
     def main(self) -> None:
         """
