@@ -84,4 +84,21 @@ tm:
 	tendermint init
 	tendermint node --proxy_app=tcp://127.0.0.1:26658 --rpc.laddr=tcp://127.0.0.1:26657 --p2p.laddr=tcp://0.0.0.0:26656 --p2p.seeds= --consensus.create_empty_blocks=true
 
+.PHONY: all-linters
+all-linters:
+	gitleaks detect --report-format json --report-path leak_report
+	tox -e spell-check
+	tox -e check-doc-hashes
+	tox -e bandit
+	tox -e safety
+	tox -e check-packages
+	tox -e check-abciapp-specs
+	tox -e check-hash
+	tox -e black-check
+	tox -e isort-check
+	tox -e flake8
+	tox -e darglint
+	tox -e pylint
+	tox -e mypy
+
 v := $(shell pip -V | grep virtualenvs)

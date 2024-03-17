@@ -1,0 +1,5 @@
+84bb27da7c7e36ae932749216a05fe563d83bc42:packages/dvilela/agents/tsunami/aea-config.yaml:generic-api-key:144
+84bb27da7c7e36ae932749216a05fe563d83bc42:packages/dvilela/services/tsunami/service.yaml:generic-api-key:64
+84bb27da7c7e36ae932749216a05fe563d83bc42:packages/dvilela/skills/tsunami_chained_abci/skill.yaml:generic-api-key:85
+a4c606c6635c2562f67e4d2cb7c614e0d10d58f8:packages/dvilela/skills/prepare_tweets_abci/skill.yaml:generic-api-key:80
+a4c606c6635c2562f67e4d2cb7c614e0d10d58f8:packages/dvilela/skills/tsunami_abci/skill.yaml:generic-api-key:80

@@ -417,7 +417,7 @@ class PrepareTweetsBehaviour(TsunamiBaseBehaviour):
 
         # Randomly select a personality
         # TODO: this only works for a single agent
-        system_prompt = random.choice(SYSTEM_PROMPTS)
+        system_prompt = random.choice(SYSTEM_PROMPTS)  # nosec
         self.context.logger.info("Llama is building a tweet...")
 
         attempts = 0

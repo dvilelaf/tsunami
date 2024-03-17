@@ -25,7 +25,6 @@ from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
-from web3.types import BlockIdentifier
 
 
 PUBLIC_ID = PublicId.from_str("dvilela/service_registry:0.1.0")
@@ -47,8 +46,8 @@ class ServiceRegistryContract(Contract):
         ledger_api: EthereumApi,
         contract_address: str,
         event_name: str,
-        from_block: BlockIdentifier = "earliest",
-        to_block: BlockIdentifier = "latest",
+        from_block: int = "earliest",
+        to_block: int = "latest",
     ) -> Optional[JSONLike]:
         """Get events."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
