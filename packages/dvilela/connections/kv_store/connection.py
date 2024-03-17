@@ -142,9 +142,9 @@ class KvStoreConnection(BaseSyncConnection):
             )
             return
 
-        handler: Callable[
-            [KvStoreMessage, KvStoreDialogue], KvStoreMessage
-        ] = getattr(self, kv_store_message.performative.value)
+        handler: Callable[[KvStoreMessage, KvStoreDialogue], KvStoreMessage] = getattr(
+            self, kv_store_message.performative.value
+        )
         response = handler(kv_store_message, dialogue)
         response_envelope = Envelope(
             to=envelope.sender,

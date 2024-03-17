@@ -185,7 +185,7 @@ class LlamaConnection(BaseSyncConnection):
                     {"role": "system", "content": payload["system"]},
                     {"role": "user", "content": payload["user"]},
                 ],
-                temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE))
+                temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE)),
             )
         except Exception as e:
             return {"error": f"Exception while calling Llama:\n{e}"}, True

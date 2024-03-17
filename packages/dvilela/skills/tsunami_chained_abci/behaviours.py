@@ -21,15 +21,13 @@
 
 from typing import Set, Type
 
-from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
-    BaseBehaviour,
-)
+from packages.dvilela.skills.tsunami_abci.behaviours import TsunamiRoundBehaviour
 from packages.dvilela.skills.tsunami_chained_abci.composition import (
     TsunamiChainedSkillAbciApp,
 )
-from packages.dvilela.skills.tsunami_abci.behaviours import (
-    TsunamiRoundBehaviour,
+from packages.valory.skills.abstract_round_abci.behaviours import (
+    AbstractRoundBehaviour,
+    BaseBehaviour,
 )
 from packages.valory.skills.registration_abci.behaviours import (
     AgentRegistrationRoundBehaviour,

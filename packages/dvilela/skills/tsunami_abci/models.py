@@ -19,8 +19,9 @@
 
 """This module contains the shared state for the abci skill of TsunamiAbciApp."""
 
-from typing import Any
 import json
+from typing import Any
+
 from packages.dvilela.skills.tsunami_abci.rounds import TsunamiAbciApp
 from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
@@ -53,7 +54,13 @@ class Params(BaseParams):
         """Initialize the parameters object."""
         self.publish_twitter = self._ensure("publish_twitter", kwargs, bool)
         self.publish_farcaster = self._ensure("publish_farcaster", kwargs, bool)
-        self.service_registry_address_ethereum = self._ensure("service_registry_address_ethereum", kwargs, str)
-        self.initial_block_ethereum = self._ensure("initial_block_ethereum", kwargs, int)
-        self.twitter_credentials = json.loads(self._ensure("twitter_credentials", kwargs, str))
+        self.service_registry_address_ethereum = self._ensure(
+            "service_registry_address_ethereum", kwargs, str
+        )
+        self.initial_block_ethereum = self._ensure(
+            "initial_block_ethereum", kwargs, int
+        )
+        self.twitter_credentials = json.loads(
+            self._ensure("twitter_credentials", kwargs, str)
+        )
         super().__init__(*args, **kwargs)

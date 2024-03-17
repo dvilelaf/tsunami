@@ -7,14 +7,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeiejb76twzcifsztvmjr7lyvvca2y3335apfn5x2wpn3njgtdl6xx4
-  dialogues.py: bafybeib6jmus2ororlca3g6ktyvlwzkicqke4e6joqf7zmcpbwyszpoaa4
+  behaviours.py: bafybeiaaltarv4dlus5ecfebwibnlmjnob7zri3uu7hhxl52qpynedj6bq
+  dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeienbo7qnwpnlrril35x4stzoseor3mxrw3sz7uhcwi5gvc4ag47ae
-  handlers.py: bafybeigsgkgpjqrsw6jumv3qpqrlsmsbyoorgm7c5nrfulxqfvc4ruimei
-  models.py: bafybeietq7i7js5s6ictdnmnpesthmx67gqotznvfhnxra7djbjlegifji
-  payloads.py: bafybeihltzq2eqd6cabn5534fzk6gryfgggqi4nneswojq22e6iktpr2km
-  prompts.py: bafybeibpvgk7gnrmijhtvgwodniigb5vfj4jotumjjf4i5itgqhizz6b7a
-  rounds.py: bafybeihpdukacbmwoebz3d2ivpfkt2zwkb5nrhsr2psvcsi5n7nzmm23r4
+  handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
+  models.py: bafybeibve42pf2dsjxbds3k4b6ao3cfebb4sjttwkca45w2u52ewslggdm
+  payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
+  prompts.py: bafybeiaiojw5kcacmxh33mi62bksrihzgshot2xqn6wbgojw773slyeepi
+  rounds.py: bafybeifeqrdirsr75ztjr7e524kyr36aoubbw6o74hdxiddya3lvoheefu
   tests/__init__.py: bafybeihp6kpsvb25xuq7hz6gmq5pizbodmpw7qblavu53g4bonhim3nbdy
   tests/test_behaviours.py: bafybeibi3dcr73rcg3wigppwdoh5csv6kamftcf4hhrugkab4t44njsb6q
   tests/test_dialogues.py: bafybeihdh4rmtkdqjkhccgnjtzqtw5yhcswrxgnmiexiubi4qpe66t46ce
@@ -24,16 +24,16 @@ fingerprint:
   tests/test_rounds.py: bafybeibcdct5qlu6xs5lfvt4npdxnyw3kunlwhepf4bkby5twqwvc2ztd4
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeigy4djshfxul4sxnjhpxaafoef3kjoqx5zyuhn34bs2n254ocsuku
-- dvilela/llama:0.1.0:bafybeigzp546kb4bzyjnq5s2ahduskokcnr7o7k3lcf6emg7iva6c6rue4
+- dvilela/kv_store:0.1.0:bafybeicl3d5x22g7yoqhidh6m3vl3mo5qcnosq4qmnjaj2en7ieyymamaq
+- dvilela/llama:0.1.0:bafybeiczdkeq5q7zinqcgqp2v26x62m2wnuqvdft7nqryflit7yop43r5m
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
-- dvilela/service_registry:0.1.0:bafybeihedzhenrzowsexoq5mnkputivyyf2rbnxg7pxq5cqhlyjy5qmmea
+- dvilela/service_registry:0.1.0:bafybeih4w3zwtvll7ow4deontdhkwe6ouobpznsnpjgsum6ujkgioqgpli
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-- dvilela/kv_store:0.1.0:bafybeigbszpzmtsrvuxe3lcpxkgj5jtxlnxsxgutrrsyg745cwasgdvqeu
+- dvilela/kv_store:0.1.0:bafybeidxnjkkp7bwbf3dxca65va2nlyoltxjgpmffzzskmqjggdrzae2fi
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe

@@ -20,11 +20,16 @@
 """This module contains the handlers for the skill of TsunamiAbciApp."""
 
 from typing import Optional
+
 from aea.configurations.data_types import PublicId
-from packages.valory.skills.abstract_round_abci.handlers import AbstractResponseHandler
+
+from packages.dvilela.protocols.kv_store.message import KvStoreMessage
+from packages.valory.protocols.srr.message import SrrMessage
+from packages.valory.protocols.twitter.message import TwitterMessage
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
+from packages.valory.skills.abstract_round_abci.handlers import AbstractResponseHandler
 from packages.valory.skills.abstract_round_abci.handlers import (
     ContractApiHandler as BaseContractApiHandler,
 )
@@ -43,9 +48,6 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
-from packages.valory.protocols.twitter.message import TwitterMessage
-from packages.valory.protocols.srr.message import SrrMessage
-from packages.dvilela.protocols.kv_store.message import KvStoreMessage
 
 
 ABCIHandler = BaseABCIRoundHandler

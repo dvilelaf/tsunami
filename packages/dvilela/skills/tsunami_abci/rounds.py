@@ -19,9 +19,10 @@
 
 """This package contains the rounds of TsunamiAbciApp."""
 
-from enum import Enum
-from typing import Dict, FrozenSet, cast, Set
 import json
+from enum import Enum
+from typing import Dict, FrozenSet, Set, cast
+
 from packages.dvilela.skills.tsunami_abci.payloads import (
     PrepareTweetsPayload,
     PublishTweetsPayload,
@@ -29,14 +30,14 @@ from packages.dvilela.skills.tsunami_abci.payloads import (
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
+    CollectionRound,
     DegenerateRound,
+    DeserializedCollection,
     EventToTimeout,
     get_name,
-    DeserializedCollection,
-    CollectionRound
 )
 
 
@@ -98,7 +99,6 @@ class PublishTweetsRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_publication)
     selection_key = get_name(SynchronizedData.tweets)
-
 
 
 class FinishedPublishRound(DegenerateRound):

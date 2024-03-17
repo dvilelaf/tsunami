@@ -36,4 +36,3 @@ class PublishTweetsPayload(BaseTxPayload):
     """Represent a transaction payload for the PublishTweetsRound."""
 
     tweets: str
-

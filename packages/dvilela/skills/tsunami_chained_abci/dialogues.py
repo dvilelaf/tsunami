@@ -19,6 +19,24 @@
 
 """This module contains the classes required for dialogue management."""
 
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    KvStoreDialogue as BaseKvStoreDialogue,
+)
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    KvStoreDialogues as BaseKvStoreDialogues,
+)
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    SrrDialogue as BaseSrrDialogue,
+)
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    SrrDialogues as BaseSrrDialogues,
+)
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    TwitterDialogue as BaseTwitterDialogue,
+)
+from packages.dvilela.skills.tsunami_abci.dialogues import (
+    TwitterDialogues as BaseTwitterDialogues,
+)
 from packages.valory.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
 )
@@ -60,14 +78,6 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 )
 from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
-)
-from packages.dvilela.skills.tsunami_abci.dialogues import (
-    SrrDialogue as BaseSrrDialogue,
-    SrrDialogues as BaseSrrDialogues,
-    TwitterDialogue as BaseTwitterDialogue,
-    TwitterDialogues as BaseTwitterDialogues,
-    KvStoreDialogue as BaseKvStoreDialogue,
-    KvStoreDialogues as BaseKvStoreDialogues,
 )
 
 

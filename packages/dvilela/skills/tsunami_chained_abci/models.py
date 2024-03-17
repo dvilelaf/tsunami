@@ -19,6 +19,14 @@
 
 """This module contains the shared state for the abci skill of TsunamiChainedSkillAbciApp."""
 
+from packages.dvilela.skills.tsunami_abci.models import Params as TsunamiParams
+from packages.dvilela.skills.tsunami_abci.models import (
+    RandomnessApi as TsunamiRandomnessApi,
+)
+from packages.dvilela.skills.tsunami_abci.rounds import Event as TsunamiEvent
+from packages.dvilela.skills.tsunami_chained_abci.composition import (
+    TsunamiChainedSkillAbciApp,
+)
 from packages.valory.skills.abstract_round_abci.models import ApiSpecs
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -26,18 +34,6 @@ from packages.valory.skills.abstract_round_abci.models import (
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
-)
-from packages.dvilela.skills.tsunami_chained_abci.composition import (
-    TsunamiChainedSkillAbciApp,
-)
-from packages.dvilela.skills.tsunami_abci.models import (
-    Params as TsunamiParams,
-)
-from packages.dvilela.skills.tsunami_abci.models import (
-    RandomnessApi as TsunamiRandomnessApi,
-)
-from packages.dvilela.skills.tsunami_abci.rounds import (
-    Event as TsunamiEvent,
 )
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 
@@ -67,13 +63,12 @@ class SharedState(BaseSharedState):
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
         ] = (self.context.params.reset_pause_duration + MARGIN)
 
-        TsunamiChainedSkillAbciApp.event_to_timeout[
-            TsunamiEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds * MULTIPLIER
+        TsunamiChainedSkillAbciApp.event_to_timeout[TsunamiEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds * MULTIPLIER
+        )
 
 
 class Params(
     TsunamiParams,
-
 ):
     """A model to represent params for multiple abci apps."""

@@ -19,6 +19,16 @@
 
 """This module contains the handlers for the skill of TsunamiChainedAbciApp."""
 
+from packages.dvilela.skills.tsunami_abci.handlers import (
+    FarcasterHandler as BaseFarcasterHandler,
+)
+from packages.dvilela.skills.tsunami_abci.handlers import HttpHandler as BaseHttpHandler
+from packages.dvilela.skills.tsunami_abci.handlers import (
+    KvStoreHandler as BaseKvStoreHandler,
+)
+from packages.dvilela.skills.tsunami_abci.handlers import (
+    TwitterHandler as BaseTwitterHandler,
+)
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
@@ -36,12 +46,6 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 )
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
-)
-from packages.dvilela.skills.tsunami_abci.handlers import (
-    TwitterHandler as BaseTwitterHandler,
-    FarcasterHandler as BaseFarcasterHandler,
-    HttpHandler as BaseHttpHandler,
-    KvStoreHandler as BaseKvStoreHandler
 )
 
 

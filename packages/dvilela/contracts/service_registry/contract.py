@@ -20,12 +20,12 @@
 """This module contains the class to connect to the wveolas contract."""
 import logging
 from typing import Optional
-from web3.types import BlockIdentifier
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
+from web3.types import BlockIdentifier
 
 
 PUBLIC_ID = PublicId.from_str("dvilela/service_registry:0.1.0")
@@ -58,7 +58,9 @@ class ServiceRegistryContract(Contract):
         MAX_BLOCKS = 300000
 
         to_block = (
-            ledger_api.api.eth.get_block_number() - 1 if to_block == "latest" else to_block
+            ledger_api.api.eth.get_block_number() - 1
+            if to_block == "latest"
+            else to_block
         )
         ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
 
@@ -80,7 +82,6 @@ class ServiceRegistryContract(Contract):
             events=events,
             last_block=int(to_block),
         )
-
 
     @classmethod
     def get_token_uri(

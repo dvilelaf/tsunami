@@ -25,6 +25,20 @@ from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
 
+from packages.dvilela.protocols.kv_store.dialogues import (
+    KvStoreDialogue as BaseKvStoreDialogue,
+)
+from packages.dvilela.protocols.kv_store.dialogues import (
+    KvStoreDialogues as BaseKvStoreDialogues,
+)
+from packages.valory.protocols.srr.dialogues import SrrDialogue as BaseSrrDialogue
+from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
+from packages.valory.protocols.twitter.dialogues import (
+    TwitterDialogue as BaseTwitterDialogue,
+)
+from packages.valory.protocols.twitter.dialogues import (
+    TwitterDialogues as BaseTwitterDialogues,
+)
 from packages.valory.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
 )
@@ -68,15 +82,6 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
 
-from packages.valory.protocols.srr.dialogues import SrrDialogue as BaseSrrDialogue
-from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
-
-from packages.valory.protocols.twitter.dialogues import TwitterDialogue as BaseTwitterDialogue
-from packages.valory.protocols.twitter.dialogues import TwitterDialogues as BaseTwitterDialogues
-
-from packages.dvilela.protocols.kv_store.dialogues import KvStoreDialogue as BaseKvStoreDialogue
-from packages.dvilela.protocols.kv_store.dialogues import KvStoreDialogues as BaseKvStoreDialogues
-
 
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
@@ -108,6 +113,7 @@ IpfsDialogues = BaseIpfsDialogues
 
 SrrDialogue = BaseSrrDialogue
 
+
 class SrrDialogues(Model, BaseSrrDialogues):
     """The dialogues class keeps track of all dialogues."""
 
@@ -135,6 +141,7 @@ class SrrDialogues(Model, BaseSrrDialogues):
             self_address=str(self.skill_id),
             role_from_first_message=role_from_first_message,
         )
+
 
 TwitterDialogue = BaseTwitterDialogue
 
@@ -169,6 +176,7 @@ class TwitterDialogues(Model, BaseTwitterDialogues):
 
 
 KvStoreDialogue = BaseKvStoreDialogue
+
 
 class KvStoreDialogues(Model, BaseKvStoreDialogues):
     """The dialogues class keeps track of all dialogues."""
