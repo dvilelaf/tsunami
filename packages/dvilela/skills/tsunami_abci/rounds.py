@@ -89,6 +89,8 @@ class PrepareTweetsRound(CollectSameUntilThresholdRound):
     collection_key = get_name(SynchronizedData.participant_to_preparation)
     selection_key = get_name(SynchronizedData.tweets)
 
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
+
 
 class PublishTweetsRound(CollectSameUntilThresholdRound):
     """PublishTweetsRound"""
@@ -99,6 +101,8 @@ class PublishTweetsRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_publication)
     selection_key = get_name(SynchronizedData.tweets)
+
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
 
 
 class FinishedPublishRound(DegenerateRound):
@@ -113,16 +117,12 @@ class TsunamiAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         PrepareTweetsRound: {
             Event.DONE: PublishTweetsRound,
-            Event.ERROR: PrepareTweetsRound,
             Event.NO_MAJORITY: PrepareTweetsRound,
-            Event.RETRY: PrepareTweetsRound,
             Event.ROUND_TIMEOUT: PrepareTweetsRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,
-            Event.ERROR: PublishTweetsRound,
             Event.NO_MAJORITY: PublishTweetsRound,
-            Event.RETRY: PublishTweetsRound,
             Event.ROUND_TIMEOUT: PublishTweetsRound,
         },
         FinishedPublishRound: {},

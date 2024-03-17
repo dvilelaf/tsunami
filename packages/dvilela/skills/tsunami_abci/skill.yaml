@@ -29,7 +29,7 @@ connections:
 - valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
-- dvilela/service_registry:0.1.0:bafybeih4w3zwtvll7ow4deontdhkwe6ouobpznsnpjgsum6ujkgioqgpli
+- dvilela/service_registry:0.1.0:bafybeieryuif77icvgh23x4pvtbb3cobo57yzuuttf44df6us4rey4bf5m
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4

@@ -16,3 +16,6 @@ ethereum_private_key.txt
 tsunami
 !packages/dvilela/agents/tsunami
 !packages/dvilela/services/tsunami
+packages/__pycache__/
+
+__pycache__/

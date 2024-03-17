@@ -78,6 +78,12 @@ common-checks-1:
 	tomte check-doc-links
 	tox -p -e check-hash -e check-packages -e check-doc-hashes
 
+.PHONY: fix-abci-app-specs
+fix-abci-app-specs:
+	export PYTHONPATH=${PYTHONPATH}:${PWD}
+	autonomy analyse fsm-specs --update --app-class TsunamiAbciApp --package packages/dvilela/skills/tsunami_abci/ || (echo "Failed to check tsunami_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class TsunamiChainedSkillAbciApp --package packages/dvilela/skills/tsunami_chained_abci/ || (echo "Failed to check tsunami_chained_abci abci consistency" && exit 1)
+
 .PHONY: tm
 tm:
 	rm -r ~/.tendermint
