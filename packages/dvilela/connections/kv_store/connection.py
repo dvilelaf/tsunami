@@ -160,6 +160,7 @@ class KvStoreConnection(BaseSyncConnection):
     ) -> KvStoreMessage:
         """Read several keys."""
         keys = message.keys if isinstance(message.keys, tuple) else (message.keys)
+        self.logger.info(f"DB read: {keys}")
         query = Store.select().where(Store.key in keys)
         response_data = {entry.key: entry.value for entry in query}
 
@@ -179,10 +180,16 @@ class KvStoreConnection(BaseSyncConnection):
     ) -> KvStoreMessage:
         """Write several key-value pairs."""
 
-        with db.atomic():
-            Store.insert_many(
-                message.data.items(), fields=[Store.key, Store.value]
-            ).execute()
+        self.logger.info(f"DB write: {message.data}")
+
+        for k, v in message.data.items():
+            entry = Store.get_or_none(Store.key == k)
+
+            if not entry:
+                Store.create(key=k, value=v)
+            else:
+                entry.value = v
+                entry.save()
 
         return cast(
             KvStoreMessage,
@@ -195,7 +202,9 @@ class KvStoreConnection(BaseSyncConnection):
     def on_connect(self) -> None:
         """Set up the connection"""
         db.init(self.db_path)
+        self.logger.info(f"KV database initialized in {self.db_path}")
         db.connect()
+        self.logger.info("KV database connection established")
         db.create_tables([Store])
 
     def on_disconnect(self) -> None:

@@ -98,7 +98,9 @@ class LlamaConnection(BaseSyncConnection):
         repo_id = self.configuration.config.get(
             "repo_id", "TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF"
         )
-        self.logger.info(f"Downloading LLM model {repo_id}...")
+        self.logger.info(
+            f"Downloading LLM model {repo_id}. This might take a few minutes..."
+        )
         self.llm = Llama.from_pretrained(
             repo_id=repo_id,
             filename=self.configuration.config.get("filename", "*Q2_K.gguf"),
