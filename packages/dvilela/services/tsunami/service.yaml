@@ -8,13 +8,12 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeielzpw77btndekig6wcsmu47br7kf5acrlrpauya72qsvveckalhy
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeiab2gbgdwakhywlx6hcxhyllz4rja3cc726kft5f7qek6yu44lite
+agent: dvilela/tsunami:0.1.0:bafybeieu563fyfc6z2qbnbdzh3bar2zbncl3kad2as7yyokj43bgstwm6q
 number_of_agents: 1
 deployment:
   agent:
     ports:
-      0:
-        8000: 8000
+      8000: 8000
   local:
     volumes:
       data: /data
@@ -157,29 +156,25 @@ cert_requests:
 ---
 public_id: valory/twitter:0.1.0
 type: connection
-0:
-  config:
-    access_secret: ${ACCESS_SECRET:str:<access_secret>}
-    access_token: ${ACCESS_TOKEN:str:<access_token>}
-    auth_token: ${AUTH_TOKEN:str:<auth_token>}
-    consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
-    consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+config:
+  access_secret: ${ACCESS_SECRET:str:<access_secret>}
+  access_token: ${ACCESS_TOKEN:str:<access_token>}
+  auth_token: ${AUTH_TOKEN:str:<auth_token>}
+  consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
+  consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
+  use_staging_api: ${USE_STAGING_API:bool:false}
+  staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 ---
 public_id: valory/farcaster:0.1.0
 type: connection
-0:
-  config:
-    farcaster_mnemonic: ${FARCASTER_MNEMONIC:str:<farcaster_mnemonic>}
+config:
+  farcaster_mnemonic: ${FARCASTER_MNEMONIC:str:<farcaster_mnemonic>}
 ---
 public_id: dvilela/llama:0.1.0
 type: connection
-0:
-  config: {}
+config: {}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection
-0:
-  config:
-    db_path: ${DB_PATH:str:/data/tsunami.db}
+config:
+  db_path: ${DB_PATH:str:null}

@@ -14,10 +14,10 @@ connections:
 - valory/http_client:0.23.0:bafybeih5vzo22p2umhqo52nzluaanxx7kejvvpcpdsrdymckkyvmsim6gm
 - valory/ledger:0.19.0:bafybeic3ft7l7ca3qgnderm4xupsfmyoihgi27ukotnz7b5hdczla2enya
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
-- valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
+- valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
-- dvilela/kv_store:0.1.0:bafybeiflpjqi47db3k3jwdhlz2twqverpx4ccu7me6gxg7uzb7k63y624e
-- dvilela/llama:0.1.0:bafybeictdja7oeufksrmpdhmzrulannm6pc44qruoegb4esal7pp7i454u
+- dvilela/kv_store:0.1.0:bafybeiahmkgt7f7wero3emcem2augumezzifluwp4bnbgtlnqgwor242li
+- dvilela/llama:0.1.0:bafybeihmqgneufeirpbow2avevd6ue6dqbnmbe2wvsydrcrpryh5w4sqye
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeif3n23srpc7kouvry6c5h3qmd4h63vtd3gg7el2upjm6xac6mligi
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeic5f3vnd3pkzlhapkzgtrfmer7otjg3xxaflxkadpz6prjxk3salq
@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeig3q2w55qdvnoflrsebfuqhjpzakziv2f2y6mfpdh3jry2ea6hvim
-- dvilela/tsunami_chained_abci:0.1.0:bafybeieoklhrq53tlwzuyciuy4fvh3nicenwn5jegy67b3onqckt7ick4m
+- dvilela/tsunami_abci:0.1.0:bafybeidbfym6dktycy46bafyvh5nogtgepl7c62b2i7uhfc55xfp5rc5qa
+- dvilela/tsunami_chained_abci:0.1.0:bafybeighdezrpvq3zzn7s2arvad2p4pk5m2gvcawzcdknzxvbv5g3oks74
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -91,7 +91,7 @@ config: {}
 public_id: dvilela/kv_store:0.1.0
 type: connection
 config:
-  db_path: null
+  db_path: ${str:/data/tsunami.db}
 ---
 public_id: valory/abci:0.1.0
 type: connection
