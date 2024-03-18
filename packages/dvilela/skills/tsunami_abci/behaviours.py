@@ -331,14 +331,23 @@ class PrepareTweetsBehaviour(
 
         # Chain loop
         for chain_id, contracts_data in self.tracked_events.items():
-            # Get last block
+            # Get from block
+            db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
+            from_block = int(
+                db_data.get(f"from_block_{chain_id}")
+                or getattr(self.params, f"initial_block_{chain_id}")
+            )
+
+            # Get to block
             latest_block = yield from self.get_ledger_api_response(
                 performative=LedgerApiMessage.Performative.GET_STATE,
                 ledger_callable="get_block_number",
                 chain_id=chain_id,
             )
 
-            self.context.logger.info(f"Latest {chain_id} block is {latest_block}")
+            self.context.logger.info(
+                f"chaind_id: {chain_id} from_block: {from_block} to_clock: {latest_block}"
+            )
 
             # Contract loop
             for contract_name, contract_data in contracts_data.items():
@@ -351,13 +360,6 @@ class PrepareTweetsBehaviour(
                 ].items():
                     self.context.logger.info(
                         f"Getting {event_name} events from contract {contract_name} on {chain_id} [{contract_address}]"
-                    )
-
-                    # Get from_block
-                    db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
-                    from_block = int(
-                        db_data.get(f"from_block_{chain_id}")
-                        or getattr(self.params, f"initial_block_{chain_id}")
                     )
 
                     # Get events
@@ -374,7 +376,7 @@ class PrepareTweetsBehaviour(
                     for event in response["events"]:
                         self.context.logger.info(f"Processing event {event}")
 
-                        unit_id = event.args.serviceId
+                        unit_id = getattr(event.args, f"{unit_id}Id")
 
                         kwargs = {
                             f"{unit_type}_id": unit_id,
