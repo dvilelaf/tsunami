@@ -22,7 +22,7 @@ skills:
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
-- dvilela/tsunami_abci:0.1.0:bafybeidbfym6dktycy46bafyvh5nogtgepl7c62b2i7uhfc55xfp5rc5qa
+- dvilela/tsunami_abci:0.1.0:bafybeid5j36c47vqtenoe4nodrwfdmiaswkvahdz3tpkd5nfr6p6vu2pjm
 behaviours:
   main:
     args: {}

@@ -183,6 +183,8 @@ class LlamaConnection(BaseSyncConnection):
                 "error": f"Some parameter is missing from the request data: required={REQUIRED_PROPERTIES}, got={list(payload.keys())}"
             }, True
 
+        self.logger.info(f"Calling chat completion: {payload}")
+
         try:
             response = self.llm.create_chat_completion(
                 messages=[
