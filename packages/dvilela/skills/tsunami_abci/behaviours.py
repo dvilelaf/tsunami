@@ -347,7 +347,7 @@ class PrepareTweetsBehaviour(
                 }
             )
 
-            user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
+            user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}"
 
             tweet = yield from self.build_tweet(user_prompt)
 
