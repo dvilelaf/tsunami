@@ -357,7 +357,7 @@ class PrepareTweetsBehaviour(
                     db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
                     from_block = int(
                         db_data.get(f"from_block_{chain_id}")
-                        or self.params.initial_block_ethereum
+                        or getattr(self.params, f"initial_block_{chain_id}")
                     )
 
                     # Get events

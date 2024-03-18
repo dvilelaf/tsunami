@@ -69,6 +69,7 @@ class Params(BaseParams):
         self.initial_block_ethereum = self._ensure(
             "initial_block_ethereum", kwargs, int
         )
+        self.initial_block_gnosis = self._ensure("initial_block_gnosis", kwargs, int)
         self.twitter_credentials = json.loads(
             self._ensure("twitter_credentials", kwargs, str)
         )

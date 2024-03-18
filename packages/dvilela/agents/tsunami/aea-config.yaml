@@ -205,4 +205,5 @@ models:
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
       service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
       initial_block_ethereum: ${int:18500000}
+      initial_block_gnosis: ${int:18500000}
       twitter_credentials: ${str:'{}'}
