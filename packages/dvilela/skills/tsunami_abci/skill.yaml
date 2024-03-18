@@ -142,6 +142,9 @@ models:
       publish_twitter: true
       publish_farcaster: true
       service_registry_address_ethereum: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
+      agent_registry_address_ethereum: '0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112'
+      component_registry_address_ethereum: '0x15bd56669F57192a97dF41A2aa8f4403e9491776'
+      service_registry_address_gnosis: '0x9338b5153AE39BB89f50468E608eD9d764B755fD'
       initial_block_ethereum: 18500000
       twitter_credentials: '{}'
     class_name: Params

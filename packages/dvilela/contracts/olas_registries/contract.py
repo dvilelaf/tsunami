@@ -27,7 +27,7 @@ from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
 
 
-PUBLIC_ID = PublicId.from_str("dvilela/service_registry:0.1.0")
+PUBLIC_ID = PublicId.from_str("dvilela/olas_registries:0.1.0")
 
 _logger = logging.getLogger(
     f"aea.packages.{PUBLIC_ID.author}.contracts.{PUBLIC_ID.name}.contract"
@@ -35,8 +35,8 @@ _logger = logging.getLogger(
 
 
 # pylint: disable=too-many-arguments,invalid-name
-class ServiceRegistryContract(Contract):
-    """The service registry contract."""
+class OlasRegistriesContract(Contract):
+    """The olas registries contract."""
 
     contract_id = PUBLIC_ID
 
@@ -63,7 +63,6 @@ class ServiceRegistryContract(Contract):
         )
         ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
 
-        # Event loop
         event = getattr(contract_instance.events, event_name)
         events = []
         for i in range(len(ranges) - 1):
@@ -78,7 +77,7 @@ class ServiceRegistryContract(Contract):
 
         return dict(
             events=events,
-            last_block=int(to_block),
+            latest_block=int(to_block),
         )
 
     @classmethod

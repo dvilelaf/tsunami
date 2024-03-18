@@ -23,7 +23,7 @@ contracts:
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeic5f3vnd3pkzlhapkzgtrfmer7otjg3xxaflxkadpz6prjxk3salq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeibtaa6tvhzoo4osu3moilxtwxbfwqo3vt7rsr3ugjugzwndzkkmd4
-- dvilela/service_registry:0.1.0:bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom
+- dvilela/olas_registries:0.1.0:bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -201,5 +201,8 @@ models:
       publish_twitter: ${bool:true}
       publish_farcaster: ${bool:true}
       service_registry_address_ethereum: ${str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+      agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
+      component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
+      service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
       initial_block_ethereum: ${int:18500000}
       twitter_credentials: ${str:'{}'}

@@ -1,7 +1,7 @@
 {
     "dev": {
         "protocol/dvilela/kv_store/0.1.0": "bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge",
-        "contract/dvilela/service_registry/0.1.0": "bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom",
+        "contract/dvilela/olas_registries/0.1.0": "bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom",
         "connection/dvilela/kv_store/0.1.0": "bafybeiahmkgt7f7wero3emcem2augumezzifluwp4bnbgtlnqgwor242li",
         "connection/dvilela/llama/0.1.0": "bafybeiabrhp6isug6whu3plordgk7fctkblozw7hm5u6xddobludhforju",
         "skill/dvilela/tsunami_abci/0.1.0": "bafybeidx2i3cfd75bmutbughbkfc5fprzu7talquphcdfb3ebnlqu3jg6y",

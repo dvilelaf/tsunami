@@ -52,14 +52,14 @@ task is to create a short Tweet to announce it.
 Keep it really short, under 200 characters.
 """
 
-USER_PROMPT_SERVICE = "A new service with id {service_id} has been minted on the Olas protocol on {chain_name}."
-USER_PROMPT_AGENT = "A new agent with id {agent_id} has been minted on the Olas protocol on {chain_name}."
-USER_PROMPT_COMPONENT = "A new component with id {component_id} has been minted on the Olas protocol on {chain_name}."
+USER_PROMPT_SERVICE_CREATED = "A new service with id {service_id} has been minted on the Olas protocol on {chain_name}."
+USER_PROMPT_AGENT_CREATED = "A new agent with id {agent_id} has been minted on the Olas protocol on {chain_name}."
+USER_PROMPT_COMPONENT_CREATED = "A new component with id {component_id} has been minted on the Olas protocol on {chain_name}."
 
 SYSTEM_PROMPTS = [SYSTEM_PROMPT_PIRATE, SYSTEM_PROMPT_OLAD, SYSTEM_PROMPT_TECHIE]
 
 USER_PROMPT_TEMPLATES = {
-    "service": USER_PROMPT_SERVICE,
-    "agent": USER_PROMPT_AGENT,
-    "component": USER_PROMPT_COMPONENT,
+    "service_minted": USER_PROMPT_SERVICE_CREATED,
+    "agent_minted": USER_PROMPT_AGENT_CREATED,
+    "component_minted": USER_PROMPT_COMPONENT_CREATED,
 }

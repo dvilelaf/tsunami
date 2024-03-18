@@ -22,7 +22,7 @@
 import json
 import random
 from abc import ABC
-from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from aea.protocols.base import Message
 from twitter_text import parse_tweet
@@ -33,7 +33,7 @@ from packages.dvilela.connections.kv_store.connection import (
 from packages.dvilela.connections.llama.connection import (
     PUBLIC_ID as LLAMA_CONNECTION_PUBLIC_ID,
 )
-from packages.dvilela.contracts.service_registry.contract import ServiceRegistryContract
+from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
 from packages.dvilela.protocols.kv_store.dialogues import (
     KvStoreDialogue,
     KvStoreDialogues,
@@ -63,6 +63,7 @@ from packages.valory.connections.twitter.connection import (
     PUBLIC_ID as TWITTER_CONNECTION_PUBLIC_ID,
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.protocols.ledger_api import LedgerApiMessage
 from packages.valory.protocols.srr.dialogues import SrrDialogue, SrrDialogues
 from packages.valory.protocols.srr.message import SrrMessage
 from packages.valory.protocols.twitter.message import TwitterMessage
@@ -81,6 +82,41 @@ HTTP_OK = 200
 
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
     """Base behaviour for the tsunami_abci skill."""
+
+    def __init__(self, **kwargs: Any):
+        """Init"""
+        super().__init__(**kwargs)
+
+        self.tracked_events = {
+            "ethereum": {
+                "service_registry": {
+                    "contract_address": self.params.service_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                    },
+                },
+                "agent_registry": {
+                    "contract_address": self.params.agent_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateUnit": USER_PROMPT_TEMPLATES["agent_minted"]
+                    },
+                },
+                "component_registry": {
+                    "contract_address": self.params.component_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateUnit": USER_PROMPT_TEMPLATES["component_minted"]
+                    },
+                },
+            },
+            "gnosis": {
+                "service_registry": {
+                    "contract_address": self.params.service_registry_address_gnosis,
+                    "event_to_template": {
+                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                    },
+                },
+            },
+        }
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -281,11 +317,6 @@ class PrepareTweetsBehaviour(
         self,
     ) -> Generator[None, None, List[str]]:  # pylint: disable=too-many-locals
         """Build tweets"""
-
-        # TODO: Loop chains
-        # TODO: Loop registries
-        # TODO: common last block for every call
-
         tweets = self.synchronized_data.tweets
 
         # If there are no tweets in the synchronized_data, this might be the first period.
@@ -296,69 +327,99 @@ class PrepareTweetsBehaviour(
                 tweets = json.loads(response["tweets"])
                 self.context.logger.info(f"Loaded tweets from db: {tweets}")
 
-        # Get from_block
-        db_data = yield from self._read_kv(keys=("from_block",))
-        from_block = int(
-            db_data.get("from_block") or self.params.initial_block_ethereum
-        )
+        contract_id = str(OlasRegistriesContract.contract_id)
 
-        # Get events
-        contract_id = str(ServiceRegistryContract.contract_id)
-        contract_address = self.params.service_registry_address_ethereum
-
-        events, last_block = yield from self.get_events(
-            contract_id, contract_address, "CreateService", from_block
-        )
-
-        # Write from block
-        yield from self._write_kv({"from_block": str(last_block)})
-
-        tweets = []
-        for event in events:
-            self.context.logger.info(f"Processing event {event}")
-
-            unit_id = event.args.serviceId  # TODO: change for different events
-
-            # Get token URI
-            uri = yield from self.get_token_uri(contract_id, contract_address, unit_id)
-
-            # Get unit data
-            self.context.logger.info("Getting token data...")
-            response = yield from self.get_http_response(method="GET", url=uri)
-
-            if response.status_code != HTTP_OK:
-                self.context.logger.info(
-                    f"Failed to download token data: {response.status_code}"
-                )
-                continue  # TODO: retries
-
-            response_json = json.loads(response.body)
-            self.context.logger.info(f"Got token data: {response_json}")
-
-            unit_name = response_json["name"]
-            unit_description = response_json["description"]
-
-            unit_type = "service"
-
-            user_prompt = USER_PROMPT_TEMPLATES[unit_type].format(
-                **{
-                    f"{unit_type}_id": unit_id,
-                    "chain_name": "Ethereum",  # TODO: dynamic
-                }
+        # Chain loop
+        for chain_id, contracts_data in self.tracked_events.items():
+            # Get last block
+            latest_block = yield from self.get_ledger_api_response(
+                performative=LedgerApiMessage.Performative.GET_STATE,
+                ledger_callable="get_block_number",
+                chain_id=chain_id,
             )
 
-            user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}"
+            self.context.logger.info(f"Latest {chain_id} block is {latest_block}")
 
-            tweet = yield from self.build_tweet(user_prompt)
+            # Contract loop
+            for contract_name, contract_data in contracts_data.items():
+                contract_address = contract_data["contract_address"]
+                unit_type = contract_name.split("_", maxsplit=1)[0]
 
-            if tweet:
-                tweets.append(
-                    {
-                        "text": tweet,
-                        "twitter_published": False,
-                        "farcaster_published": False,
-                    }
-                )
+                # Event type loop
+                for event_name, event_template in contract_data[
+                    "event_to_template"
+                ].items():
+                    self.context.logger.info(
+                        f"Getting {event_name} events from contract {contract_name} on {chain_id} [{contract_address}]"
+                    )
+
+                    # Get from_block
+                    db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
+                    from_block = int(
+                        db_data.get(f"from_block_{chain_id}")
+                        or self.params.initial_block_ethereum
+                    )
+
+                    # Get events
+                    response = yield from self.get_events(
+                        contract_id,
+                        chain_id,
+                        contract_address,
+                        event_name,
+                        from_block,
+                        latest_block,
+                    )
+
+                    # Event loop
+                    for event in response["events"]:
+                        self.context.logger.info(f"Processing event {event}")
+
+                        unit_id = event.args.serviceId
+
+                        kwargs = {
+                            f"{unit_type}_id": unit_id,
+                            "chain_name": chain_id,
+                        }
+
+                        user_prompt = event_template.format(**kwargs)
+
+                        # Get token URI
+                        uri = yield from self.get_token_uri(
+                            contract_id, contract_address, unit_id
+                        )
+
+                        # Get unit data
+                        self.context.logger.info("Getting token data...")
+                        response = yield from self.get_http_response(
+                            method="GET", url=uri
+                        )
+
+                        if response.status_code != HTTP_OK:
+                            self.context.logger.info(
+                                f"Failed to download token data: {response.status_code}"
+                            )
+                            continue  # TODO: retries
+
+                        response_json = json.loads(response.body)
+                        self.context.logger.info(f"Got token data: {response_json}")
+
+                        unit_name = response_json["name"]
+                        unit_description = response_json["description"]
+                        user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
+
+                        tweet = yield from self.build_tweet(user_prompt)
+
+                        if tweet:
+                            tweets.append(
+                                {
+                                    "text": tweet,
+                                    "twitter_published": False,
+                                    "farcaster_published": False,
+                                }
+                            )
+
+            # Write from block
+            yield from self._write_kv({f"from_block_{chain_id}": str(latest_block)})
 
         # Save tweets to the db
         yield from self._write_kv({"tweets": json.dumps(tweets)})
@@ -368,12 +429,12 @@ class PrepareTweetsBehaviour(
         return tweets
 
     def get_events(
-        self, contract_id, contract_address, event, from_block
+        self, contract_id, chain_id, contract_address, event_name, from_block, to_block
     ) -> Generator[None, None, Tuple[Optional[List], Optional[int]]]:
         """Get registries events"""
 
         self.context.logger.info(
-            f"Retrieving {event} events later than block {from_block} on contract {contract_id}::{contract_address}"
+            f"Retrieving {event_name} events later than block {from_block} on contract {chain_id}::{contract_id}::{contract_address}"
         )
 
         contract_api_msg = yield from self.get_contract_api_response(
@@ -381,8 +442,10 @@ class PrepareTweetsBehaviour(
             contract_address=contract_address,
             contract_id=contract_id,
             contract_callable="get_events",
-            event_name=event,
+            event_name=event_name,
             from_block=from_block,
+            to_block=to_block,
+            chain_id=chain_id,
         )
 
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:

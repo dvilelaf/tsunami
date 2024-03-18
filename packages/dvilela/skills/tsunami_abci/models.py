@@ -57,6 +57,15 @@ class Params(BaseParams):
         self.service_registry_address_ethereum = self._ensure(
             "service_registry_address_ethereum", kwargs, str
         )
+        self.agent_registry_address_ethereum = self._ensure(
+            "agent_registry_address_ethereum", kwargs, str
+        )
+        self.component_registry_address_ethereum = self._ensure(
+            "component_registry_address_ethereum", kwargs, str
+        )
+        self.service_registry_address_gnosis = self._ensure(
+            "service_registry_address_gnosis", kwargs, str
+        )
         self.initial_block_ethereum = self._ensure(
             "initial_block_ethereum", kwargs, int
         )
