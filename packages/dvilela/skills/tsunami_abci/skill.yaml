@@ -8,13 +8,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeihy5i3ehmd5bn4sxdhjxvgt2qvjbsrtqhwe6weteknghjyea5j6uu
+  behaviours.py: bafybeiebjhvpzm6zyutiimd2vxv6ly2cjy7hzr3h3cg2oeab55iqla4zhi
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
-  models.py: bafybeibve42pf2dsjxbds3k4b6ao3cfebb4sjttwkca45w2u52ewslggdm
+  models.py: bafybeicurmqhjs4ax5mhrysr5sh5wmf654lcmza6qb652ximvr2kt64yx4
   payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
-  prompts.py: bafybeigfdlgmstarwq3lvhqczenw464xeho3ajjoojgfkcy6zyp2lzmsbi
+  prompts.py: bafybeibppdv2qbyswpaborgju52qfn7n7jnwpeb775uukogqzd6tzap6mq
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
@@ -23,7 +23,7 @@ connections:
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
-- dvilela/service_registry:0.1.0:bafybeihn7jismtfqurfpihd2frqxzxkdzgngyyt5mwxvnk5zbchy7adiom
+- dvilela/olas_registries:0.1.0:bafybeidklp7etrez3ia7glx5daswcjyjpqjwu42xubap2ja3pmdkqc3ehu
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
