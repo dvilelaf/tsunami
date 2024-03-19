@@ -193,6 +193,7 @@ class LlamaConnection(BaseSyncConnection):
                 ],
                 temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE)),
             )
+            self.logger.info(f"LLM response: {response}")
         except Exception as e:
             return {"error": f"Exception while calling Llama:\n{e}"}, True
 
