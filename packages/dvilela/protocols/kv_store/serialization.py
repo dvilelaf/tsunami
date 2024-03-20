@@ -19,15 +19,11 @@
 
 """Serialization module for kv_store protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,no-name-in-module
 from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import (
-    DialogueMessage,  # type: ignore  # pylint: disable=no-name-in-module
-)
-from aea.mail.base_pb2 import (
-    Message as ProtobufMessage,  # type: ignore  # pylint: disable=no-name-in-module
-)
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
 from aea.protocols.base import Message  # type: ignore
 from aea.protocols.base import Serializer  # type: ignore
 

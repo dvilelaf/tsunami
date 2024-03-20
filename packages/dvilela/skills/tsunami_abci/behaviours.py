@@ -313,7 +313,7 @@ class PrepareTweetsBehaviour(
 
         self.set_done()
 
-    def build_tweets(
+    def build_tweets(  # pylint: disable=too-many-locals
         self,
     ) -> Generator[None, None, List[str]]:  # pylint: disable=too-many-locals
         """Build tweets"""
@@ -381,7 +381,7 @@ class PrepareTweetsBehaviour(
                         unit_id = getattr(event.args, f"{unit_type}Id")
 
                         kwargs = {
-                            f"unit_id": unit_id,
+                            "unit_id": unit_id,
                             "chain_name": chain_id,
                         }
 
@@ -432,7 +432,7 @@ class PrepareTweetsBehaviour(
 
         return tweets
 
-    def get_events(
+    def get_events(  # pylint: disable=too-many-arguments
         self, contract_id, chain_id, contract_address, event_name, from_block, to_block
     ) -> Generator[None, None, Tuple[Optional[List], Optional[int]]]:
         """Get registries events"""

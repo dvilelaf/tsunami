@@ -47,7 +47,7 @@ class RandomnessApi(ApiSpecs):
     """A model that wraps ApiSpecs for randomness api specifications."""
 
 
-class Params(BaseParams):
+class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
     """Parameters."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
