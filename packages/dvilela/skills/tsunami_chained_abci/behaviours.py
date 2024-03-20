@@ -36,6 +36,13 @@ from packages.valory.skills.registration_abci.behaviours import (
 from packages.valory.skills.reset_pause_abci.behaviours import (
     ResetPauseABCIConsensusBehaviour,
 )
+from packages.valory.skills.termination_abci.behaviours import (
+    BackgroundBehaviour,
+    TerminationAbciBehaviours,
+)
+from packages.valory.skills.transaction_settlement_abci.behaviours import (
+    TransactionSettlementRoundBehaviour,
+)
 
 
 class TsunamiChainedConsensusBehaviour(AbstractRoundBehaviour):
@@ -47,4 +54,7 @@ class TsunamiChainedConsensusBehaviour(AbstractRoundBehaviour):
         *AgentRegistrationRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TsunamiRoundBehaviour.behaviours,
+        *TerminationAbciBehaviours.behaviours,
+        *TransactionSettlementRoundBehaviour.behaviours,
     }
+    background_behaviours_cls = {BackgroundBehaviour}
