@@ -6,9 +6,9 @@ description: A service that tracks events on the Olas ecosystem and autonomously
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
-  README.md: bafybeielzpw77btndekig6wcsmu47br7kf5acrlrpauya72qsvveckalhy
+  README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeibofpudcbwoqwdlcfcxn7g2nqvw6bcgo4n3pybvizhhx7e2buxw5e
+agent: dvilela/tsunami:0.1.0:bafybeiejk5iff7x3onxl7huflkhy7gglvchmeap5mq6ce5n4dsjw7v7nbm
 number_of_agents: 1
 deployment:
   agent:

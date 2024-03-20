@@ -8,17 +8,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeidveqkli7anvtkldt3bdz5pnuryd2tvhbuzginhxif63e5she4ypi
+  behaviours.py: bafybeig3q2a37ec3z5ixucsk3ttgxjvbv2ugxqvlutfc2n5ktnob4curve
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
-  models.py: bafybeib77agoclwjwecgkuaylctveow3resfwnpm7ukcqvetz2j7ua7sme
+  models.py: bafybeiga2yhyvrpp2rmxdytly4sma2uno2bffmq5bpnuh3g4iljunwhwhe
   payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
   prompts.py: bafybeianrqmfaskrr3hzdvupplnb6izcdgywlvnokepytr5krmromyds3u
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeiahmkgt7f7wero3emcem2augumezzifluwp4bnbgtlnqgwor242li
+- dvilela/kv_store:0.1.0:bafybeiezwfxaanclcj54fp2bk6kodjboz4i5t7ycvmkzsyjnsyq4x464zq
 - dvilela/llama:0.1.0:bafybeicznqvddlmsp5m564emwsbwocya27macghhmkhiey6njwwwc4gzca
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
@@ -28,7 +28,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-- dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
+- dvilela/kv_store:0.1.0:bafybeibkgttvuipo52vytzxknxlumxiygu4g6la4j5c27awgvign5uoqeq
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe

@@ -12,7 +12,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
+- dvilela/kv_store:0.1.0:bafybeibkgttvuipo52vytzxknxlumxiygu4g6la4j5c27awgvign5uoqeq
 class_name: KvStoreConnection
 config:
   db_path: null
