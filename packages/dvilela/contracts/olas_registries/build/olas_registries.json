@@ -483,6 +483,31 @@
          "anonymous":false,
          "inputs":[
             {
+               "indexed":false,
+               "internalType":"uint256",
+               "name":"unitId",
+               "type":"uint256"
+            },
+            {
+               "indexed":false,
+               "internalType":"enum UnitRegistry.UnitType",
+               "name":"uType",
+               "type":"uint8"
+            },
+            {
+               "indexed":false,
+               "internalType":"bytes32",
+               "name":"unitHash",
+               "type":"bytes32"
+            }
+         ],
+         "name":"CreateUnit",
+         "type":"event"
+      },
+      {
+         "anonymous":false,
+         "inputs":[
+            {
                "indexed":true,
                "internalType":"uint256",
                "name":"serviceId",

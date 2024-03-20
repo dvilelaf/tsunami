@@ -339,20 +339,22 @@ class PrepareTweetsBehaviour(
             )
 
             # Get to block
-            latest_block = yield from self.get_ledger_api_response(
+            ledger_api_response = yield from self.get_ledger_api_response(
                 performative=LedgerApiMessage.Performative.GET_STATE,
                 ledger_callable="get_block_number",
                 chain_id=chain_id,
             )
 
+            latest_block = ledger_api_response.state.body["get_block_number_result"]
+
             self.context.logger.info(
-                f"chaind_id: {chain_id} from_block: {from_block} to_clock: {latest_block}"
+                f"chaind_id: {chain_id} from_block: {from_block} to_block: {latest_block}"
             )
 
             # Contract loop
             for contract_name, contract_data in contracts_data.items():
                 contract_address = contract_data["contract_address"]
-                unit_type = contract_name.split("_", maxsplit=1)[0]
+                unit_type = "service" if contract_name == "service_registry" else "unit"
 
                 # Event type loop
                 for event_name, event_template in contract_data[
@@ -363,7 +365,7 @@ class PrepareTweetsBehaviour(
                     )
 
                     # Get events
-                    response = yield from self.get_events(
+                    events, _ = yield from self.get_events(
                         contract_id,
                         chain_id,
                         contract_address,
@@ -373,13 +375,13 @@ class PrepareTweetsBehaviour(
                     )
 
                     # Event loop
-                    for event in response["events"]:
+                    for event in events:
                         self.context.logger.info(f"Processing event {event}")
 
-                        unit_id = getattr(event.args, f"{unit_id}Id")
+                        unit_id = getattr(event.args, f"{unit_type}Id")
 
                         kwargs = {
-                            f"{unit_type}_id": unit_id,
+                            f"unit_id": unit_id,
                             "chain_name": chain_id,
                         }
 
@@ -452,18 +454,18 @@ class PrepareTweetsBehaviour(
 
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.info(
-                f"Error retrieving the events [{contract_api_msg.performative}]"
+                f"Error retrieving the events [{contract_api_msg}]"
             )
             return None, None
 
         events = cast(dict, contract_api_msg.state.body)["events"]
-        last_block = cast(dict, contract_api_msg.state.body)["last_block"]
+        latest_block = cast(dict, contract_api_msg.state.body)["latest_block"]
 
         self.context.logger.info(
-            f"Got {len(events)} events from block {from_block} until block {last_block}"
+            f"Got {len(events)} events from block {from_block} until block {latest_block}"
         )
 
-        return events, last_block
+        return events, latest_block
 
     def get_token_uri(
         self, contract_id, contract_address, unit_id

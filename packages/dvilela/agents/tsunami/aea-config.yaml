@@ -23,7 +23,7 @@ contracts:
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeic5f3vnd3pkzlhapkzgtrfmer7otjg3xxaflxkadpz6prjxk3salq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeibtaa6tvhzoo4osu3moilxtwxbfwqo3vt7rsr3ugjugzwndzkkmd4
-- dvilela/olas_registries:0.1.0:bafybeidklp7etrez3ia7glx5daswcjyjpqjwu42xubap2ja3pmdkqc3ehu
+- dvilela/olas_registries:0.1.0:bafybeienmanjtpgjpgfnlqcuxnxbh4em3h5w2cmyhcycpb45zbsq7kx64a
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeihdedspeaktftgc7lkijkk5bpkf3wipsy7gsvmeesfp7lkwfa443u
-- dvilela/tsunami_chained_abci:0.1.0:bafybeialwda6o43bp4xwey75trotywshvou7qtys2ad6qpce5eehll2mti
+- dvilela/tsunami_abci:0.1.0:bafybeiawx5vrich3vpu3hf333woivtcb4ilqnvswitgzlmp2wdakp6y7ve
+- dvilela/tsunami_chained_abci:0.1.0:bafybeihvu2dudw2om7ligicmg2q45rwx7alemui52lk2mysm4ln2uo5ohi
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -91,7 +91,7 @@ config: {}
 public_id: dvilela/kv_store:0.1.0
 type: connection
 config:
-  db_path: ${str:/data/tsunami.db}
+  db_path: ${str:/tmp/tsunami.db}
 ---
 public_id: valory/abci:0.1.0
 type: connection
@@ -177,7 +177,7 @@ models:
       service_id: tsunami
       service_registry_address: ${str:null}
       setup:
-        all_participants: ${list:["0x10E867Ac2Fb0Aa156ca81eF440a5cdf373bE1AaC"]}
+        all_participants: ${list:["0x65E50F3B0D6AC6b0C45067ECf0a0f14C1F283d0b"]}
         safe_contract_address: ${str:0x0000000000000000000000000000000000000000}
         consensus_threshold: ${int:null}
       share_tm_config_on_startup: ${bool:false}
@@ -198,12 +198,12 @@ models:
       light_slash_unit_amount: ${int:5000000000000000}
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
-      publish_twitter: ${bool:true}
-      publish_farcaster: ${bool:true}
+      publish_twitter: ${bool:false}
+      publish_farcaster: ${bool:false}
       service_registry_address_ethereum: ${str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
       agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
       service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
       initial_block_ethereum: ${int:18500000}
-      initial_block_gnosis: ${int:18500000}
-      twitter_credentials: ${str:'{}'}
+      initial_block_gnosis: ${int:32996411}
+      twitter_credentials: ${str:{}}

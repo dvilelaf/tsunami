@@ -19,7 +19,7 @@
 
 """This module contains the class to connect to the wveolas contract."""
 import logging
-from typing import Optional
+from typing import Optional, Union, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -46,8 +46,8 @@ class OlasRegistriesContract(Contract):
         ledger_api: EthereumApi,
         contract_address: str,
         event_name: str,
-        from_block: int = "earliest",
-        to_block: int = "latest",
+        from_block: int,
+        to_block: Union[int, str] = "latest",
     ) -> Optional[JSONLike]:
         """Get events."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
@@ -61,7 +61,8 @@ class OlasRegistriesContract(Contract):
             if to_block == "latest"
             else to_block
         )
-        ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
+
+        ranges = list(range(from_block, cast(int, to_block), MAX_BLOCKS)) + [to_block]
 
         event = getattr(contract_instance.events, event_name)
         events = []

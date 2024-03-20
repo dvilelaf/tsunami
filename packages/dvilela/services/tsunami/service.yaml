@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeielzpw77btndekig6wcsmu47br7kf5acrlrpauya72qsvveckalhy
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeihhzb3zfzs7wn26hplqtkqqxwvfuo2q4dv2cs4sqjdujtgmo74u5a
+agent: dvilela/tsunami:0.1.0:bafybeibofpudcbwoqwdlcfcxn7g2nqvw6bcgo4n3pybvizhhx7e2buxw5e
 number_of_agents: 1
 deployment:
   agent:
@@ -184,4 +184,4 @@ config: {}
 public_id: dvilela/kv_store:0.1.0
 type: connection
 config:
-  db_path: ${DB_PATH:str:null}
+  db_path: ${DB_PATH:str:/logs/tsunami.db}

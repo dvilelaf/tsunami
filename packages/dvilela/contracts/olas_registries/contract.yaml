@@ -7,8 +7,8 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihnrsaswue3kq46kk2jxpigzxxi6evtftp7ih53hqnirpvucpasdi
-  build/olas_registries.json: bafybeidka5jw54xw6s6xzgsbu3hm7q7vqcrlw73w2b2novc55qrrocr6h4
-  contract.py: bafybeihceg2gqdfv5gsinoz7p674rql4zz72nopqgzc7q4226zccd3ju2q
+  build/olas_registries.json: bafybeifbqqzaprge3gbt6tabanz4vzr6bfuzoo2yu4lyiubxxi7objinkq
+  contract.py: bafybeicmjqyjpa7bhs52myqs3a5w7jf5h4ri34cxifcexlj6zbuyj267kq
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: OlasRegistriesContract

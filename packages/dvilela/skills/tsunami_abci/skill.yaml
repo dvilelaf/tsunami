@@ -8,13 +8,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeieafgiusiyunavgff4r2z2ig7utw7thjjfocbbmsb2oyq7rtc7rki
+  behaviours.py: bafybeidveqkli7anvtkldt3bdz5pnuryd2tvhbuzginhxif63e5she4ypi
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
   models.py: bafybeib77agoclwjwecgkuaylctveow3resfwnpm7ukcqvetz2j7ua7sme
   payloads.py: bafybeigpsx3deu7bc3ixg3debmzm4oiwy6jd5ohsrvhcjgq5wamdhrr5ty
-  prompts.py: bafybeibppdv2qbyswpaborgju52qfn7n7jnwpeb775uukogqzd6tzap6mq
+  prompts.py: bafybeianrqmfaskrr3hzdvupplnb6izcdgywlvnokepytr5krmromyds3u
   rounds.py: bafybeicxzzgiuemldrmjlyr4c23bxwkge5uzsyjr6lpmykmesei3eyxxgu
 fingerprint_ignore_patterns: []
 connections:
@@ -23,9 +23,10 @@ connections:
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
-- dvilela/olas_registries:0.1.0:bafybeidklp7etrez3ia7glx5daswcjyjpqjwu42xubap2ja3pmdkqc3ehu
+- dvilela/olas_registries:0.1.0:bafybeienmanjtpgjpgfnlqcuxnxbh4em3h5w2cmyhcycpb45zbsq7kx64a
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
+- valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
 - dvilela/kv_store:0.1.0:bafybeihy44nty3y7woibivozhnxmp6rcu3hxay35y5h6ex5atizfnep5ge
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
