@@ -16,14 +16,14 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
-- dvilela/kv_store:0.1.0:bafybeiezwfxaanclcj54fp2bk6kodjboz4i5t7ycvmkzsyjnsyq4x464zq
+- dvilela/kv_store:0.1.0:bafybeig6zz4dq5ytaozc2qrssgl5sqaaus5fcrop5hxkiulnbfoxfe7iny
 - dvilela/llama:0.1.0:bafybeicznqvddlmsp5m564emwsbwocya27macghhmkhiey6njwwwc4gzca
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeif3n23srpc7kouvry6c5h3qmd4h63vtd3gg7el2upjm6xac6mligi
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeic5f3vnd3pkzlhapkzgtrfmer7otjg3xxaflxkadpz6prjxk3salq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeibtaa6tvhzoo4osu3moilxtwxbfwqo3vt7rsr3ugjugzwndzkkmd4
-- dvilela/olas_registries:0.1.0:bafybeienmanjtpgjpgfnlqcuxnxbh4em3h5w2cmyhcycpb45zbsq7kx64a
+- dvilela/olas_registries:0.1.0:bafybeihrvbos2xuk6hlzklxz25j2emnxlsbhk53xvkluxcsvr4ilsviphu
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeicpge4qrwpac26esh35pzbnr6k4aipoqftuhdvwcys7r3jgtafnmy
-- dvilela/tsunami_chained_abci:0.1.0:bafybeiarxjmy6o7v7nawlmk4z4jwfqvsk6hfep7kjpdn6jpalcxr3cksyy
+- dvilela/tsunami_abci:0.1.0:bafybeif5mwkwwgbzukqqsscw5p2c2osv37ysxd2aoiyyxibbekiegocsru
+- dvilela/tsunami_chained_abci:0.1.0:bafybeihhy7xn5jua7umqlwlv36au2kiihrdbgnh2xhtvgbqj3a7gigtnce
 default_ledger: ethereum
 required_ledgers:
 - ethereum
