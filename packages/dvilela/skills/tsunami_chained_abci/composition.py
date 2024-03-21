@@ -22,6 +22,7 @@
 import packages.dvilela.skills.tsunami_abci.rounds as TsunamiAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
+import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
     AbciAppTransitionMapping,
     chain,
@@ -54,6 +55,7 @@ TsunamiChainedSkillAbciApp = chain(
         RegistrationAbci.AgentRegistrationAbciApp,
         TsunamiAbci.TsunamiAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
+        TxSettlementAbci.TransactionSubmissionAbciApp,
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)
