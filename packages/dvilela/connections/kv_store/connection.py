@@ -196,6 +196,7 @@ class KvStoreConnection(BaseSyncConnection):
             dialogue.reply(
                 performative=KvStoreMessage.Performative.SUCCESS,
                 target_message=message,
+                message="",
             ),
         )
 
