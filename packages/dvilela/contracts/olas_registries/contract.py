@@ -113,16 +113,16 @@ class OlasRegistriesContract(Contract):
         event_name: str,
         from_block: int,
         to_block: Union[int, str] = "latest",
-        chain_id: str = "ethereum",
+        chain_name: str = "ethereum",
     ) -> Optional[JSONLike]:
         """Get events."""
         contract_instance = ledger_api.api.eth.contract(
-            contract_address, abi=EVENT_ABIS[chain_id]
+            contract_address, abi=EVENT_ABIS[chain_name]
         )
 
         # Avoid parsing too many blocks at a time. This might take too long and
         # the connection could time out.
-        MAX_BLOCKS = 300000
+        MAX_BLOCKS = 5000
 
         to_block = (
             ledger_api.api.eth.get_block_number() - 1
@@ -146,11 +146,15 @@ class OlasRegistriesContract(Contract):
                         toBlock=to_block,  # inclusive
                     ).get_all_entries()  # limited to 10k entries for now
                     break
-                # Gnosis RPCs sometimes return ValueError or MismatchedABI
+                # Gnosis RPCs sometimes returns:
+                # ValueError: Filter with id: x does not exist
+                # MismatchedABI: The event signature did not match the provided ABI
                 # Retrying several times makes it work
-                except ValueError:
+                except ValueError as e:
+                    _logger.error(e)
                     pass
-                except MismatchedABI:
+                except MismatchedABI as e:
+                    _logger.error(e)
                     pass
 
             events += new_events
