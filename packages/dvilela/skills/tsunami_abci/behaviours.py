@@ -389,7 +389,7 @@ class PrepareTweetsBehaviour(
 
                         # Get token URI
                         uri = yield from self.get_token_uri(
-                            contract_id, contract_address, unit_id
+                            chain_id, contract_id, contract_address, unit_id
                         )
 
                         # Get unit data
@@ -449,6 +449,7 @@ class PrepareTweetsBehaviour(
             event_name=event_name,
             from_block=from_block,
             to_block=to_block,
+            chain_name=chain_id,  # chain_id is intercepted so we need to duplicate this to reach the contract
             chain_id=chain_id,
         )
 
@@ -468,12 +469,12 @@ class PrepareTweetsBehaviour(
         return events, latest_block
 
     def get_token_uri(
-        self, contract_id, contract_address, unit_id
+        self, chain_id, contract_id, contract_address, unit_id
     ) -> Generator[None, None, Optional[str]]:
         """Get registries events"""
 
         self.context.logger.info(
-            f"Retrieving uri for unit_id {unit_id} on contract {contract_id}::{contract_address}"
+            f"Retrieving uri for unit_id {unit_id} on contract {chain_id}::{contract_id}::{contract_address}"
         )
 
         contract_api_msg = yield from self.get_contract_api_response(
@@ -482,6 +483,7 @@ class PrepareTweetsBehaviour(
             contract_id=contract_id,
             contract_callable="get_token_uri",
             unit_id=unit_id,
+            chain_id=chain_id,
         )
 
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
