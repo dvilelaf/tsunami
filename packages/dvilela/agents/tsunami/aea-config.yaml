@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeif5mwkwwgbzukqqsscw5p2c2osv37ysxd2aoiyyxibbekiegocsru
-- dvilela/tsunami_chained_abci:0.1.0:bafybeihhy7xn5jua7umqlwlv36au2kiihrdbgnh2xhtvgbqj3a7gigtnce
+- dvilela/tsunami_abci:0.1.0:bafybeie4no3sxq2vxhu2omkdx5qt7jomfrrjfsa3hfzzlholgy2jdemzdy
+- dvilela/tsunami_chained_abci:0.1.0:bafybeiez3abwlqxecythscsdrf3f6olsp5epibx3chfkuytfkk2w4tlriy
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -204,6 +204,6 @@ models:
       agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
       service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
-      initial_block_ethereum: ${int:18500000}
-      initial_block_gnosis: ${int:32043506}
+      initial_block_ethereum: ${int:19423661}
+      initial_block_gnosis: ${int:33047920}
       twitter_credentials: ${str:{}}

@@ -46,8 +46,8 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
     SYSTEM_PROMPTS,
+    SYSTEM_PROMPT_SUMMARIZER,
     USER_PROMPT_TEMPLATES,
-    SYSTEM_PROMPT_SUMMARIZER
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
     PrepareTweetsPayload,
@@ -511,7 +511,6 @@ class PrepareTweetsBehaviour(
         attempts = 0
         tweet = None
         while attempts < MAX_TWEET_ATTEMPTS:
-
             system_prompt = system_prompt_base
 
             # Summarize if we've been retrying for some time
@@ -538,9 +537,7 @@ class PrepareTweetsBehaviour(
             attempts += 1
 
         if attempts >= MAX_TWEET_ATTEMPTS:
-            self.context.logger.error(
-                "Too many attempts. Aborting tweet."
-            )
+            self.context.logger.error("Too many attempts. Aborting tweet.")
 
         return tweet
 
