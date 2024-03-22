@@ -19,13 +19,14 @@
 
 """This module contains the class to connect to the wveolas contract."""
 import logging
-from typing import Optional, Union, cast
+from typing import Optional, Union, cast, List
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
 from web3.exceptions import MismatchedABI
+from web3 import Web3
 
 
 PUBLIC_ID = PublicId.from_str("dvilela/olas_registries:0.1.0")
@@ -117,7 +118,7 @@ class OlasRegistriesContract(Contract):
     ) -> Optional[JSONLike]:
         """Get events."""
         contract_instance = ledger_api.api.eth.contract(
-            contract_address, abi=EVENT_ABIS[chain_name]
+            Web3.to_checksum_address(contract_address), abi=EVENT_ABIS[chain_name]
         )
 
         # Avoid parsing too many blocks at a time. This might take too long and
@@ -130,7 +131,7 @@ class OlasRegistriesContract(Contract):
             else to_block
         )
 
-        ranges = list(range(from_block, cast(int, to_block), MAX_BLOCKS)) + [to_block]
+        ranges: List[int] = list(range(from_block, cast(int, to_block), MAX_BLOCKS)) + [cast(int, to_block)]
 
         event = getattr(contract_instance.events, event_name)
         events = []

@@ -9,7 +9,7 @@ from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
-from peewee import CharField, Model, SqliteDatabase
+from peewee import CharField, Model, SqliteDatabase  # type: ignore
 
 from packages.dvilela.protocols.kv_store.dialogues import KvStoreDialogue
 from packages.dvilela.protocols.kv_store.dialogues import (
@@ -144,7 +144,7 @@ class KvStoreConnection(BaseSyncConnection):
         handler: Callable[[KvStoreMessage, KvStoreDialogue], KvStoreMessage] = getattr(
             self, kv_store_message.performative.value
         )
-        response = handler(kv_store_message, dialogue)
+        response = handler(kv_store_message, dialogue)  # type: ignore
         response_envelope = Envelope(
             to=envelope.sender,
             sender=envelope.to,

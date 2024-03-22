@@ -66,7 +66,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def tweets(self) -> list:
         """Get the tweets."""
-        return cast(list, json.loads(self.db.get("tweets", "[]")))
+        return cast(list, json.loads(cast(str, self.db.get("tweets", "[]"))))
 
     @property
     def participant_to_preparation(self) -> DeserializedCollection:

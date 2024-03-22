@@ -25,7 +25,7 @@ from abc import ABC
 from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from aea.protocols.base import Message
-from twitter_text import parse_tweet
+from twitter_text import parse_tweet  # type: ignore
 
 from packages.dvilela.connections.kv_store.connection import (
     PUBLIC_ID as KV_STORE_CONNECTION_PUBLIC_ID,
@@ -130,7 +130,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Return the params."""
         return cast(Params, super().params)
 
-    def publish_tweet(self, text) -> Generator[None, None, Dict]:
+    def publish_tweet(self, text: str) -> Generator[None, None, Dict]:
         """Publish tweet"""
 
         self.context.logger.info(f"Creating tweet with text: {text}")
@@ -147,7 +147,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
         return {"success": True, "tweet_id": response.tweet_id}
 
-    def publish_cast(self, text) -> Generator[None, None, Dict]:
+    def publish_cast(self, text: str) -> Generator[None, None, Dict]:
         """Publish cast"""
 
         self.context.logger.info(f"Creating cast with text: {text}")
@@ -214,8 +214,8 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         )
         srr_message = cast(SrrMessage, srr_message)
         srr_dialogue = cast(SrrDialogue, srr_dialogue)
-        response = yield from self._do_connection_request(srr_message, srr_dialogue)
-        return response
+        response = yield from self._do_connection_request(srr_message, srr_dialogue)  # type: ignore
+        return response  # type: ignore
 
     def _call_llama(
         self,
@@ -231,13 +231,13 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         )
         srr_message = cast(SrrMessage, srr_message)
         srr_dialogue = cast(SrrDialogue, srr_dialogue)
-        response = yield from self._do_connection_request(srr_message, srr_dialogue)
-        return response
+        response = yield from self._do_connection_request(srr_message, srr_dialogue)  # type: ignore
+        return response  # type: ignore
 
     def _read_kv(
         self,
         keys: Tuple[str],
-    ) -> Generator[None, None, KvStoreMessage]:
+    ) -> Generator[None, None, Optional[Dict]]:
         """Send a request message from the skill context."""
         self.context.logger.info(f"Reading keys from db: {keys}")
         kv_store_dialogues = cast(KvStoreDialogues, self.context.kv_store_dialogues)
@@ -249,19 +249,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         kv_store_message = cast(KvStoreMessage, kv_store_message)
         kv_store_dialogue = cast(KvStoreDialogue, srr_dialogue)
         response = yield from self._do_connection_request(
-            kv_store_message, kv_store_dialogue
+            kv_store_message, kv_store_dialogue  # type: ignore
         )
         if response.performative != KvStoreMessage.Performative.READ_RESPONSE:
             return None
 
-        data = {key: response.data.get(key, None) for key in keys}
+        data = {key: response.data.get(key, None) for key in keys}  # type: ignore
 
         return data
 
     def _write_kv(
         self,
         data: Dict[str, str],
-    ) -> Generator[None, None, KvStoreMessage]:
+    ) -> Generator[None, None, bool]:
         """Send a request message from the skill context."""
         kv_store_dialogues = cast(KvStoreDialogues, self.context.kv_store_dialogues)
         kv_store_message, srr_dialogue = kv_store_dialogues.create(
@@ -272,7 +272,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         kv_store_message = cast(KvStoreMessage, kv_store_message)
         kv_store_dialogue = cast(KvStoreDialogue, srr_dialogue)
         response = yield from self._do_connection_request(
-            kv_store_message, kv_store_dialogue
+            kv_store_message, kv_store_dialogue  # type: ignore
         )
         return response == KvStoreMessage.Performative.SUCCESS
 
@@ -285,7 +285,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Do a request and wait the response, asynchronously."""
 
         self.context.outbox.put_message(message=message)
-        request_nonce = self._get_request_nonce_from_dialogue(dialogue)
+        request_nonce = self._get_request_nonce_from_dialogue(dialogue)  # type: ignore
         cast(Requests, self.context.requests).request_id_to_callback[
             request_nonce
         ] = self.get_callback_request()
@@ -435,7 +435,7 @@ class PrepareTweetsBehaviour(
         return tweets
 
     def get_events(  # pylint: disable=too-many-arguments
-        self, contract_id, chain_id, contract_address, event_name, from_block, to_block
+        self, contract_id: str, chain_id: str, contract_address: str, event_name: str, from_block: int, to_block: int
     ) -> Generator[None, None, Tuple[Optional[List], Optional[int]]]:
         """Get registries events"""
 
@@ -471,7 +471,7 @@ class PrepareTweetsBehaviour(
         return events, latest_block
 
     def get_token_uri(
-        self, chain_id, contract_id, contract_address, unit_id
+        self, chain_id: str, contract_id: str, contract_address: str, unit_id: str
     ) -> Generator[None, None, Optional[str]]:
         """Get registries events"""
 
@@ -589,7 +589,7 @@ class TsunamiRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = PrepareTweetsBehaviour
     abci_app_cls = TsunamiAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [
+    behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
         PrepareTweetsBehaviour,
         PublishTweetsBehaviour,
     ]

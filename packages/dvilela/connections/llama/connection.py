@@ -156,7 +156,7 @@ class LlamaConnection(BaseSyncConnection):
 
         response_message = cast(
             SrrMessage,
-            dialogue.reply(
+            dialogue.reply(  # type: ignore
                 performative=SrrMessage.Performative.RESPONSE,
                 target_message=srr_message,
                 payload=json.dumps(payload),
@@ -188,8 +188,8 @@ class LlamaConnection(BaseSyncConnection):
         try:
             response = self.llm.create_chat_completion(
                 messages=[
-                    {"role": "system", "content": payload["system"]},
-                    {"role": "user", "content": payload["user"]},
+                    {"role": "system", "content": payload["system"]},  # type: ignore
+                    {"role": "user", "content": payload["user"]},     # type: ignore
                 ],
                 temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE)),
             )
@@ -197,7 +197,7 @@ class LlamaConnection(BaseSyncConnection):
         except Exception as e:
             return {"error": f"Exception while calling Llama:\n{e}"}, True
 
-        return {"response": response["choices"][0]["message"]["content"]}, False
+        return {"response": response["choices"][0]["message"]["content"]}, False  # type: ignore
 
     def on_connect(self) -> None:
         """
