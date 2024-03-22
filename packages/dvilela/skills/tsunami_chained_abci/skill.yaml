@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeid3dfxtr5ct2cxdhyzqsplkcio5idj74hw5wbekuychahve6qak7a
   behaviours.py: bafybeidfx37vrowzmjjtm6o2ucaqk2ur242nmzzg5aho6lbeaemfihzpaa
-  composition.py: bafybeigzk6hqc75ktwyvy76ufuukf5zmroy4iwcy4rq7k7phcufzg5bmei
+  composition.py: bafybeigsupdf7ais6bgkoptbopwkzl4lmsdwsz6v5xmeqa7t7lkwwikcl4
   dialogues.py: bafybeifztypshmkfnkn445xnhzdcmnwalduts7kubuksfn3ggm6nl75fsa
   fsm_specification.yaml: bafybeiag7ve5xxfefusjpm6wm33msl3s6fdwge24krellqxpfofqqsj6pe
   handlers.py: bafybeiey53s2hlypgfhb54qwmig4tt3yzy4pauiknybnuzinpvwly3zmgi
@@ -23,7 +23,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
-- dvilela/tsunami_abci:0.1.0:bafybeie4no3sxq2vxhu2omkdx5qt7jomfrrjfsa3hfzzlholgy2jdemzdy
+- dvilela/tsunami_abci:0.1.0:bafybeig5npue2m4qlflv66gqalydstk77ak4wopsfqiqxkq2sh4vpccuti
 behaviours:
   main:
     args: {}

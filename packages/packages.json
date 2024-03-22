@@ -1,13 +1,13 @@
 {
     "dev": {
         "protocol/dvilela/kv_store/0.1.0": "bafybeibkgttvuipo52vytzxknxlumxiygu4g6la4j5c27awgvign5uoqeq",
-        "contract/dvilela/olas_registries/0.1.0": "bafybeihrvbos2xuk6hlzklxz25j2emnxlsbhk53xvkluxcsvr4ilsviphu",
+        "contract/dvilela/olas_registries/0.1.0": "bafybeigi6ajmebfpbswa3jaokd3i6p53z4ctlxo5yr2nrmdv2ettxxiu4u",
         "connection/dvilela/kv_store/0.1.0": "bafybeig6zz4dq5ytaozc2qrssgl5sqaaus5fcrop5hxkiulnbfoxfe7iny",
         "connection/dvilela/llama/0.1.0": "bafybeicznqvddlmsp5m564emwsbwocya27macghhmkhiey6njwwwc4gzca",
-        "skill/dvilela/tsunami_abci/0.1.0": "bafybeie4no3sxq2vxhu2omkdx5qt7jomfrrjfsa3hfzzlholgy2jdemzdy",
-        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeiez3abwlqxecythscsdrf3f6olsp5epibx3chfkuytfkk2w4tlriy",
-        "agent/dvilela/tsunami/0.1.0": "bafybeiegaw7bkmltobuv4bztqaout7rucqjvu2dkihwsnmja4c57ajscqu",
-        "service/dvilela/tsunami/0.1.0": "bafybeib2ylgcuxtyv6sklzgaz6lvqjlqgretuhqkyc534b6t6d566k3e6q"
+        "skill/dvilela/tsunami_abci/0.1.0": "bafybeig5npue2m4qlflv66gqalydstk77ak4wopsfqiqxkq2sh4vpccuti",
+        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeid76z6qdzcalovyed4x3cr3l74vwxlu7riceu3ap7vrnk5u7csz5q",
+        "agent/dvilela/tsunami/0.1.0": "bafybeici5ps26xvu5ahmmsser2thitmgd32sdayw2sosu3ljpbmef7uheq",
+        "service/dvilela/tsunami/0.1.0": "bafybeicddfmmtfq6o6wjljrxiuq3ttfzwyte4tjqikkwuzwswqpw7vnby4"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",

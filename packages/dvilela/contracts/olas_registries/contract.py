@@ -152,10 +152,8 @@ class OlasRegistriesContract(Contract):
                 # Retrying several times makes it work
                 except ValueError as e:
                     _logger.error(e)
-                    pass
                 except MismatchedABI as e:
                     _logger.error(e)
-                    pass
 
             events += new_events
 

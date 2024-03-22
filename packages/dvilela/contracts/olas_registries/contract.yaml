@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihnrsaswue3kq46kk2jxpigzxxi6evtftp7ih53hqnirpvucpasdi
   build/olas_registries.json: bafybeifbqqzaprge3gbt6tabanz4vzr6bfuzoo2yu4lyiubxxi7objinkq
-  contract.py: bafybeierj6xcrngo6uyw3dx4gxfh5xoanecw37zmgyz5ixg5vdnkhovmxa
+  contract.py: bafybeif2o5ccoa4au6vc7aepcjbf4lyullbele75fkdxey6dd2meh7cray
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: OlasRegistriesContract
@@ -17,3 +17,5 @@ contract_interface_paths:
 dependencies:
   open-aea-ledger-ethereum:
     version: ==1.49.0
+  web3:
+    version: ==6.15.1
