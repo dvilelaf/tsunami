@@ -19,14 +19,14 @@
 
 """This module contains the class to connect to the wveolas contract."""
 import logging
-from typing import Optional, Union, cast, List
+from typing import List, Optional, Union, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
-from web3.exceptions import MismatchedABI
 from web3 import Web3
+from web3.exceptions import MismatchedABI
 
 
 PUBLIC_ID = PublicId.from_str("dvilela/olas_registries:0.1.0")
@@ -131,7 +131,9 @@ class OlasRegistriesContract(Contract):
             else to_block
         )
 
-        ranges: List[int] = list(range(from_block, cast(int, to_block), MAX_BLOCKS)) + [cast(int, to_block)]
+        ranges: List[int] = list(range(from_block, cast(int, to_block), MAX_BLOCKS)) + [
+            cast(int, to_block)
+        ]
 
         event = getattr(contract_instance.events, event_name)
         events = []

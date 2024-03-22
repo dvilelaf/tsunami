@@ -435,7 +435,13 @@ class PrepareTweetsBehaviour(
         return tweets
 
     def get_events(  # pylint: disable=too-many-arguments
-        self, contract_id: str, chain_id: str, contract_address: str, event_name: str, from_block: int, to_block: int
+        self,
+        contract_id: str,
+        chain_id: str,
+        contract_address: str,
+        event_name: str,
+        from_block: int,
+        to_block: int,
     ) -> Generator[None, None, Tuple[Optional[List], Optional[int]]]:
         """Get registries events"""
 

@@ -189,7 +189,7 @@ class LlamaConnection(BaseSyncConnection):
             response = self.llm.create_chat_completion(
                 messages=[
                     {"role": "system", "content": payload["system"]},  # type: ignore
-                    {"role": "user", "content": payload["user"]},     # type: ignore
+                    {"role": "user", "content": payload["user"]},  # type: ignore
                 ],
                 temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE)),
             )
