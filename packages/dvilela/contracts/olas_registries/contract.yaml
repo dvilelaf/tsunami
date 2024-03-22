@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihnrsaswue3kq46kk2jxpigzxxi6evtftp7ih53hqnirpvucpasdi
   build/olas_registries.json: bafybeifbqqzaprge3gbt6tabanz4vzr6bfuzoo2yu4lyiubxxi7objinkq
-  contract.py: bafybeif2o5ccoa4au6vc7aepcjbf4lyullbele75fkdxey6dd2meh7cray
+  contract.py: bafybeiadzaralmnolvqehcxtpo4imeq6eyz5qvap6g7djtamfkkngs2wjy
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: OlasRegistriesContract
