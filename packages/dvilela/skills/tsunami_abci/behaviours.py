@@ -47,6 +47,7 @@ from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
     SYSTEM_PROMPTS,
     USER_PROMPT_TEMPLATES,
+    SYSTEM_PROMPT_SUMMARIZER
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
     PrepareTweetsPayload,
@@ -76,6 +77,7 @@ from packages.valory.skills.abstract_round_abci.models import Requests
 
 
 MAX_TWEET_ATTEMPTS = 5
+TWEET_ATTEMPTS_SUMMARIZE = 3
 MAX_TWEET_CHARS = 280
 HTTP_OK = 200
 
@@ -463,7 +465,7 @@ class PrepareTweetsBehaviour(
         latest_block = cast(dict, contract_api_msg.state.body)["latest_block"]
 
         self.context.logger.info(
-            f"Got {len(events)} events from block {from_block} until block {latest_block}"
+            f"Got {len(events)} {event_name} events from block {from_block} until block {latest_block}"
         )
 
         return events, latest_block
@@ -503,12 +505,19 @@ class PrepareTweetsBehaviour(
 
         # Randomly select a personality
         # TODO: this only works for a single agent
-        system_prompt = random.choice(SYSTEM_PROMPTS)  # nosec
+        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
         self.context.logger.info("Llama is building a tweet...")
 
         attempts = 0
         tweet = None
         while attempts < MAX_TWEET_ATTEMPTS:
+
+            system_prompt = system_prompt_base
+
+            # Summarize if we've been retrying for some time
+            if attempts >= TWEET_ATTEMPTS_SUMMARIZE:
+                system_prompt += SYSTEM_PROMPT_SUMMARIZER
+
             # Call llama conection
             response = yield from self._call_llama(
                 system_prompt=system_prompt, user_prompt=user_prompt
@@ -518,6 +527,7 @@ class PrepareTweetsBehaviour(
             # Check tweet length
             tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
             if tweet_len < MAX_TWEET_CHARS:
+                self.context.logger.info("Tweet is OK!")
                 tweet = tweet_attempt
                 break
 
@@ -526,6 +536,11 @@ class PrepareTweetsBehaviour(
             )
 
             attempts += 1
+
+        if attempts >= MAX_TWEET_ATTEMPTS:
+            self.context.logger.error(
+                "Too many attempts. Aborting tweet."
+            )
 
         return tweet
 
