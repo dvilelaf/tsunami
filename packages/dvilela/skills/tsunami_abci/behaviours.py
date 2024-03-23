@@ -471,7 +471,7 @@ class PrepareTweetsBehaviour(
         latest_block = cast(dict, contract_api_msg.state.body)["latest_block"]
 
         self.context.logger.info(
-            f"Got {len(events)} {event_name} events from block {from_block} until block {latest_block}"
+            f"Got {len(events)} {event_name} events on {chain_id} from block {from_block} until block {latest_block}"
         )
 
         return events, latest_block
