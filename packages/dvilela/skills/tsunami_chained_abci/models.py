@@ -35,6 +35,7 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
+from packages.valory.skills.termination_abci.models import TerminationParams
 
 
 Requests = BaseRequests
@@ -69,5 +70,6 @@ class SharedState(BaseSharedState):
 
 class Params(
     TsunamiParams,
+    TerminationParams,
 ):
     """A model to represent params for multiple abci apps."""

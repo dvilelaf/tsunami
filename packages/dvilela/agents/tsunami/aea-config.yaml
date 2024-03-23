@@ -43,8 +43,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- dvilela/tsunami_abci:0.1.0:bafybeihc5aui6s33iy3nhajqkxnwltcqexqxgf4itn4egbc6pnhelmpwye
-- dvilela/tsunami_chained_abci:0.1.0:bafybeiakqmkg4zfj6a6z2w53zb5oza2qiybn5l322spalurzybtnrktwu4
+- dvilela/tsunami_abci:0.1.0:bafybeia7ejoouiodwho6gixzbihmzjkie53aes2a5j3prgcynezz5gbkfu
+- dvilela/tsunami_chained_abci:0.1.0:bafybeibt3z3ayowoiwg3sdepxytxqg3sh372zzas7f4xcttqpgxgj4j7tm
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -198,6 +198,9 @@ models:
       light_slash_unit_amount: ${int:5000000000000000}
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
+      ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
+      default_chain_id: ${str:ethereum}
+      termination_from_block: ${int:0}
       publish_twitter: ${bool:false}
       publish_farcaster: ${bool:false}
       service_registry_address_ethereum: ${str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}

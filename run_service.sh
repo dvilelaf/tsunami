@@ -22,4 +22,4 @@ cp $REPO_PATH/keys.json .
 autonomy deploy build -ltm --agent-cpu-limit 4.0 --agent-memory-limit 8192 --agent-memory-request 1024
 
 # Run the deployment
-autonomy deploy run --build-dir abci_build/
+autonomy deploy run --build-dir abci_build/ --detach

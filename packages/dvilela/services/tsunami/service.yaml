@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeigg265erv26qfawmcrg3sg72rem2bctvyka2hxff4xpr6wgruesqa
+agent: dvilela/tsunami:0.1.0:bafybeihg64hxrlqgm6yimsypka6ng2iqvf2y4fnpmzjujwq2c4ugjwfwdy
 number_of_agents: 1
 deployment:
   agent:
@@ -55,19 +55,9 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
@@ -91,35 +81,12 @@ extra:
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:tsunami_tm_0:26656}
-        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
-        whitelist_api_key: null
-        whitelist_endpoint: http://localhost
-        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
-        twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
-        twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
-        twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
-        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
-        twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
-        twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
-        twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
-        centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
-        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
-        openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
-        openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
-        service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
-        mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31de935740567cf4ff1986d04b2c964a786a}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
-        transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
-        wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
-        tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
         publish_twitter: ${PUBLISH_TWITTER:bool:true}
         publish_farcaster: ${PUBLISH_FARCASTER:bool:true}

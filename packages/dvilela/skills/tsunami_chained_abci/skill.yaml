@@ -12,7 +12,7 @@ fingerprint:
   dialogues.py: bafybeifztypshmkfnkn445xnhzdcmnwalduts7kubuksfn3ggm6nl75fsa
   fsm_specification.yaml: bafybeiag7ve5xxfefusjpm6wm33msl3s6fdwge24krellqxpfofqqsj6pe
   handlers.py: bafybeiey53s2hlypgfhb54qwmig4tt3yzy4pauiknybnuzinpvwly3zmgi
-  models.py: bafybeihmkcafhcaoa3jo7kond3zdsd7mgizgu4ssu7nhqpcjbnpr5ncm7u
+  models.py: bafybeigmsoi6kxhm3jymzsswc4mi4j76mje63kvgtqnoskyfhxnofrehja
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -23,7 +23,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
 - valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
-- dvilela/tsunami_abci:0.1.0:bafybeihc5aui6s33iy3nhajqkxnwltcqexqxgf4itn4egbc6pnhelmpwye
+- dvilela/tsunami_abci:0.1.0:bafybeia7ejoouiodwho6gixzbihmzjkie53aes2a5j3prgcynezz5gbkfu
 behaviours:
   main:
     args: {}
@@ -141,6 +141,8 @@ models:
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
       tx_timeout: 10.0
+      ipfs_address: https://gateway.autonolas.tech/ipfs/
+      default_chain_id: ethereum
       publish_twitter: true
       publish_farcaster: true
       service_registry_address_ethereum: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'

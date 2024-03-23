@@ -139,7 +139,9 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
+      ipfs_address: https://gateway.autonolas.tech/ipfs/
       validate_timeout: 1205
+      default_chain_id: ethereum
       publish_twitter: true
       publish_farcaster: true
       service_registry_address_ethereum: '0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA'
