@@ -1,7 +1,31 @@
-from aea_cli_ipfs.ipfs_utils import IPFSTool
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# ------------------------------------------------------------------------------
+#
+#   Copyright 2021-2024 Valory AG
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# ------------------------------------------------------------------------------
+
+"""Push NFT images to IPFS"""
+
+import json
 import os
 from pathlib import Path
-import json
+
+from aea_cli_ipfs.ipfs_utils import IPFSTool
+
 
 MINT_PATH = Path(".", "mints")
 MINT_FILE = "mints.json"
@@ -10,7 +34,6 @@ IPFS_GATEWAY = "https://gateway.autonolas.tech/ipfs/"
 
 
 if __name__ == "__main__":
-
     ipfs_tool = IPFSTool(IPFS_NODE)
     image_to_hash = {}
 
@@ -18,10 +41,8 @@ if __name__ == "__main__":
         if file.endswith(".jpg"):
             image_path = Path(MINT_PATH, file)
 
-            _, hash_, _ = ipfs_tool.add(
-                dir_path=image_path,
-                pin=True,
-                wrap_with_directory=False
+            _, hash_, _ = ipfs_tool.add(  # type: ignore
+                dir_path=str(image_path), pin=True, wrap_with_directory=False
             )
             image_to_hash[image_path.stem] = {"id": None, "image_hash": hash_}
             print(f"Successfully stored {file}: {IPFS_GATEWAY}{hash_}")
