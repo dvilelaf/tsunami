@@ -1,0 +1,34 @@
+{
+    "service": {
+        "id": null,
+        "image_hash": "QmS3HgnQ4pLmZR4h1PaVaK2vF9GKU8YkrsT1BVMuZvshYf"
+    },
+    "agent": {
+        "id": null,
+        "image_hash": "QmfLhXwCdeJVZMgPxoS8CE4Vikb9WuLf8j16wEEVnBHZZ4"
+    },
+    "llama_connection": {
+        "id": null,
+        "image_hash": "QmdWaptMohowK89KhDekmQZmysWasU9WAGBYE3udLTzrdC"
+    },
+    "kv_store_protocol": {
+        "id": 188,
+        "image_hash": "QmXy9JAEDpBxJttA5J6VGeqFJU5ytiKYvSRTeu9W7XJvms"
+    },
+    "chained_skill": {
+        "id": null,
+        "image_hash": "QmUKMmGxGjXRLvWcayidPXnxNNyiF9ohrMgrouJwecoJQU"
+    },
+    "registry": {
+        "id": 190,
+        "image_hash": "QmTcmzodgbNZ8HMxW7tf31dPLYxKiBvUjhZEa67hLATNzJ"
+    },
+    "skill": {
+        "id": null,
+        "image_hash": "QmZaNCRZ1ejepycjB6DBwiWRcE819t1svwZt9m8s5YegkA"
+    },
+    "kv_store_connection": {
+        "id": 189,
+        "image_hash": "QmTSzsCFxEg879y2EDw2e8AsgiHyF5sGW9n76SUufZRDyV"
+    }
+}
