@@ -360,10 +360,7 @@ class PrepareTweetsBehaviour(
                 chain_id=chain_id,
             )
 
-            if (
-                ledger_api_response.performative
-                != LedgerApiMessage.Performative.GET_STATE
-            ):
+            if ledger_api_response.performative != LedgerApiMessage.Performative.STATE:
                 self.context.logger.error(
                     f"Error while retieving latest block number: {ledger_api_response}\n. Skipping chain {chain_id}..."
                 )
