@@ -73,7 +73,7 @@ extra:
         round_timeout_seconds: 30.0
         tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: tsunami
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
