@@ -182,23 +182,33 @@ class KvStoreConnection(BaseSyncConnection):
 
         self.logger.info(f"DB write: {message.data}")
 
-        for k, v in message.data.items():
-            entry = Store.get_or_none(Store.key == k)
+        try:
+            for k, v in message.data.items():
+                entry = Store.get_or_none(Store.key == k)
 
-            if not entry:
-                Store.create(key=k, value=v)
-            else:
-                entry.value = v
-                entry.save()
+                if not entry:
+                    Store.create(key=k, value=v)
+                else:
+                    entry.value = v
+                    entry.save()
 
-        return cast(
-            KvStoreMessage,
-            dialogue.reply(
-                performative=KvStoreMessage.Performative.SUCCESS,
-                target_message=message,
-                message="",
-            ),
-        )
+            return cast(
+                KvStoreMessage,
+                dialogue.reply(
+                    performative=KvStoreMessage.Performative.SUCCESS,
+                    target_message=message,
+                    message="OK",
+                ),
+            )
+        except Exception as e:
+            return cast(
+                KvStoreMessage,
+                dialogue.reply(
+                    performative=KvStoreMessage.Performative.ERROR,
+                    target_message=message,
+                    message=str(e),
+                ),
+            )
 
     def on_connect(self) -> None:
         """Set up the connection"""

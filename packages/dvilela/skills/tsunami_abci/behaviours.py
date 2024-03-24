@@ -22,7 +22,7 @@
 import json
 import random
 from abc import ABC
-from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from aea.protocols.base import Message
 from twitter_text import parse_tweet  # type: ignore
@@ -80,6 +80,7 @@ MAX_TWEET_ATTEMPTS = 5
 TWEET_ATTEMPTS_SUMMARIZE = 3
 MAX_TWEET_CHARS = 280
 HTTP_OK = 200
+OLAS_REGISTRY_URL = "https://registry.olas.network"
 
 
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
@@ -130,7 +131,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Return the params."""
         return cast(Params, super().params)
 
-    def publish_tweet(self, text: str) -> Generator[None, None, Dict]:
+    def publish_tweet(self, text: Union[str, List[str]]) -> Generator[None, None, Dict]:
         """Publish tweet"""
 
         self.context.logger.info(f"Creating tweet with text: {text}")
@@ -166,7 +167,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
     def _create_tweet(
         self,
-        text: str,
+        text: Union[str, List[str]],
         credentials: dict,
     ) -> Generator[None, None, TwitterMessage]:
         """Send a request message from the skill context."""
@@ -315,7 +316,7 @@ class PrepareTweetsBehaviour(
 
         self.set_done()
 
-    def build_tweets(  # pylint: disable=too-many-locals
+    def build_tweets(  # pylint: disable=too-many-locals,too-many-statements
         self,
     ) -> Generator[None, None, List[str]]:  # pylint: disable=too-many-locals
         """Build tweets"""
@@ -325,7 +326,13 @@ class PrepareTweetsBehaviour(
         # We need to check the db
         if not tweets:
             response = yield from self._read_kv(keys=("tweets",))
-            if response["tweets"]:
+
+            if response is None:
+                self.context.logger.error(
+                    "Error reading from the database. Tweets won't be loaded."
+                )
+
+            elif response["tweets"]:
                 tweets = json.loads(response["tweets"])
                 self.context.logger.info(f"Loaded tweets from db: {tweets}")
 
@@ -333,12 +340,18 @@ class PrepareTweetsBehaviour(
 
         # Chain loop
         for chain_id, contracts_data in self.tracked_events.items():
+            # Default from_block
+            from_block = getattr(self.params, f"initial_block_{chain_id}")
+
             # Get from block
             db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
-            from_block = int(
-                db_data.get(f"from_block_{chain_id}")
-                or getattr(self.params, f"initial_block_{chain_id}")
-            )
+
+            if db_data is None:
+                self.context.logger.error(
+                    "Error reading from the database. from_block won't be loaded."
+                )
+            else:
+                from_block = int(db_data.get(f"from_block_{chain_id}") or from_block)
 
             # Get to block
             ledger_api_response = yield from self.get_ledger_api_response(
@@ -347,7 +360,18 @@ class PrepareTweetsBehaviour(
                 chain_id=chain_id,
             )
 
-            latest_block = ledger_api_response.state.body["get_block_number_result"]
+            if (
+                ledger_api_response.performative
+                != LedgerApiMessage.Performative.GET_STATE
+            ):
+                self.context.logger.error(
+                    f"Error while retieving latest block number: {ledger_api_response}\n. Skipping chain {chain_id}..."
+                )
+                continue
+
+            latest_block = cast(
+                int, ledger_api_response.state.body["get_block_number_result"]
+            )
 
             self.context.logger.info(
                 f"chaind_id: {chain_id} from_block: {from_block} to_block: {latest_block}"
@@ -376,6 +400,12 @@ class PrepareTweetsBehaviour(
                         latest_block,
                     )
 
+                    if events is None:
+                        self.context.logger.error(
+                            f"Error while retrieving events: {ledger_api_response}\n. Skipping event type {chain_id}:{contract_name}:{event_name}..."
+                        )
+                        continue
+
                     # Event loop
                     for event in events:
                         self.context.logger.info(f"Processing event {event}")
@@ -394,31 +424,46 @@ class PrepareTweetsBehaviour(
                             chain_id, contract_id, contract_address, unit_id
                         )
 
+                        if uri is None:
+                            self.context.logger.error(
+                                f"Error while retieving uri: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}..."
+                            )
+                            continue
+
                         # Get unit data
                         self.context.logger.info("Getting token data...")
-                        response = yield from self.get_http_response(
+                        response = yield from self.get_http_response(  # type: ignore
                             method="GET", url=uri
                         )
 
-                        if response.status_code != HTTP_OK:
-                            self.context.logger.info(
-                                f"Failed to download token data: {response.status_code}"
+                        if response.status_code != HTTP_OK:  # type: ignore
+                            self.context.logger.error(
+                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response.status_code}"  # type: ignore
                             )
-                            continue  # TODO: retries
+                            continue
 
-                        response_json = json.loads(response.body)
+                        response_json = json.loads(response.body)  # type: ignore
                         self.context.logger.info(f"Got token data: {response_json}")
 
                         unit_name = response_json["name"]
                         unit_description = response_json["description"]
                         user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
+                        unit_url = (
+                            f"{OLAS_REGISTRY_URL}/{chain_id}/{unit_type}s/{unit_id}"
+                        )
 
                         tweet = yield from self.build_tweet(user_prompt)
+
+                        if tweet is None:
+                            self.context.logger.error(
+                                "Error while building tweet. Skipping..."
+                            )
+                            continue
 
                         if tweet:
                             tweets.append(
                                 {
-                                    "text": tweet,
+                                    "text": [tweet, unit_url],  # this is a thread
                                     "twitter_published": False,
                                     "farcaster_published": False,
                                 }
@@ -527,7 +572,14 @@ class PrepareTweetsBehaviour(
             response = yield from self._call_llama(
                 system_prompt=system_prompt, user_prompt=user_prompt
             )
-            tweet_attempt = json.loads(response.payload)["response"]
+
+            response_json = json.loads(response.payload)
+
+            if "error" in response_json:
+                self.context.logger.error(response_json["error"])
+                continue
+
+            tweet_attempt = response_json["response"]
 
             # Check tweet length
             tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
@@ -568,7 +620,9 @@ class PublishTweetsBehaviour(
                     tweet["twitter_published"] = response["success"]
 
                 if self.params.publish_farcaster and not tweet["farcaster_published"]:
-                    response = yield from self.publish_cast(tweet["text"])
+                    response = yield from self.publish_cast(
+                        tweet["text"][0]
+                    )  # no threads on Farcaster, we drop the link
                     tweet["farcaster_published"] = response["success"]
 
             # Remove published tweets
