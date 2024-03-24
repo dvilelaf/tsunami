@@ -69,12 +69,12 @@ security:
 .PHONY: generators
 generators:
 	tox -e abci-docstrings
-	tomte format-copyright --author dvilela
+	tomte format-copyright --author author_name
 	autonomy packages lock
 
 .PHONY: common-checks-1
 common-checks-1:
-	tomte check-copyright --author dvilela
+	tomte check-copyright --author author_name
 	tomte check-doc-links
 	tox -p -e check-hash -e check-packages -e check-doc-hashes
 

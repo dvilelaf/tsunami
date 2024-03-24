@@ -60,7 +60,7 @@ jobs:
           pip install tomte[tox,cli]==0.2.15
           pip install --upgrade setuptools==60.10.0
       - name: Check copyright headers
-        run: tomte check-copyright --author dvilela
+        run: tomte check-copyright --author author_name
       - name: License compatibility check
         run: tox -e liccheck
       - name: Check dependencies
