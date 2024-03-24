@@ -68,7 +68,7 @@ class SharedState(BaseSharedState):
         )
 
 
-class Params(
+class Params(  # pylint: disable=too-many-ancestors
     TsunamiParams,
     TerminationParams,
 ):

@@ -316,7 +316,7 @@ class PrepareTweetsBehaviour(
 
         self.set_done()
 
-    def build_tweets(  # pylint: disable=too-many-locals
+    def build_tweets(  # pylint: disable=too-many-locals,too-many-statements
         self,
     ) -> Generator[None, None, List[str]]:  # pylint: disable=too-many-locals
         """Build tweets"""
