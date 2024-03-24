@@ -1,14 +1,14 @@
 {
     "service": {
-        "id": null,
+        "id": 23,
         "image_hash": "QmS3HgnQ4pLmZR4h1PaVaK2vF9GKU8YkrsT1BVMuZvshYf"
     },
     "agent": {
-        "id": null,
+        "id": 30,
         "image_hash": "QmfLhXwCdeJVZMgPxoS8CE4Vikb9WuLf8j16wEEVnBHZZ4"
     },
     "llama_connection": {
-        "id": null,
+        "id": 195,
         "image_hash": "QmdWaptMohowK89KhDekmQZmysWasU9WAGBYE3udLTzrdC"
     },
     "kv_store_protocol": {
@@ -16,7 +16,7 @@
         "image_hash": "QmXy9JAEDpBxJttA5J6VGeqFJU5ytiKYvSRTeu9W7XJvms"
     },
     "chained_skill": {
-        "id": null,
+        "id": 197,
         "image_hash": "QmUKMmGxGjXRLvWcayidPXnxNNyiF9ohrMgrouJwecoJQU"
     },
     "registry": {
@@ -24,7 +24,7 @@
         "image_hash": "QmTcmzodgbNZ8HMxW7tf31dPLYxKiBvUjhZEa67hLATNzJ"
     },
     "skill": {
-        "id": null,
+        "id": 196,
         "image_hash": "QmZaNCRZ1ejepycjB6DBwiWRcE819t1svwZt9m8s5YegkA"
     },
     "kv_store_connection": {
