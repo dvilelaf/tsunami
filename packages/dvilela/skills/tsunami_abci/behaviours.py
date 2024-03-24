@@ -22,7 +22,7 @@
 import json
 import random
 from abc import ABC
-from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from aea.protocols.base import Message
 from twitter_text import parse_tweet  # type: ignore
@@ -80,6 +80,7 @@ MAX_TWEET_ATTEMPTS = 5
 TWEET_ATTEMPTS_SUMMARIZE = 3
 MAX_TWEET_CHARS = 280
 HTTP_OK = 200
+OLAS_REGISTRY_URL = "https://registry.olas.network"
 
 
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
@@ -130,7 +131,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Return the params."""
         return cast(Params, super().params)
 
-    def publish_tweet(self, text: str) -> Generator[None, None, Dict]:
+    def publish_tweet(self, text: Union[str, List[str]]) -> Generator[None, None, Dict]:
         """Publish tweet"""
 
         self.context.logger.info(f"Creating tweet with text: {text}")
@@ -166,7 +167,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
     def _create_tweet(
         self,
-        text: str,
+        text: Union[str, List[str]],
         credentials: dict,
     ) -> Generator[None, None, TwitterMessage]:
         """Send a request message from the skill context."""
@@ -412,13 +413,16 @@ class PrepareTweetsBehaviour(
                         unit_name = response_json["name"]
                         unit_description = response_json["description"]
                         user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
+                        unit_url = (
+                            f"{OLAS_REGISTRY_URL}/{chain_id}/{unit_type}s/{unit_id}"
+                        )
 
                         tweet = yield from self.build_tweet(user_prompt)
 
                         if tweet:
                             tweets.append(
                                 {
-                                    "text": tweet,
+                                    "text": [tweet, unit_url],  # this is a thread
                                     "twitter_published": False,
                                     "farcaster_published": False,
                                 }
@@ -568,7 +572,9 @@ class PublishTweetsBehaviour(
                     tweet["twitter_published"] = response["success"]
 
                 if self.params.publish_farcaster and not tweet["farcaster_published"]:
-                    response = yield from self.publish_cast(tweet["text"])
+                    response = yield from self.publish_cast(
+                        tweet["text"][0]
+                    )  # no threads on Farcaster, we drop the link
                     tweet["farcaster_published"] = response["success"]
 
             # Remove published tweets
