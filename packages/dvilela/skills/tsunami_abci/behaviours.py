@@ -378,6 +378,9 @@ class PrepareTweetsBehaviour(
             for contract_name, contract_data in contracts_data.items():
                 contract_address = contract_data["contract_address"]
                 unit_type = "service" if contract_name == "service_registry" else "unit"
+                component_type = contract_name.split("_", maxsplit=1)[
+                    0
+                ]  # service, agent or component
 
                 # Event type loop
                 for event_name, event_template in contract_data[
@@ -445,9 +448,7 @@ class PrepareTweetsBehaviour(
                         unit_name = response_json["name"]
                         unit_description = response_json["description"]
                         user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
-                        unit_url = (
-                            f"{OLAS_REGISTRY_URL}/{chain_id}/{unit_type}s/{unit_id}"
-                        )
+                        unit_url = f"{OLAS_REGISTRY_URL}/{chain_id}/{component_type}s/{unit_id}"
 
                         tweet = yield from self.build_tweet(user_prompt)
 
