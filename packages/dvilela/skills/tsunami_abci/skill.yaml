@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeifdopnv6rsa4cdi3ov7j4swksi7ppxh4kntyg3xesh4qzgjdlevd4
+  behaviours.py: bafybeihdpjm6vdqu3yea3cw7aktlyfn4llocqprzudbjf2jdsrpbehntey
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeif3s6rzacuwr3r677ygkj727w6ws34grdeszswzlkmbfknfzebvyq
   handlers.py: bafybeicwd2y34vq6twmgid5kjsyebqb3s4g3cahjofwdkfw67phzb2kgfu
@@ -18,7 +18,7 @@ fingerprint:
   rounds.py: bafybeidwhdsz5zsdc3scg6f7bzcqqsiyqiksoz3glyiwe5kcr3gl24hjtu
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeieiip2maqwv7qwb5wmpsmaqgseth3g6mvwl7nnp6ftwkwotxyg2nu
+- dvilela/kv_store:0.1.0:bafybeihdjpafne6h3a7u2d5uwitmhmafpun73mukozp5dnempkjepsjk4a
 - dvilela/llama:0.1.0:bafybeia2pgj2eqmzhdl5aj3b5dixy663yuhtlevzyy63fqz6jowntsaigu
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
