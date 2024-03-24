@@ -348,6 +348,15 @@ class PrepareTweetsBehaviour(
                 chain_id=chain_id,
             )
 
+            if (
+                ledger_api_response.performative
+                != LedgerApiMessage.Performative.GET_STATE
+            ):
+                self.context.logger.error(
+                    f"Error while retieving latest block number: {ledger_api_response}\n. Skipping chain {chain_id}..."
+                )
+                continue
+
             latest_block = ledger_api_response.state.body["get_block_number_result"]
 
             self.context.logger.info(
@@ -377,6 +386,12 @@ class PrepareTweetsBehaviour(
                         latest_block,
                     )
 
+                    if events is None:
+                        self.context.logger.error(
+                            f"Error while retrieving events: {ledger_api_response}\n. Skipping event type {chain_id}:{contract_name}:{event_name}..."
+                        )
+                        continue
+
                     # Event loop
                     for event in events:
                         self.context.logger.info(f"Processing event {event}")
@@ -395,6 +410,12 @@ class PrepareTweetsBehaviour(
                             chain_id, contract_id, contract_address, unit_id
                         )
 
+                        if uri is None:
+                            self.context.logger.error(
+                                f"Error while retieving uri: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}..."
+                            )
+                            continue
+
                         # Get unit data
                         self.context.logger.info("Getting token data...")
                         response = yield from self.get_http_response(
@@ -402,10 +423,10 @@ class PrepareTweetsBehaviour(
                         )
 
                         if response.status_code != HTTP_OK:
-                            self.context.logger.info(
-                                f"Failed to download token data: {response.status_code}"
+                            self.context.logger.error(
+                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response.status_code}"
                             )
-                            continue  # TODO: retries
+                            continue
 
                         response_json = json.loads(response.body)
                         self.context.logger.info(f"Got token data: {response_json}")
@@ -418,6 +439,12 @@ class PrepareTweetsBehaviour(
                         )
 
                         tweet = yield from self.build_tweet(user_prompt)
+
+                        if tweet is None:
+                            self.context.logger.error(
+                                "Error while building tweet. Skipping..."
+                            )
+                            continue
 
                         if tweet:
                             tweets.append(
@@ -531,7 +558,14 @@ class PrepareTweetsBehaviour(
             response = yield from self._call_llama(
                 system_prompt=system_prompt, user_prompt=user_prompt
             )
-            tweet_attempt = json.loads(response.payload)["response"]
+
+            response_json = json.loads(response.payload)
+
+            if "error" in response_json:
+                self.context.logger.error(response_json["error"])
+                continue
+
+            tweet_attempt = response_json["response"]
 
             # Check tweet length
             tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
