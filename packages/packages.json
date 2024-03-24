@@ -6,8 +6,8 @@
         "connection/dvilela/llama/0.1.0": "bafybeia2pgj2eqmzhdl5aj3b5dixy663yuhtlevzyy63fqz6jowntsaigu",
         "skill/dvilela/tsunami_abci/0.1.0": "bafybeidqwgrglaggfbhpha55ewtsilnz3o5guulcapqrsdb7i5bwog7lse",
         "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeielmpqslq2hi73trtx5ppihweqsstfchy2sd2irevebm6mr3vkpdq",
-        "agent/dvilela/tsunami/0.1.0": "bafybeigg7cizwknhit7hkywxpgxxnxi6nudp2irdqmfih7y7r2ior2pr6q",
-        "service/dvilela/tsunami/0.1.0": "bafybeiczqkgr5odaoygaj33lu5gerrpw3m3g53o7zj2pzgl5rzrplapfua"
+        "agent/dvilela/tsunami/0.1.0": "bafybeiadvysumbjny4o2x25ma3xdkxii4hhgniwmfe4zonaabwddpmff5e",
+        "service/dvilela/tsunami/0.1.0": "bafybeif6chojpyp4dn7wefnr7loqzm37u2vedilzt5xqimvsybynas4a2m"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
