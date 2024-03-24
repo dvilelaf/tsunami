@@ -326,7 +326,13 @@ class PrepareTweetsBehaviour(
         # We need to check the db
         if not tweets:
             response = yield from self._read_kv(keys=("tweets",))
-            if response["tweets"]:
+
+            if response is None:
+                self.context.logger.error(
+                    "Error reading from the database. Tweets won't be loaded."
+                )
+
+            elif response["tweets"]:
                 tweets = json.loads(response["tweets"])
                 self.context.logger.info(f"Loaded tweets from db: {tweets}")
 
@@ -334,12 +340,18 @@ class PrepareTweetsBehaviour(
 
         # Chain loop
         for chain_id, contracts_data in self.tracked_events.items():
+            # Default from_block
+            from_block = getattr(self.params, f"initial_block_{chain_id}")
+
             # Get from block
             db_data = yield from self._read_kv(keys=(f"from_block_{chain_id}",))
-            from_block = int(
-                db_data.get(f"from_block_{chain_id}")
-                or getattr(self.params, f"initial_block_{chain_id}")
-            )
+
+            if db_data is None:
+                self.context.logger.error(
+                    "Error reading from the database. from_block won't be loaded."
+                )
+            else:
+                from_block = int(db_data.get(f"from_block_{chain_id}") or from_block)
 
             # Get to block
             ledger_api_response = yield from self.get_ledger_api_response(
@@ -357,7 +369,9 @@ class PrepareTweetsBehaviour(
                 )
                 continue
 
-            latest_block = ledger_api_response.state.body["get_block_number_result"]
+            latest_block = cast(
+                int, ledger_api_response.state.body["get_block_number_result"]
+            )
 
             self.context.logger.info(
                 f"chaind_id: {chain_id} from_block: {from_block} to_block: {latest_block}"
@@ -418,17 +432,17 @@ class PrepareTweetsBehaviour(
 
                         # Get unit data
                         self.context.logger.info("Getting token data...")
-                        response = yield from self.get_http_response(
+                        response = yield from self.get_http_response(  # type: ignore
                             method="GET", url=uri
                         )
 
-                        if response.status_code != HTTP_OK:
+                        if response.status_code != HTTP_OK:  # type: ignore
                             self.context.logger.error(
-                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response.status_code}"
+                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response.status_code}"  # type: ignore
                             )
                             continue
 
-                        response_json = json.loads(response.body)
+                        response_json = json.loads(response.body)  # type: ignore
                         self.context.logger.info(f"Got token data: {response_json}")
 
                         unit_name = response_json["name"]
