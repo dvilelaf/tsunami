@@ -56,7 +56,7 @@ handlers:
   twitter:
     args: {}
     class_name: TwitterHandler
-  kvv_store:
+  kv_store:
     args: {}
     class_name: KvStoreHandler
 models:
