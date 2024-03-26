@@ -72,8 +72,8 @@ class TwitterHandler(AbstractResponseHandler):
     )
 
 
-class FarcasterHandler(AbstractResponseHandler):
-    """A class for handling Farcaster messages."""
+class SrrHandler(AbstractResponseHandler):
+    """A class for handling SRR messages."""
 
     SUPPORTED_PROTOCOL: Optional[PublicId] = SrrMessage.protocol_id
     allowed_response_performatives = frozenset(

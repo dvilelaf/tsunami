@@ -20,7 +20,7 @@
 """This module contains the handlers for the skill of TsunamiChainedAbciApp."""
 
 from packages.dvilela.skills.tsunami_abci.handlers import (
-    FarcasterHandler as BaseFarcasterHandler,
+    SrrHandler as BaseSrrHandler,
 )
 from packages.dvilela.skills.tsunami_abci.handlers import HttpHandler as BaseHttpHandler
 from packages.dvilela.skills.tsunami_abci.handlers import (
@@ -57,5 +57,5 @@ ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
 TwitterHandler = BaseTwitterHandler
-FarcasterHandler = BaseFarcasterHandler
+SrrHandler = BaseSrrHandler
 KvStoreHandler = BaseKvStoreHandler
