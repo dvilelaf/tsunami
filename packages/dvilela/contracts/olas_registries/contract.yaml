@@ -16,6 +16,6 @@ contract_interface_paths:
   ethereum: build/olas_registries.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.49.0
+    version: ==1.50.0
   web3:
     version: ==6.15.1
