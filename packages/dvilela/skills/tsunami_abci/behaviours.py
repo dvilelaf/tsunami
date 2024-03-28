@@ -45,16 +45,19 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 )
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
+    EVENT_USER_PROMPT_TEMPLATES,
+    REPO_USER_PROMPT_RELEASE,
     SYSTEM_PROMPTS,
     SYSTEM_PROMPT_SUMMARIZER,
-    USER_PROMPT_TEMPLATES,
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
-    PrepareTweetsPayload,
-    PrepareTweetsRound,
     PublishTweetsPayload,
     PublishTweetsRound,
     SynchronizedData,
+    TrackChainEventsPayload,
+    TrackChainEventsRound,
+    TrackReposPayload,
+    TrackReposRound,
     TsunamiAbciApp,
 )
 from packages.valory.connections.farcaster.connection import (
@@ -81,6 +84,24 @@ TWEET_ATTEMPTS_SUMMARIZE = 3
 MAX_TWEET_CHARS = 280
 HTTP_OK = 200
 OLAS_REGISTRY_URL = "https://registry.olas.network"
+GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
+
+TRACKED_REPOS = [
+    "dvilelaf/tsunami",
+    "valory-xyz/IEKit",
+    "valory-xyz/governatooorr",
+    "valory-xyz/mech",
+    "valory-xyz/apy-oracle",
+    "valory-xyz/price-oracle",
+    "valory-xyz/open-aea",
+    "valory-xyz/open-autonomy",
+    "valory-xyz/autonomous-fund",
+    "valory-xyz/hello-world",
+    "valory-xyz/market-creator",
+    "valory-xyz/agent-academy-2",
+    "valory-xyz/agent-academy-1",
+    "valory-xyz/generatooorr",
+]
 
 
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
@@ -95,19 +116,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 "service_registry": {
                     "contract_address": self.params.service_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
                 },
                 "agent_registry": {
                     "contract_address": self.params.agent_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateUnit": USER_PROMPT_TEMPLATES["agent_minted"]
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
                     },
                 },
                 "component_registry": {
                     "contract_address": self.params.component_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateUnit": USER_PROMPT_TEMPLATES["component_minted"]
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
                     },
                 },
             },
@@ -115,7 +136,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 "service_registry": {
                     "contract_address": self.params.service_registry_address_gnosis,
                     "event_to_template": {
-                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
                 },
             },
@@ -294,19 +315,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         return response
 
 
-class PrepareTweetsBehaviour(
+class TrackChainEventsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
-    """PrepareTweetsBehaviour"""
+    """TrackChainEventsBehaviour"""
 
-    matching_round: Type[AbstractRound] = PrepareTweetsRound
+    matching_round: Type[AbstractRound] = TrackChainEventsRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             tweets = yield from self.build_tweets()
-            payload = PrepareTweetsPayload(
+            payload = TrackChainEventsPayload(
                 sender=self.context.agent_address, tweets=json.dumps(tweets)
             )
 
@@ -598,6 +619,69 @@ class PrepareTweetsBehaviour(
         return tweet
 
 
+class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """TrackReposBehaviour"""
+
+    matching_round: Type[AbstractRound] = TrackReposRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweets = self.synchronized_data.tweets
+            repo_tweets = yield from self.get_repo_tweets()
+            tweets += repo_tweets
+
+            # Save tweets to the db
+            yield from self._write_kv({"tweets": json.dumps(tweets)})
+
+            payload = TrackReposPayload(
+                sender=self.context.agent_address, tweets=json.dumps(tweets)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_repo_tweets(self):
+        """Get tweets about new repo releases"""
+
+        tweets = []
+
+        for repo in TRACKED_REPOS:
+            self.context.logger.info(f"Getting repo {repo}...")
+            response = yield from self.get_http_response(  # type: ignore
+                method="GET", url=GITHUB_REPO_LATEST_URL.replace("{repo}", repo)
+            )
+
+            if response.status_code != HTTP_OK:  # type: ignore
+                self.context.logger.error(
+                    f"Error while getting the repo {repo}: {response}"  # type: ignore
+                )
+                continue
+
+            response_json = json.loads(response.body)  # type: ignore
+            version = response_json["tag_name"]
+
+            user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
+            tweet = yield from self.build_tweet(user_prompt)
+
+            if tweet is None:
+                self.context.logger.error("Error while building tweet. Skipping...")
+                continue
+
+            if tweet:
+                tweets.append(
+                    {
+                        "text": [tweet, response_json["html_url"]],  # this is a thread
+                        "twitter_published": False,
+                        "farcaster_published": False,
+                    }
+                )
+
+
 class PublishTweetsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
@@ -645,9 +729,9 @@ class PublishTweetsBehaviour(
 class TsunamiRoundBehaviour(AbstractRoundBehaviour):
     """TsunamiRoundBehaviour"""
 
-    initial_behaviour_cls = PrepareTweetsBehaviour
+    initial_behaviour_cls = TrackChainEventsBehaviour
     abci_app_cls = TsunamiAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
-        PrepareTweetsBehaviour,
+        TrackChainEventsBehaviour,
         PublishTweetsBehaviour,
     ]

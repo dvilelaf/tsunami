@@ -25,8 +25,15 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class PrepareTweetsPayload(BaseTxPayload):
-    """Represent a transaction payload for the PrepareTweetsRound."""
+class TrackChainEventsPayload(BaseTxPayload):
+    """Represent a transaction payload for the TrackChainEventsRound."""
+
+    tweets: str
+
+
+@dataclass(frozen=True)
+class TrackReposPayload(BaseTxPayload):
+    """Represent a transaction payload for the TrackReposRound."""
 
     tweets: str
 

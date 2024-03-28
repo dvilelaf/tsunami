@@ -24,8 +24,9 @@ from enum import Enum
 from typing import Dict, FrozenSet, Set, cast
 
 from packages.dvilela.skills.tsunami_abci.payloads import (
-    PrepareTweetsPayload,
     PublishTweetsPayload,
+    TrackChainEventsPayload,
+    TrackReposPayload,
 )
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -69,9 +70,14 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(list, json.loads(cast(str, self.db.get("tweets", "[]"))))
 
     @property
-    def participant_to_preparation(self) -> DeserializedCollection:
-        """Get the participants to the tweet preparation round."""
-        return self._get_deserialized("participant_to_preparation")
+    def participant_to_events(self) -> DeserializedCollection:
+        """Get the participants to the event tracking round."""
+        return self._get_deserialized("participant_to_events")
+
+    @property
+    def participant_to_repos(self) -> DeserializedCollection:
+        """Get the participants to the repo tracking round."""
+        return self._get_deserialized("participant_to_repos")
 
     @property
     def participant_to_publication(self) -> DeserializedCollection:
@@ -79,14 +85,27 @@ class SynchronizedData(BaseSynchronizedData):
         return self._get_deserialized("participant_to_publication")
 
 
-class PrepareTweetsRound(CollectSameUntilThresholdRound):
-    """PrepareTweetsRound"""
+class TrackChainEventsRound(CollectSameUntilThresholdRound):
+    """TrackChainEventsRound"""
 
-    payload_class = PrepareTweetsPayload
+    payload_class = TrackChainEventsPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_preparation)
+    collection_key = get_name(SynchronizedData.participant_to_events)
+    selection_key = get_name(SynchronizedData.tweets)
+
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
+
+
+class TrackReposRound(CollectSameUntilThresholdRound):
+    """TrackReposRound"""
+
+    payload_class = TrackReposPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_repos)
     selection_key = get_name(SynchronizedData.tweets)
 
     # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
@@ -112,13 +131,18 @@ class FinishedPublishRound(DegenerateRound):
 class TsunamiAbciApp(AbciApp[Event]):
     """TsunamiAbciApp"""
 
-    initial_round_cls: AppState = PrepareTweetsRound
-    initial_states: Set[AppState] = {PrepareTweetsRound}
+    initial_round_cls: AppState = TrackChainEventsRound
+    initial_states: Set[AppState] = {TrackChainEventsRound}
     transition_function: AbciAppTransitionFunction = {
-        PrepareTweetsRound: {
+        TrackChainEventsRound: {
+            Event.DONE: TrackReposRound,
+            Event.NO_MAJORITY: TrackChainEventsRound,
+            Event.ROUND_TIMEOUT: TrackChainEventsRound,
+        },
+        TrackReposRound: {
             Event.DONE: PublishTweetsRound,
-            Event.NO_MAJORITY: PrepareTweetsRound,
-            Event.ROUND_TIMEOUT: PrepareTweetsRound,
+            Event.NO_MAJORITY: TrackReposRound,
+            Event.ROUND_TIMEOUT: TrackReposRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,
@@ -131,7 +155,7 @@ class TsunamiAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        PrepareTweetsRound: set(),
+        TrackChainEventsRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedPublishRound: set(),

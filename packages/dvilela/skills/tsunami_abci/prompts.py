@@ -56,14 +56,18 @@ SYSTEM_PROMPT_SUMMARIZER = """
 You are also known for keeping your communications extremely short and concise, and using few words. Try to summarize everything to a few words.
 """
 
-USER_PROMPT_SERVICE_CREATED = "A new service with id {unit_id} has been minted on the Olas protocol on {chain_name}."
-USER_PROMPT_AGENT_CREATED = "A new agent with id {unit_id} has been minted on the Olas protocol on {chain_name}."
-USER_PROMPT_COMPONENT_CREATED = "A new component with id {unit_id} has been minted on the Olas protocol on {chain_name}."
-
 SYSTEM_PROMPTS = [SYSTEM_PROMPT_PIRATE, SYSTEM_PROMPT_OLAD, SYSTEM_PROMPT_TECHIE]
 
-USER_PROMPT_TEMPLATES = {
-    "service_minted": USER_PROMPT_SERVICE_CREATED,
-    "agent_minted": USER_PROMPT_AGENT_CREATED,
-    "component_minted": USER_PROMPT_COMPONENT_CREATED,
+EVENT_USER_PROMPT_SERVICE_CREATED = "A new service with id {unit_id} has been minted on the Olas protocol on {chain_name}."
+EVENT_USER_PROMPT_AGENT_CREATED = "A new agent with id {unit_id} has been minted on the Olas protocol on {chain_name}."
+EVENT_USER_PROMPT_COMPONENT_CREATED = "A new component with id {unit_id} has been minted on the Olas protocol on {chain_name}."
+
+EVENT_USER_PROMPT_TEMPLATES = {
+    "service_minted": EVENT_USER_PROMPT_SERVICE_CREATED,
+    "agent_minted": EVENT_USER_PROMPT_AGENT_CREATED,
+    "component_minted": EVENT_USER_PROMPT_COMPONENT_CREATED,
 }
+
+REPO_USER_PROMPT_RELEASE = (
+    "Version {version} of the {repo} repository has been released."
+)
