@@ -758,7 +758,9 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
 
         self.set_done()
 
-    def get_omen_tweets(self) -> Generator[None, None, List]:
+    def get_omen_tweets(  # pylint: disable=too-many-locals,too-many-return-statements
+        self,
+    ) -> Generator[None, None, List]:
         """Get tweets about Omen markets"""
 
         tweets: List[Dict] = []

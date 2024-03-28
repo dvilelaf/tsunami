@@ -24,7 +24,6 @@ from llama_cpp import Llama
 
 from packages.dvilela.skills.tsunami_abci.prompts import (
     OMEN_USER_PROMPT,
-    REPO_USER_PROMPT_RELEASE,
     SYSTEM_PROMPTS,
 )
 
