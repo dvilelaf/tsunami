@@ -740,7 +740,7 @@ class PublishTweetsBehaviour(
 
             # Remove published tweets
             tweets = [
-                t for t in tweets if t["twitter_published"] and t["farcaster_published"]
+                t for t in tweets if not t["twitter_published"] or not t["farcaster_published"]
             ]
 
             # Save tweets to the db
