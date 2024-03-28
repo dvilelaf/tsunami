@@ -96,7 +96,7 @@ OLAS_REGISTRY_URL = "https://registry.olas.network"
 GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
 DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
-OMEN_RUN_TIME = 14
+OMEN_RUN_HOUR = 16
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -790,7 +790,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             self.context.logger.info("Omen task already ran today")
             return tweets
 
-        if now.hour < OMEN_RUN_TIME:
+        if now.hour < OMEN_RUN_HOUR:
             self.context.logger.info("Not time to run Omen yet")
             return tweets
 
