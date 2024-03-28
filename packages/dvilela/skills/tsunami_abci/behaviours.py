@@ -316,6 +316,54 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         response = yield from self.wait_for_message(timeout=timeout)
         return response
 
+    def build_tweet(self, user_prompt: str) -> Generator[None, None, Optional[str]]:
+        """Build tweet"""
+
+        # Randomly select a personality
+        # TODO: this only works for a single agent
+        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
+        self.context.logger.info("Llama is building a tweet...")
+
+        attempts = 0
+        tweet = None
+        while attempts < MAX_TWEET_ATTEMPTS:
+            system_prompt = system_prompt_base
+
+            # Summarize if we've been retrying for some time
+            if attempts >= TWEET_ATTEMPTS_SUMMARIZE:
+                system_prompt += SYSTEM_PROMPT_SUMMARIZER
+
+            # Call llama conection
+            response = yield from self._call_llama(
+                system_prompt=system_prompt, user_prompt=user_prompt
+            )
+
+            response_json = json.loads(response.payload)
+
+            if "error" in response_json:
+                self.context.logger.error(response_json["error"])
+                continue
+
+            tweet_attempt = response_json["response"]
+
+            # Check tweet length
+            tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
+            if tweet_len < MAX_TWEET_CHARS:
+                self.context.logger.info("Tweet is OK!")
+                tweet = tweet_attempt
+                break
+
+            self.context.logger.error(
+                f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
+            )
+
+            attempts += 1
+
+        if attempts >= MAX_TWEET_ATTEMPTS:
+            self.context.logger.error("Too many attempts. Aborting tweet.")
+
+        return tweet
+
 
 class TrackChainEventsBehaviour(
     TsunamiBaseBehaviour
@@ -572,54 +620,6 @@ class TrackChainEventsBehaviour(
 
         return uri
 
-    def build_tweet(self, user_prompt: str) -> Generator[None, None, Optional[str]]:
-        """Build tweet"""
-
-        # Randomly select a personality
-        # TODO: this only works for a single agent
-        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
-        self.context.logger.info("Llama is building a tweet...")
-
-        attempts = 0
-        tweet = None
-        while attempts < MAX_TWEET_ATTEMPTS:
-            system_prompt = system_prompt_base
-
-            # Summarize if we've been retrying for some time
-            if attempts >= TWEET_ATTEMPTS_SUMMARIZE:
-                system_prompt += SYSTEM_PROMPT_SUMMARIZER
-
-            # Call llama conection
-            response = yield from self._call_llama(
-                system_prompt=system_prompt, user_prompt=user_prompt
-            )
-
-            response_json = json.loads(response.payload)
-
-            if "error" in response_json:
-                self.context.logger.error(response_json["error"])
-                continue
-
-            tweet_attempt = response_json["response"]
-
-            # Check tweet length
-            tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
-            if tweet_len < MAX_TWEET_CHARS:
-                self.context.logger.info("Tweet is OK!")
-                tweet = tweet_attempt
-                break
-
-            self.context.logger.error(
-                f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
-            )
-
-            attempts += 1
-
-        if attempts >= MAX_TWEET_ATTEMPTS:
-            self.context.logger.error("Too many attempts. Aborting tweet.")
-
-        return tweet
-
 
 class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
     """TrackReposBehaviour"""
@@ -658,11 +658,12 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
             self.context.logger.error("Error reading repos from the database.")
             return tweets
 
-        repos = json.loads(response["repos"])
+        repos = json.loads(response["repose"]) if response["repos"] else {}
+
         self.context.logger.info(f"Loaded repos from db: {repos}")
 
         for repo in TRACKED_REPOS:
-            latest_known_version = repos[repo]
+            latest_known_version = repos.get(repo, None)
             self.context.logger.info(f"Getting repo {repo}...")
             response = yield from self.get_http_response(  # type: ignore
                 method="GET", url=GITHUB_REPO_LATEST_URL.replace("{repo}", repo)
@@ -678,7 +679,7 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
             version = response_json["tag_name"]
             published_at = response_json["published_at"]
 
-            if version == latest_known_version:
+            if latest_known_version and version == latest_known_version:
                 self.context.logger.info("Repo has not been updated yet")
                 continue
 
@@ -697,14 +698,19 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 self.context.logger.error("Error while building tweet. Skipping...")
                 continue
 
-            if tweet:
-                tweets.append(
-                    {
-                        "text": [tweet, response_json["html_url"]],  # this is a thread
-                        "twitter_published": False,
-                        "farcaster_published": False,
-                    }
-                )
+            repos[repo] = version
+            tweets.append(
+                {
+                    "text": [tweet, response_json["html_url"]],  # this is a thread
+                    "twitter_published": False,
+                    "farcaster_published": False,
+                }
+            )
+
+        # Save repos to the db
+        yield from self._write_kv({"repos": json.dumps(repos)})
+
+        return tweets
 
 
 class PublishTweetsBehaviour(
@@ -758,5 +764,6 @@ class TsunamiRoundBehaviour(AbstractRoundBehaviour):
     abci_app_cls = TsunamiAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
         TrackChainEventsBehaviour,
+        TrackReposBehaviour,
         PublishTweetsBehaviour,
     ]
