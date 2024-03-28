@@ -22,6 +22,7 @@
 import json
 import random
 from abc import ABC
+from datetime import datetime
 from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from aea.protocols.base import Message
@@ -85,6 +86,7 @@ MAX_TWEET_CHARS = 280
 HTTP_OK = 200
 OLAS_REGISTRY_URL = "https://registry.olas.network"
 GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
+DAY_IN_SECONDS = 3600 * 24
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -645,12 +647,22 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
 
         self.set_done()
 
-    def get_repo_tweets(self):
+    def get_repo_tweets(self) -> Generator[None, None, List]:
         """Get tweets about new repo releases"""
 
         tweets = []
 
+        response = yield from self._read_kv(keys=("repos",))
+
+        if response is None:
+            self.context.logger.error("Error reading repos from the database.")
+            return tweets
+
+        repos = json.loads(response["repos"])
+        self.context.logger.info(f"Loaded repos from db: {repos}")
+
         for repo in TRACKED_REPOS:
+            latest_known_version = repos[repo]
             self.context.logger.info(f"Getting repo {repo}...")
             response = yield from self.get_http_response(  # type: ignore
                 method="GET", url=GITHUB_REPO_LATEST_URL.replace("{repo}", repo)
@@ -664,6 +676,19 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
 
             response_json = json.loads(response.body)  # type: ignore
             version = response_json["tag_name"]
+            published_at = response_json["published_at"]
+
+            if version == latest_known_version:
+                self.context.logger.info("Repo has not been updated yet")
+                continue
+
+            if (
+                datetime.now() - datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ")
+            ).total_seconds() > DAY_IN_SECONDS:
+                self.context.logger.info(
+                    "Repo has not been updated during the last 24 hours"
+                )
+                continue
 
             user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
             tweet = yield from self.build_tweet(user_prompt)
