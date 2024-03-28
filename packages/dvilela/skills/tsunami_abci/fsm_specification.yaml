@@ -10,12 +10,16 @@ start_states:
 - TrackChainEventsRound
 states:
 - FinishedPublishRound
-- TrackChainEventsRound
 - PublishTweetsRound
+- TrackChainEventsRound
+- TrackReposRound
 transition_func:
-    (TrackChainEventsRound, DONE): PublishTweetsRound
-    (TrackChainEventsRound, NO_MAJORITY): TrackChainEventsRound
-    (TrackChainEventsRound, ROUND_TIMEOUT): TrackChainEventsRound
     (PublishTweetsRound, DONE): FinishedPublishRound
     (PublishTweetsRound, NO_MAJORITY): PublishTweetsRound
     (PublishTweetsRound, ROUND_TIMEOUT): PublishTweetsRound
+    (TrackChainEventsRound, DONE): TrackReposRound
+    (TrackChainEventsRound, NO_MAJORITY): TrackChainEventsRound
+    (TrackChainEventsRound, ROUND_TIMEOUT): TrackChainEventsRound
+    (TrackReposRound, DONE): PublishTweetsRound
+    (TrackReposRound, NO_MAJORITY): TrackReposRound
+    (TrackReposRound, ROUND_TIMEOUT): TrackReposRound
