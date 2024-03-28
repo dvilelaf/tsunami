@@ -23,7 +23,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
 - valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
 - valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
-- dvilela/tsunami_abci:0.1.0:bafybeiee7uxejkmpxeoagehywqhtxe7ctfegydfgopqavpcs46ffatobsy
+- dvilela/tsunami_abci:0.1.0:bafybeib73xncma6vnfnyl4en56hsaco5zd3fadvyrvby5jcjrgzscmljcm
 behaviours:
   main:
     args: {}
@@ -152,6 +152,9 @@ models:
       initial_block_ethereum: 18500000
       initial_block_gnosis: 18500000
       twitter_credentials: '{}'
+      event_tracking_enabled: true
+      repo_tracking_enabled: true
+      omen_tracking_enabled: true
     class_name: Params
   randomness_api:
     args:

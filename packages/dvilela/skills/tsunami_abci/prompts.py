@@ -67,7 +67,12 @@ SYSTEM_PROMPT_SUMMARIZER = """
 You are also known for keeping your communications extremely short and concise, and using few words. Try to summarize everything to a few words.
 """
 
-SYSTEM_PROMPTS = [SYSTEM_PROMPT_PIRATE, SYSTEM_PROMPT_OLAD, SYSTEM_PROMPT_TECHIE, SYSTEM_PROMPT_ALIEN]
+SYSTEM_PROMPTS = [
+    SYSTEM_PROMPT_PIRATE,
+    SYSTEM_PROMPT_OLAD,
+    SYSTEM_PROMPT_TECHIE,
+    SYSTEM_PROMPT_ALIEN,
+]
 
 EVENT_USER_PROMPT_SERVICE_CREATED = "A new service with id {unit_id} has been minted on the Olas protocol on {chain_name}."
 EVENT_USER_PROMPT_AGENT_CREATED = "A new agent with id {unit_id} has been minted on the Olas protocol on {chain_name}."
@@ -82,3 +87,9 @@ EVENT_USER_PROMPT_TEMPLATES = {
 REPO_USER_PROMPT_RELEASE = (
     "Version {version} of the {repo} repository has been released."
 )
+
+OMEN_USER_PROMPT = """
+During the last 24 hours, the Market Creator agent has opened {n_markets} markets on Omen.
+During the same interval, {n_agents} agents have placed {n_trades} trades totalling ${usd_amount}.
+The biggest and craziest trader was {biggest_trader_address} with {biggest_trader_trades} trades.
+"""

@@ -57,6 +57,18 @@ def main() -> None:
             "initial_block_gnosis"
         ] = f"${{int:{int(os.getenv('INITIAL_BLOCK_GNOSIS'))}}}"  # type: ignore
 
+        config[7]["models"]["params"]["args"][
+            "event_tracking_enabled"
+        ] = f"${{bool:{os.getenv('EVENT_TRACKING_ENABLED')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "repo_tracking_enabled"
+        ] = f"${{bool:{os.getenv('REPO_TRACKING_ENABLED')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "omen_tracking_enabled"
+        ] = f"${{bool:{os.getenv('OMEN_TRACKING_ENABLED')}}}"
+
     with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 

@@ -23,13 +23,13 @@
 from llama_cpp import Llama
 
 from packages.dvilela.skills.tsunami_abci.prompts import (
+    OMEN_USER_PROMPT,
     REPO_USER_PROMPT_RELEASE,
     SYSTEM_PROMPTS,
 )
 
 
 llm = Llama.from_pretrained(
-    # repo_id="Qwen/Qwen1.5-0.5B-Chat-GGUF",
     repo_id="TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF",
     filename="*Q2_K.gguf",
     verbose=False,
@@ -37,11 +37,16 @@ llm = Llama.from_pretrained(
 
 output = llm.create_chat_completion(
     messages=[
-        {"role": "system", "content": SYSTEM_PROMPTS[0]},  # type: ignore
+        {"role": "system", "content": SYSTEM_PROMPTS[-1]},  # type: ignore
         {  # type: ignore
             "role": "user",
-            "content": REPO_USER_PROMPT_RELEASE.format(
-                version="v0.1.0", repo="dvilelaf/tsunami"
+            "content": OMEN_USER_PROMPT.format(
+                n_markets=15,
+                n_agents=20,
+                n_trades=900,
+                usd_amount=100,
+                biggest_trader_address="0x0000000000",
+                biggest_trader_trades=30,
             ),
         },
     ],

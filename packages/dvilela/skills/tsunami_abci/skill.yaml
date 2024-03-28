@@ -8,14 +8,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeigairz4l54kyn2nipdefeu2zimmc5r5lbtlcdn2lilqxaagvfkxj4
+  behaviours.py: bafybeihlv34xy4yyb2unpsfj5q7reiu3n35qkggwe6qnijbfkm6k2d3t7i
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeifyejpyu62hxaf5ddddii5i7dmte6ivr2lirwfpcej4q45iqbsbpe
   handlers.py: bafybeialhc4f2333c6lvyt3yhrwju6h46ph2fc4qysydhcf5fe45zw43ly
-  models.py: bafybeiga2yhyvrpp2rmxdytly4sma2uno2bffmq5bpnuh3g4iljunwhwhe
-  payloads.py: bafybeiemt2tya237olxuwef6fxtgyiof5eyldnldvmpypfnyoarrhadw74
-  prompts.py: bafybeictnscclugp6hja23f46k5hsbfzzip7evijyg3vjzpnqsi27b266m
-  rounds.py: bafybeib3l63sqysyozkaab5biaqsbztdpiv5dakxlqqhuwd4irhvajlesu
+  models.py: bafybeifi4bq6avivpvkhgrgnprerlxggp37o6sqv35u6g34v2yyvw6yhcu
+  payloads.py: bafybeialfueiboflbrn5zgpqblkucrtobkulwvjkk25jdaw24r7pkujgta
+  prompts.py: bafybeicd2wipnyq7azif3hcy6xff46j6y3xbpgmz3ipa2wp2zvwdrvedza
+  rounds.py: bafybeigp5umjiu6ms6hifwmysygs5lc3crr7dsru2xhbpwf45wfdgdmlqi
+  subgraph.py: bafybeigblelbodde7ws3n6psicinq3ot35mdajwophmphynhy4h6nqre4i
 fingerprint_ignore_patterns: []
 connections:
 - dvilela/kv_store:0.1.0:bafybeihdjpafne6h3a7u2d5uwitmhmafpun73mukozp5dnempkjepsjk4a
@@ -151,6 +152,9 @@ models:
       initial_block_ethereum: 18500000
       initial_block_gnosis: 18500000
       twitter_credentials: '{}'
+      event_tracking_enabled: true
+      repo_tracking_enabled: true
+      omen_tracking_enabled: true
     class_name: Params
   requests:
     args: {}
