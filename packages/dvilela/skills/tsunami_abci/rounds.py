@@ -26,6 +26,7 @@ from typing import Dict, FrozenSet, Set, cast
 from packages.dvilela.skills.tsunami_abci.payloads import (
     PublishTweetsPayload,
     TrackChainEventsPayload,
+    TrackOmenPayload,
     TrackReposPayload,
 )
 from packages.valory.skills.abstract_round_abci.base import (
@@ -111,6 +112,19 @@ class TrackReposRound(CollectSameUntilThresholdRound):
     # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
 
 
+class TrackOmenRound(CollectSameUntilThresholdRound):
+    """TrackOmenRound"""
+
+    payload_class = TrackOmenPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_repos)
+    selection_key = get_name(SynchronizedData.tweets)
+
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
+
+
 class PublishTweetsRound(CollectSameUntilThresholdRound):
     """PublishTweetsRound"""
 
@@ -140,9 +154,14 @@ class TsunamiAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: TrackChainEventsRound,
         },
         TrackReposRound: {
-            Event.DONE: PublishTweetsRound,
+            Event.DONE: TrackOmenRound,
             Event.NO_MAJORITY: TrackReposRound,
             Event.ROUND_TIMEOUT: TrackReposRound,
+        },
+        TrackOmenRound: {
+            Event.DONE: PublishTweetsRound,
+            Event.NO_MAJORITY: TrackOmenRound,
+            Event.ROUND_TIMEOUT: TrackOmenRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,

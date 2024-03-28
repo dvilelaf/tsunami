@@ -15,6 +15,7 @@ states:
 - RegistrationStartupRound
 - ResetAndPauseRound
 - TrackChainEventsRound
+- TrackOmenRound
 - TrackReposRound
 transition_func:
     (PublishTweetsRound, DONE): ResetAndPauseRound
@@ -29,6 +30,9 @@ transition_func:
     (TrackChainEventsRound, DONE): TrackReposRound
     (TrackChainEventsRound, NO_MAJORITY): TrackChainEventsRound
     (TrackChainEventsRound, ROUND_TIMEOUT): TrackChainEventsRound
-    (TrackReposRound, DONE): PublishTweetsRound
+    (TrackOmenRound, DONE): PublishTweetsRound
+    (TrackOmenRound, NO_MAJORITY): TrackOmenRound
+    (TrackOmenRound, ROUND_TIMEOUT): TrackOmenRound
+    (TrackReposRound, DONE): TrackOmenRound
     (TrackReposRound, NO_MAJORITY): TrackReposRound
     (TrackReposRound, ROUND_TIMEOUT): TrackReposRound

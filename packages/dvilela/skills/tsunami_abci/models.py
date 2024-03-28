@@ -73,4 +73,9 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.twitter_credentials = json.loads(
             self._ensure("twitter_credentials", kwargs, str)
         )
+        self.event_tracking_enabled = self._ensure(
+            "event_tracking_enabled", kwargs, bool
+        )
+        self.repo_tracking_enabled = self._ensure("repo_tracking_enabled", kwargs, bool)
+        self.omen_tracking_enabled = self._ensure("omen_tracking_enabled", kwargs, bool)
         super().__init__(*args, **kwargs)

@@ -22,7 +22,8 @@
 import json
 import random
 from abc import ABC
-from datetime import datetime
+from collections import Counter
+from datetime import datetime, timedelta
 from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from aea.protocols.base import Message
@@ -47,6 +48,7 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
     EVENT_USER_PROMPT_TEMPLATES,
+    OMEN_USER_PROMPT,
     REPO_USER_PROMPT_RELEASE,
     SYSTEM_PROMPTS,
     SYSTEM_PROMPT_SUMMARIZER,
@@ -57,9 +59,15 @@ from packages.dvilela.skills.tsunami_abci.rounds import (
     SynchronizedData,
     TrackChainEventsPayload,
     TrackChainEventsRound,
+    TrackOmenPayload,
+    TrackOmenRound,
     TrackReposPayload,
     TrackReposRound,
     TsunamiAbciApp,
+)
+from packages.dvilela.skills.tsunami_abci.subgraph import (
+    OMEN_XDAI_FPMMS_QUERY,
+    OMEN_XDAI_TRADES_QUERY,
 )
 from packages.valory.connections.farcaster.connection import (
     PUBLIC_ID as FARCASTER_CONNECTION_PUBLIC_ID,
@@ -87,6 +95,8 @@ HTTP_OK = 200
 OLAS_REGISTRY_URL = "https://registry.olas.network"
 GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
 DAY_IN_SECONDS = 3600 * 24
+OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
+OMEN_RUN_TIME = 14
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -346,6 +356,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
             tweet_attempt = response_json["response"]
 
+            # Add Contribute's hashtag
+            if "#OlasNetwork" not in tweet_attempt:
+                tweet_attempt += " #OlasNetwork"
+
             # Check tweet length
             tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
             if tweet_len < MAX_TWEET_CHARS:
@@ -376,7 +390,9 @@ class TrackChainEventsBehaviour(
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            tweets = yield from self.build_tweets()
+            tweets = self.synchronized_data.tweets
+            if self.params.event_tracking_enabled:
+                tweets += yield from self.build_tweets()
             payload = TrackChainEventsPayload(
                 sender=self.context.agent_address, tweets=json.dumps(tweets)
             )
@@ -631,11 +647,13 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             tweets = self.synchronized_data.tweets
-            repo_tweets = yield from self.get_repo_tweets()
-            tweets += repo_tweets
 
-            # Save tweets to the db
-            yield from self._write_kv({"tweets": json.dumps(tweets)})
+            if self.params.repo_tracking_enabled:
+                repo_tweets = yield from self.get_repo_tweets()
+                tweets += repo_tweets
+
+                # Save tweets to the db
+                yield from self._write_kv({"tweets": json.dumps(tweets)})
 
             payload = TrackReposPayload(
                 sender=self.context.agent_address, tweets=json.dumps(tweets)
@@ -658,7 +676,7 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
             self.context.logger.error("Error reading repos from the database.")
             return tweets
 
-        repos = json.loads(response["repose"]) if response["repos"] else {}
+        repos = json.loads(response["repos"]) if response["repos"] else {}
 
         self.context.logger.info(f"Loaded repos from db: {repos}")
 
@@ -713,6 +731,182 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
         return tweets
 
 
+class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """TrackOmenBehaviour"""
+
+    matching_round: Type[AbstractRound] = TrackOmenRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweets = self.synchronized_data.tweets
+            if self.params.omen_tracking_enabled:
+                omen_tweets = yield from self.get_omen_tweets()
+                tweets += omen_tweets
+
+                # Save tweets to the db
+                yield from self._write_kv({"tweets": json.dumps(tweets)})
+
+            payload = TrackOmenPayload(
+                sender=self.context.agent_address, tweets=json.dumps(tweets)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_omen_tweets(  # pylint: disable=too-many-locals,too-many-return-statements
+        self,
+    ) -> Generator[None, None, List]:
+        """Get tweets about Omen markets"""
+
+        tweets: List[Dict] = []
+
+        response = yield from self._read_kv(keys=("omen_last_run_date",))
+
+        if response is None:
+            self.context.logger.error(
+                "Error reading omen_last_run_date from the database."
+            )
+            return tweets
+
+        omen_last_run_date = response["omen_last_run_date"]
+        omen_last_run_date = (
+            datetime.strptime(omen_last_run_date, "%Y-%m-%d")
+            if omen_last_run_date
+            else None
+        )
+        self.context.logger.info(
+            f"Loaded omen_last_run_date from db: {omen_last_run_date}"
+        )
+
+        # Check run time
+        now = datetime.now()
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        if omen_last_run_date and today <= omen_last_run_date:
+            self.context.logger.info("Omen task already ran today")
+            return tweets
+
+        if now.hour < OMEN_RUN_TIME:
+            self.context.logger.info("Not time to run Omen yet")
+            return tweets
+
+        # We are retrieving data for the last 24 hours
+        creation_timestamp_gt = str(int((now - timedelta(days=1)).timestamp()))
+
+        headers = {
+            "Accept": "application/json, multipart/mixed",
+            "Content-Type": "application/json",
+        }
+
+        # Markets
+        self.context.logger.info("Getting Omen markets...")
+
+        query = OMEN_XDAI_FPMMS_QUERY.substitute(
+            creationTimestamp_gt=creation_timestamp_gt,
+        )
+
+        content_json = {
+            "query": query,
+            "variables": None,
+            "extensions": {"headers": None},
+        }
+
+        response = yield from self.get_http_response(  # type: ignore
+            method="POST",
+            url=OMEN_API_ENDPOINT,
+            content=json.dumps(content_json).encode(),
+            headers=headers,
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error while getting the markets: {response}"  # type: ignore
+            )
+            return tweets
+
+        markets_json = json.loads(response.body)  # type: ignore
+        markets = markets_json.get("data", {}).get("fixedProductMarketMakers", [])
+
+        # Trades
+        self.context.logger.info("Getting Omen trades...")
+
+        query = OMEN_XDAI_TRADES_QUERY.substitute(
+            creationTimestamp_gt=creation_timestamp_gt,
+        )
+
+        content_json = {
+            "query": query,
+            "variables": None,
+            "extensions": {"headers": None},
+        }
+
+        response = yield from self.get_http_response(  # type: ignore
+            method="POST",
+            url=OMEN_API_ENDPOINT,
+            content=json.dumps(content_json).encode(),
+            headers=headers,
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error while getting the trades: {response}"  # type: ignore
+            )
+            return tweets
+
+        trades_json = json.loads(response.body)  # type: ignore
+        trades = trades_json.get("data", {}).get("fpmmTrades", [])
+
+        # Calculate data
+        n_markets = len(markets)
+        trades = trades_json.get("data", {}).get("fpmmTrades", [])
+        n_trades = len(trades)
+        usd_amount = sum([float(t["collateralAmountUSD"]) for t in trades])
+        traders = [t["creator"]["id"] for t in trades]
+        trader_counter = Counter(traders)
+        n_traders = len(trader_counter)
+        biggest_trader_address, biggest_trader_trades = trader_counter.most_common(1)[0]
+
+        # Build thread
+        user_prompt = OMEN_USER_PROMPT.format(
+            n_markets=n_markets,
+            n_agents=n_traders,
+            n_trades=n_trades,
+            usd_amount=int(usd_amount),  # to avoid numeric confusion on the LLM
+            biggest_trader_address=biggest_trader_address,
+            biggest_trader_trades=biggest_trader_trades,
+        )
+        tweet = yield from self.build_tweet(user_prompt)
+
+        if tweet is None:
+            self.context.logger.error("Error while building tweet. Skipping...")
+            return tweets
+
+        header = "Here's some questions Olas agents have been trading on:"
+
+        # Get random sample of markets where its questions fit in a tweet
+        some_markets = random.sample(
+            list(filter(lambda m: len(m["question"]["title"]) < 250, markets)), 5
+        )
+        some_questions = ["☴ " + m["question"]["title"] for m in some_markets]
+
+        tweets.append(
+            {
+                "text": [tweet, header] + some_questions,  # this is a thread
+                "twitter_published": False,
+                "farcaster_published": False,
+            }
+        )
+
+        # Save run time to the db
+        yield from self._write_kv({"omen_last_run_date": today.strftime("%Y-%m-%d")})
+
+        return tweets
+
+
 class PublishTweetsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
@@ -740,7 +934,9 @@ class PublishTweetsBehaviour(
 
             # Remove published tweets
             tweets = [
-                t for t in tweets if t["twitter_published"] and t["farcaster_published"]
+                t
+                for t in tweets
+                if not t["twitter_published"] or not t["farcaster_published"]
             ]
 
             # Save tweets to the db
@@ -765,5 +961,6 @@ class TsunamiRoundBehaviour(AbstractRoundBehaviour):
     behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
         TrackChainEventsBehaviour,
         TrackReposBehaviour,
+        TrackOmenBehaviour,
         PublishTweetsBehaviour,
     ]

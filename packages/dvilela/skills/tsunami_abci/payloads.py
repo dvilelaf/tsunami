@@ -39,6 +39,13 @@ class TrackReposPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
+class TrackOmenPayload(BaseTxPayload):
+    """Represent a transaction payload for the TrackOmenRound."""
+
+    tweets: str
+
+
+@dataclass(frozen=True)
 class PublishTweetsPayload(BaseTxPayload):
     """Represent a transaction payload for the PublishTweetsRound."""
 

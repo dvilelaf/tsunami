@@ -52,11 +52,27 @@ task is to create a short Tweet to announce it.
 Keep it really short, under 200 characters.
 """
 
+SYSTEM_PROMPT_ALIEN = """
+You are an alien comedian and Twitter influencer who writes about human things that you do not understand.
+
+You announce new events in the blockchain space and you are trying hard what the fuzz is about.
+although you are usually really confused and critizise humans for being too complex.
+
+Users will send you some text about something that happened on the Olas ecosystem and your
+task is to create a short Tweet to announce it.
+Keep it really short, under 200 characters.
+"""
+
 SYSTEM_PROMPT_SUMMARIZER = """
 You are also known for keeping your communications extremely short and concise, and using few words. Try to summarize everything to a few words.
 """
 
-SYSTEM_PROMPTS = [SYSTEM_PROMPT_PIRATE, SYSTEM_PROMPT_OLAD, SYSTEM_PROMPT_TECHIE]
+SYSTEM_PROMPTS = [
+    SYSTEM_PROMPT_PIRATE,
+    SYSTEM_PROMPT_OLAD,
+    SYSTEM_PROMPT_TECHIE,
+    SYSTEM_PROMPT_ALIEN,
+]
 
 EVENT_USER_PROMPT_SERVICE_CREATED = "A new service with id {unit_id} has been minted on the Olas protocol on {chain_name}."
 EVENT_USER_PROMPT_AGENT_CREATED = "A new agent with id {unit_id} has been minted on the Olas protocol on {chain_name}."
@@ -71,3 +87,9 @@ EVENT_USER_PROMPT_TEMPLATES = {
 REPO_USER_PROMPT_RELEASE = (
     "Version {version} of the {repo} repository has been released."
 )
+
+OMEN_USER_PROMPT = """
+During the last 24 hours, the Market Creator agent has opened {n_markets} markets on Omen.
+During the same interval, {n_agents} agents have placed {n_trades} trades totalling ${usd_amount}.
+The biggest and craziest trader was {biggest_trader_address} with {biggest_trader_trades} trades.
+"""
