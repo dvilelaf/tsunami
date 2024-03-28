@@ -346,6 +346,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
             tweet_attempt = response_json["response"]
 
+            # Add Contribute's hashtag
+            if "#OlasNetwork" not in tweet_attempt:
+                tweet_attempt += " #OlasNetwork"
+
             # Check tweet length
             tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
             if tweet_len < MAX_TWEET_CHARS:
