@@ -2,20 +2,24 @@ alphabet_in:
 - DONE
 - NO_MAJORITY
 - ROUND_TIMEOUT
-default_start_state: PrepareTweetsRound
+default_start_state: TrackChainEventsRound
 final_states:
 - FinishedPublishRound
 label: TsunamiAbciApp
 start_states:
-- PrepareTweetsRound
+- TrackChainEventsRound
 states:
 - FinishedPublishRound
-- PrepareTweetsRound
 - PublishTweetsRound
+- TrackChainEventsRound
+- TrackReposRound
 transition_func:
-    (PrepareTweetsRound, DONE): PublishTweetsRound
-    (PrepareTweetsRound, NO_MAJORITY): PrepareTweetsRound
-    (PrepareTweetsRound, ROUND_TIMEOUT): PrepareTweetsRound
     (PublishTweetsRound, DONE): FinishedPublishRound
     (PublishTweetsRound, NO_MAJORITY): PublishTweetsRound
     (PublishTweetsRound, ROUND_TIMEOUT): PublishTweetsRound
+    (TrackChainEventsRound, DONE): TrackReposRound
+    (TrackChainEventsRound, NO_MAJORITY): TrackChainEventsRound
+    (TrackChainEventsRound, ROUND_TIMEOUT): TrackChainEventsRound
+    (TrackReposRound, DONE): PublishTweetsRound
+    (TrackReposRound, NO_MAJORITY): TrackReposRound
+    (TrackReposRound, ROUND_TIMEOUT): TrackReposRound

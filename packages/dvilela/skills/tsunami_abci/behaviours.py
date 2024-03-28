@@ -22,6 +22,7 @@
 import json
 import random
 from abc import ABC
+from datetime import datetime
 from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from aea.protocols.base import Message
@@ -45,16 +46,19 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 )
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
+    EVENT_USER_PROMPT_TEMPLATES,
+    REPO_USER_PROMPT_RELEASE,
     SYSTEM_PROMPTS,
     SYSTEM_PROMPT_SUMMARIZER,
-    USER_PROMPT_TEMPLATES,
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
-    PrepareTweetsPayload,
-    PrepareTweetsRound,
     PublishTweetsPayload,
     PublishTweetsRound,
     SynchronizedData,
+    TrackChainEventsPayload,
+    TrackChainEventsRound,
+    TrackReposPayload,
+    TrackReposRound,
     TsunamiAbciApp,
 )
 from packages.valory.connections.farcaster.connection import (
@@ -81,6 +85,25 @@ TWEET_ATTEMPTS_SUMMARIZE = 3
 MAX_TWEET_CHARS = 280
 HTTP_OK = 200
 OLAS_REGISTRY_URL = "https://registry.olas.network"
+GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
+DAY_IN_SECONDS = 3600 * 24
+
+TRACKED_REPOS = [
+    "dvilelaf/tsunami",
+    "valory-xyz/IEKit",
+    "valory-xyz/governatooorr",
+    "valory-xyz/mech",
+    "valory-xyz/apy-oracle",
+    "valory-xyz/price-oracle",
+    "valory-xyz/open-aea",
+    "valory-xyz/open-autonomy",
+    "valory-xyz/autonomous-fund",
+    "valory-xyz/hello-world",
+    "valory-xyz/market-creator",
+    "valory-xyz/agent-academy-2",
+    "valory-xyz/agent-academy-1",
+    "valory-xyz/generatooorr",
+]
 
 
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
@@ -95,19 +118,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 "service_registry": {
                     "contract_address": self.params.service_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
                 },
                 "agent_registry": {
                     "contract_address": self.params.agent_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateUnit": USER_PROMPT_TEMPLATES["agent_minted"]
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
                     },
                 },
                 "component_registry": {
                     "contract_address": self.params.component_registry_address_ethereum,
                     "event_to_template": {
-                        "CreateUnit": USER_PROMPT_TEMPLATES["component_minted"]
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
                     },
                 },
             },
@@ -115,7 +138,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 "service_registry": {
                     "contract_address": self.params.service_registry_address_gnosis,
                     "event_to_template": {
-                        "CreateService": USER_PROMPT_TEMPLATES["service_minted"],
+                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
                 },
             },
@@ -293,20 +316,68 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         response = yield from self.wait_for_message(timeout=timeout)
         return response
 
+    def build_tweet(self, user_prompt: str) -> Generator[None, None, Optional[str]]:
+        """Build tweet"""
 
-class PrepareTweetsBehaviour(
+        # Randomly select a personality
+        # TODO: this only works for a single agent
+        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
+        self.context.logger.info("Llama is building a tweet...")
+
+        attempts = 0
+        tweet = None
+        while attempts < MAX_TWEET_ATTEMPTS:
+            system_prompt = system_prompt_base
+
+            # Summarize if we've been retrying for some time
+            if attempts >= TWEET_ATTEMPTS_SUMMARIZE:
+                system_prompt += SYSTEM_PROMPT_SUMMARIZER
+
+            # Call llama conection
+            response = yield from self._call_llama(
+                system_prompt=system_prompt, user_prompt=user_prompt
+            )
+
+            response_json = json.loads(response.payload)
+
+            if "error" in response_json:
+                self.context.logger.error(response_json["error"])
+                continue
+
+            tweet_attempt = response_json["response"]
+
+            # Check tweet length
+            tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
+            if tweet_len < MAX_TWEET_CHARS:
+                self.context.logger.info("Tweet is OK!")
+                tweet = tweet_attempt
+                break
+
+            self.context.logger.error(
+                f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
+            )
+
+            attempts += 1
+
+        if attempts >= MAX_TWEET_ATTEMPTS:
+            self.context.logger.error("Too many attempts. Aborting tweet.")
+
+        return tweet
+
+
+class TrackChainEventsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
-    """PrepareTweetsBehaviour"""
+    """TrackChainEventsBehaviour"""
 
-    matching_round: Type[AbstractRound] = PrepareTweetsRound
+    matching_round: Type[AbstractRound] = TrackChainEventsRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             tweets = yield from self.build_tweets()
-            payload = PrepareTweetsPayload(
+            payload = TrackChainEventsPayload(
                 sender=self.context.agent_address, tweets=json.dumps(tweets)
             )
 
@@ -549,53 +620,97 @@ class PrepareTweetsBehaviour(
 
         return uri
 
-    def build_tweet(self, user_prompt: str) -> Generator[None, None, Optional[str]]:
-        """Build tweet"""
 
-        # Randomly select a personality
-        # TODO: this only works for a single agent
-        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
-        self.context.logger.info("Llama is building a tweet...")
+class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """TrackReposBehaviour"""
 
-        attempts = 0
-        tweet = None
-        while attempts < MAX_TWEET_ATTEMPTS:
-            system_prompt = system_prompt_base
+    matching_round: Type[AbstractRound] = TrackReposRound
 
-            # Summarize if we've been retrying for some time
-            if attempts >= TWEET_ATTEMPTS_SUMMARIZE:
-                system_prompt += SYSTEM_PROMPT_SUMMARIZER
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
 
-            # Call llama conection
-            response = yield from self._call_llama(
-                system_prompt=system_prompt, user_prompt=user_prompt
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweets = self.synchronized_data.tweets
+            repo_tweets = yield from self.get_repo_tweets()
+            tweets += repo_tweets
+
+            # Save tweets to the db
+            yield from self._write_kv({"tweets": json.dumps(tweets)})
+
+            payload = TrackReposPayload(
+                sender=self.context.agent_address, tweets=json.dumps(tweets)
             )
 
-            response_json = json.loads(response.payload)
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
 
-            if "error" in response_json:
-                self.context.logger.error(response_json["error"])
+        self.set_done()
+
+    def get_repo_tweets(self) -> Generator[None, None, List]:
+        """Get tweets about new repo releases"""
+
+        tweets: List[Dict] = []
+
+        response = yield from self._read_kv(keys=("repos",))
+
+        if response is None:
+            self.context.logger.error("Error reading repos from the database.")
+            return tweets
+
+        repos = json.loads(response["repose"]) if response["repos"] else {}
+
+        self.context.logger.info(f"Loaded repos from db: {repos}")
+
+        for repo in TRACKED_REPOS:
+            latest_known_version = repos.get(repo, None)
+            self.context.logger.info(f"Getting repo {repo}...")
+            response = yield from self.get_http_response(  # type: ignore
+                method="GET", url=GITHUB_REPO_LATEST_URL.replace("{repo}", repo)
+            )
+
+            if response.status_code != HTTP_OK:  # type: ignore
+                self.context.logger.error(
+                    f"Error while getting the repo {repo}: {response}"  # type: ignore
+                )
                 continue
 
-            tweet_attempt = response_json["response"]
+            response_json = json.loads(response.body)  # type: ignore
+            version = response_json["tag_name"]
+            published_at = response_json["published_at"]
 
-            # Check tweet length
-            tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
-            if tweet_len < MAX_TWEET_CHARS:
-                self.context.logger.info("Tweet is OK!")
-                tweet = tweet_attempt
-                break
+            if latest_known_version and version == latest_known_version:
+                self.context.logger.info("Repo has not been updated yet")
+                continue
 
-            self.context.logger.error(
-                f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
+            if (
+                datetime.now() - datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ")
+            ).total_seconds() > DAY_IN_SECONDS:
+                self.context.logger.info(
+                    "Repo has not been updated during the last 24 hours"
+                )
+                continue
+
+            user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
+            tweet = yield from self.build_tweet(user_prompt)
+
+            if tweet is None:
+                self.context.logger.error("Error while building tweet. Skipping...")
+                continue
+
+            repos[repo] = version
+            tweets.append(
+                {
+                    "text": [tweet, response_json["html_url"]],  # this is a thread
+                    "twitter_published": False,
+                    "farcaster_published": False,
+                }
             )
 
-            attempts += 1
+        # Save repos to the db
+        yield from self._write_kv({"repos": json.dumps(repos)})
 
-        if attempts >= MAX_TWEET_ATTEMPTS:
-            self.context.logger.error("Too many attempts. Aborting tweet.")
-
-        return tweet
+        return tweets
 
 
 class PublishTweetsBehaviour(
@@ -645,9 +760,10 @@ class PublishTweetsBehaviour(
 class TsunamiRoundBehaviour(AbstractRoundBehaviour):
     """TsunamiRoundBehaviour"""
 
-    initial_behaviour_cls = PrepareTweetsBehaviour
+    initial_behaviour_cls = TrackChainEventsBehaviour
     abci_app_cls = TsunamiAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
-        PrepareTweetsBehaviour,
+        TrackChainEventsBehaviour,
+        TrackReposBehaviour,
         PublishTweetsBehaviour,
     ]

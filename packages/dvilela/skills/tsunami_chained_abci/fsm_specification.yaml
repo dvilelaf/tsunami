@@ -10,21 +10,25 @@ start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
-- PrepareTweetsRound
 - PublishTweetsRound
 - RegistrationRound
 - RegistrationStartupRound
 - ResetAndPauseRound
+- TrackChainEventsRound
+- TrackReposRound
 transition_func:
-    (PrepareTweetsRound, DONE): PublishTweetsRound
-    (PrepareTweetsRound, NO_MAJORITY): PrepareTweetsRound
-    (PrepareTweetsRound, ROUND_TIMEOUT): PrepareTweetsRound
     (PublishTweetsRound, DONE): ResetAndPauseRound
     (PublishTweetsRound, NO_MAJORITY): PublishTweetsRound
     (PublishTweetsRound, ROUND_TIMEOUT): PublishTweetsRound
-    (RegistrationRound, DONE): PrepareTweetsRound
+    (RegistrationRound, DONE): TrackChainEventsRound
     (RegistrationRound, NO_MAJORITY): RegistrationRound
-    (RegistrationStartupRound, DONE): PrepareTweetsRound
-    (ResetAndPauseRound, DONE): PrepareTweetsRound
+    (RegistrationStartupRound, DONE): TrackChainEventsRound
+    (ResetAndPauseRound, DONE): TrackChainEventsRound
     (ResetAndPauseRound, NO_MAJORITY): ResetAndPauseRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): ResetAndPauseRound
+    (TrackChainEventsRound, DONE): TrackReposRound
+    (TrackChainEventsRound, NO_MAJORITY): TrackChainEventsRound
+    (TrackChainEventsRound, ROUND_TIMEOUT): TrackChainEventsRound
+    (TrackReposRound, DONE): PublishTweetsRound
+    (TrackReposRound, NO_MAJORITY): TrackReposRound
+    (TrackReposRound, ROUND_TIMEOUT): TrackReposRound
