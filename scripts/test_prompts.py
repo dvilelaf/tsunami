@@ -18,6 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Script to test agent prompts"""
 
 from llama_cpp import Llama
 
@@ -36,8 +37,8 @@ llm = Llama.from_pretrained(
 
 output = llm.create_chat_completion(
     messages=[
-        {"role": "system", "content": SYSTEM_PROMPTS[0]},
-        {
+        {"role": "system", "content": SYSTEM_PROMPTS[0]},  # type: ignore
+        {  # type: ignore
             "role": "user",
             "content": REPO_USER_PROMPT_RELEASE.format(
                 version="v0.1.0", repo="dvilelaf/tsunami"
@@ -47,4 +48,4 @@ output = llm.create_chat_completion(
     temperature=0.8,
 )
 
-print(output["choices"][0]["message"]["content"])
+print(output["choices"][0]["message"]["content"])  # type: ignore

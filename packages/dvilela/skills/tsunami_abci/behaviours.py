@@ -650,7 +650,7 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
     def get_repo_tweets(self) -> Generator[None, None, List]:
         """Get tweets about new repo releases"""
 
-        tweets = []
+        tweets: List[Dict] = []
 
         response = yield from self._read_kv(keys=("repos",))
 
