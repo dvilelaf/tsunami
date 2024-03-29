@@ -121,10 +121,10 @@ def tweet_len(tweet: str) -> int:
     return parse_tweet(tweet).asdict()["weightedLength"]
 
 
-def tweet_to_thread(tweet: str):
+def tweet_to_thread(tweet: str) -> Optional[List[str]]:
     """Create a thread from a long text"""
 
-    def sentence_split(sentence: str, separator: str):
+    def sentence_split(sentence: str, separator: str) -> List[str]:
         """Separates a string into parts"""
         parts = sentence.split(separator)
         for p in parts[:-1]:
@@ -132,7 +132,7 @@ def tweet_to_thread(tweet: str):
         return [p.strip() for p in parts]
 
     sentences = [t.strip() for t in tweet.split(".")]
-    thread = []
+    thread: List[str] = []
 
     # Keep iterating while there are sentences to process
     while sentences:
@@ -831,7 +831,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
 
         self.set_done()
 
-    def get_omen_tweets(  # pylint: disable=too-many-locals,too-many-return-statements
+    def get_omen_tweets(  # pylint: disable=too-many-locals,too-many-return-statements,too-many-statements
         self,
     ) -> Generator[None, None, List]:
         """Get tweets about Omen markets"""
