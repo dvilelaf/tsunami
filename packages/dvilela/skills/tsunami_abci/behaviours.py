@@ -247,7 +247,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         if not isinstance(text, list):
             texts = [text]
 
-        cast_ids = []
+        cast_id = None
         for text_ in texts:
             self.context.logger.info(f"Creating cast with text: {text_}")
 
@@ -259,13 +259,14 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     f"Writing cast failed with following error message: {response.payload}"
                 )
                 # Interrupt the process. If this was a thread, it will be cut short.
-                return {"success": False, "cast_id": cast_ids}
+                return {"success": False, "cast_id": cast_id}
 
-            cast_id = response_data["cast_id"]
-            self.context.logger.info(f"Posted cast with ID: {cast_id}")
-            cast_ids.append(cast_id)
+            # Keep the first cast_id only
+            if not cast_id:
+                cast_id = response_data["cast_id"]
+            self.context.logger.info(f"Posted cast with ID: {response_data['cast_id']}")
 
-        return {"success": True, "cast_ids": cast_ids}
+        return {"success": True, "cast_ids": cast_id}
 
     def _create_tweet(
         self,
