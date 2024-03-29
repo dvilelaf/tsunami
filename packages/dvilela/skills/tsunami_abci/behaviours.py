@@ -244,8 +244,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Publish cast"""
 
         # Enforce text to be a list
-        if not isinstance(text, list):
-            texts = [text]
+        texts = text if isinstance(text, list) else [text]
 
         cast_id = None
         for text_ in texts:
