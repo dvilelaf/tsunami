@@ -18,4 +18,13 @@
 #
 # ------------------------------------------------------------------------------
 
+REPO_PATH=$PWD
+TSUNAMI_DB=$REPO_PATH/tsunami/abci_build/persistent_data/logs/tsunami.db
+
 poetry run autonomy deploy stop --build-dir tsunami/abci_build; cd ..
+
+# Backup db
+if test -e $TSUNAMI_DB; then
+  echo "Creating database backup"
+  cp $TSUNAMI_DB $REPO_PATH
+fi
