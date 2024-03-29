@@ -946,7 +946,6 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
 
         # Calculate data
         n_markets = len(markets)
-        trades = trades_json.get("data", {}).get("fpmmTrades", [])
         n_trades = len(trades)
         usd_amount = sum([float(t["collateralAmountUSD"]) for t in trades])
         traders = [t["creator"]["id"] for t in trades]
@@ -969,14 +968,27 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             self.context.logger.error("Error while building thread. Skipping...")
             return tweets
 
+        # Add random opened markets
+        if markets:
+            header = "Here's some questions the Market Creator has opened today:"
+            thread.append(header)
+
+            # Get random sample of markets where its questions fit in a tweet
+            some_markets = random.sample(
+                list(filter(lambda m: len(m["question"]["title"]) < 250, markets)),
+                min(5, n_markets),
+            )
+            some_questions = ["☴ " + m["question"]["title"] for m in some_markets]
+            thread += some_questions
+
+        # Add random traded questions
         header = "Here's some questions Olas agents have been trading on:"
         thread.append(header)
 
-        # Get random sample of markets where its questions fit in a tweet
-        some_markets = random.sample(
-            list(filter(lambda m: len(m["question"]["title"]) < 250, markets)), 5
-        )
-        some_questions = ["☴ " + m["question"]["title"] for m in some_markets]
+        # Get random sample of trades where its questions fit in a tweet
+        filtered_trades = set(list(filter(lambda t: len(t["title"]) < 250, trades)))
+        some_trades = random.sample(filtered_trades, min(5, len(filtered_trades)))
+        some_questions = ["☴ " + m["question"]["title"] for m in some_trades]
         thread += some_questions
 
         tweets.append(
