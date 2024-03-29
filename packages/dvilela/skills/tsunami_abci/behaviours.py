@@ -240,22 +240,32 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
         return {"success": True, "tweet_id": response.tweet_id}
 
-    def publish_cast(self, text: str) -> Generator[None, None, Dict]:
+    def publish_cast(self, text: Union[str, List[str]]) -> Generator[None, None, Dict]:
         """Publish cast"""
 
-        self.context.logger.info(f"Creating cast with text: {text}")
+        # Enforce text to be a list
+        if not isinstance(text, list):
+            texts = [text]
 
-        response = yield from self._create_cast(text=text)
-        response_data = json.loads(response.payload)
+        cast_ids = []
+        for text_ in texts:
+            self.context.logger.info(f"Creating cast with text: {text_}")
 
-        if response.error:
-            self.context.logger.error(
-                f"Writing cast failed with following error message: {response.payload}"
-            )
-            return {"success": False, "cast_id": None}
+            response = yield from self._create_cast(text=text_)
+            response_data = json.loads(response.payload)
 
-        self.context.logger.info(f"Posted cast with ID: {response_data['cast_id']}")
-        return {"success": True, "cast_id": response_data["cast_id"]}
+            if response.error:
+                self.context.logger.error(
+                    f"Writing cast failed with following error message: {response.payload}"
+                )
+                # Interrupt the process. If this was a thread, it will be cut short.
+                return {"success": False, "cast_id": cast_ids}
+
+            cast_id = response_data["cast_id"]
+            self.context.logger.info(f"Posted cast with ID: {cast_id}")
+            cast_ids.append(cast_id)
+
+        return {"success": True, "cast_ids": cast_ids}
 
     def _create_tweet(
         self,
@@ -1002,9 +1012,7 @@ class PublishTweetsBehaviour(
                     tweet["twitter_published"] = response["success"]
 
                 if self.params.publish_farcaster and not tweet["farcaster_published"]:
-                    response = yield from self.publish_cast(
-                        tweet["text"][0]
-                    )  # no threads on Farcaster, we drop the link
+                    response = yield from self.publish_cast(tweet["text"])
                     tweet["farcaster_published"] = response["success"]
 
             # Remove published tweets
