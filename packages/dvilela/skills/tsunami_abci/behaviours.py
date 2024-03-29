@@ -435,7 +435,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             thread_attempt = tweet_to_thread(tweet_attempt)
 
             if thread_attempt:
-                self.context.logger.info("Thread is OK!")
+                self.context.logger.info(f"Thread is OK!:\n{thread_attempt}")
                 thread = thread_attempt
                 break
 
