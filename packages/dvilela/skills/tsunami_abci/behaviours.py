@@ -116,6 +116,65 @@ TRACKED_REPOS = [
 ]
 
 
+def tweet_len(tweet: str) -> int:
+    """Calculates a tweet length"""
+    return parse_tweet(tweet).asdict()["weightedLength"]
+
+
+def tweet_to_thread(tweet: str):
+    """Create a thread from a long text"""
+
+    def sentence_split(sentence: str, separator: str):
+        """Separates a string into parts"""
+        parts = sentence.split(separator)
+        for p in parts[:-1]:
+            p += separator.rstrip()
+        return [p.strip() for p in parts]
+
+    sentences = [t.strip() for t in tweet.split(".")]
+    thread = []
+
+    # Keep iterating while there are sentences to process
+    while sentences:
+        # Get the next sentence
+        next_sentence = sentences.pop(0)
+        sentence_end = ". " if next_sentence[-1] not in ("?", "!", ".") else " "
+        next_sentence += sentence_end
+
+        # Does the sentence fit in a tweet?
+        if tweet_len(next_sentence) > MAX_TWEET_CHARS:
+            # First check if we can split this sentence (if it includes '? ' or '! ')
+            if "? " in next_sentence:
+                next_sentences = sentence_split(next_sentence, "? ")
+                sentences = next_sentences + sentences
+                continue
+
+            if "! " in next_sentence:
+                next_sentences = sentence_split(next_sentence, "! ")
+                sentences = next_sentences + sentences
+                continue
+
+            # The sentece is too long to fit a tweet. A thread cannot be created
+            return None
+
+        # Add the first tweet
+        if not thread:
+            thread.append(next_sentence)
+            continue
+
+        # Add a new tweet if the previous one has grown too long
+        if tweet_len(thread[-1] + next_sentence) > MAX_TWEET_CHARS:
+            thread[-1] = thread[-1].strip()
+            thread.append(next_sentence)
+            continue
+
+        # Extend the previous tweet
+        thread[-1] += next_sentence
+
+    thread[-1] = thread[-1].strip()
+    return thread
+
+
 class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ancestors
     """Base behaviour for the tsunami_abci skill."""
 
@@ -326,8 +385,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         response = yield from self.wait_for_message(timeout=timeout)
         return response
 
-    def build_tweet(self, user_prompt: str) -> Generator[None, None, Optional[str]]:
-        """Build tweet"""
+    def build_thread(
+        self, user_prompt: str
+    ) -> Generator[None, None, Optional[List[str]]]:
+        """Build thread"""
 
         # Randomly select a personality
         # TODO: this only works for a single agent
@@ -335,7 +396,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         self.context.logger.info("Llama is building a tweet...")
 
         attempts = 0
-        tweet = None
+        thread = None
         while attempts < MAX_TWEET_ATTEMPTS:
             system_prompt = system_prompt_base
 
@@ -360,23 +421,32 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             if "#OlasNetwork" not in tweet_attempt:
                 tweet_attempt += " #OlasNetwork"
 
-            # Check tweet length
-            tweet_len = parse_tweet(tweet_attempt).asdict()["weightedLength"]
-            if tweet_len < MAX_TWEET_CHARS:
+            # Create a single-tweet thread
+            if tweet_len(tweet_attempt) < MAX_TWEET_CHARS:
                 self.context.logger.info("Tweet is OK!")
-                tweet = tweet_attempt
+                thread = [tweet_attempt]
                 break
 
             self.context.logger.error(
                 f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
             )
 
+            # Create a multi-tweet thread instead
+            thread_attempt = tweet_to_thread(tweet_attempt)
+
+            if thread_attempt:
+                self.context.logger.info("Thread is OK!")
+                thread = thread_attempt
+                break
+
+            self.context.logger.error(f"Thread could not be built: {tweet_attempt}")
+
             attempts += 1
 
         if attempts >= MAX_TWEET_ATTEMPTS:
             self.context.logger.error("Too many attempts. Aborting tweet.")
 
-        return tweet
+        return thread
 
 
 class TrackChainEventsBehaviour(
@@ -537,22 +607,24 @@ class TrackChainEventsBehaviour(
                         user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
                         unit_url = f"{OLAS_REGISTRY_URL}/{chain_id}/{component_type}s/{unit_id}"
 
-                        tweet = yield from self.build_tweet(user_prompt)
+                        thread = yield from self.build_thread(user_prompt)
 
-                        if tweet is None:
+                        if thread is None:
                             self.context.logger.error(
-                                "Error while building tweet. Skipping..."
+                                "Error while building thread. Skipping..."
                             )
                             continue
 
-                        if tweet:
-                            tweets.append(
-                                {
-                                    "text": [tweet, unit_url],  # this is a thread
-                                    "twitter_published": False,
-                                    "farcaster_published": False,
-                                }
-                            )
+                        # Add a link to the unit
+                        thread.append(unit_url)
+
+                        tweets.append(
+                            {
+                                "text": thread,
+                                "twitter_published": False,
+                                "farcaster_published": False,
+                            }
+                        )
 
             # Write from block
             yield from self._write_kv({f"from_block_{chain_id}": str(latest_block)})
@@ -710,16 +782,17 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
-            tweet = yield from self.build_tweet(user_prompt)
+            thread = yield from self.build_thread(user_prompt)
 
-            if tweet is None:
-                self.context.logger.error("Error while building tweet. Skipping...")
+            if thread is None:
+                self.context.logger.error("Error while building thread. Skipping...")
                 continue
 
             repos[repo] = version
+            thread.append(response_json["html_url"])
             tweets.append(
                 {
-                    "text": [tweet, response_json["html_url"]],  # this is a thread
+                    "text": thread,
                     "twitter_published": False,
                     "farcaster_published": False,
                 }
@@ -879,23 +952,25 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             biggest_trader_address=biggest_trader_address,
             biggest_trader_trades=biggest_trader_trades,
         )
-        tweet = yield from self.build_tweet(user_prompt)
+        thread = yield from self.build_thread(user_prompt)
 
-        if tweet is None:
-            self.context.logger.error("Error while building tweet. Skipping...")
+        if thread is None:
+            self.context.logger.error("Error while building thread. Skipping...")
             return tweets
 
         header = "Here's some questions Olas agents have been trading on:"
+        thread.append(header)
 
         # Get random sample of markets where its questions fit in a tweet
         some_markets = random.sample(
             list(filter(lambda m: len(m["question"]["title"]) < 250, markets)), 5
         )
         some_questions = ["☴ " + m["question"]["title"] for m in some_markets]
+        thread += some_questions
 
         tweets.append(
             {
-                "text": [tweet, header] + some_questions,  # this is a thread
+                "text": thread,
                 "twitter_published": False,
                 "farcaster_published": False,
             }
