@@ -972,12 +972,14 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             header = "Here's some questions the Market Creator has opened today:"
             thread.append(header)
 
+            market_questions = [m["question"]["title"] for m in markets]
+
             # Get random sample of markets where its questions fit in a tweet
             some_markets = random.sample(
-                list(filter(lambda m: len(m["question"]["title"]) < 250, markets)),
+                list(filter(lambda m: len(m) < 250, market_questions)),
                 min(5, n_markets),
             )
-            some_questions = ["☴ " + m["question"]["title"] for m in some_markets]
+            some_questions = ["☴ " + m for m in some_markets]
             thread += some_questions
 
         # Add random traded questions
