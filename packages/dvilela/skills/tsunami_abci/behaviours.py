@@ -988,7 +988,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
 
         # Get random sample of trades where its questions fit in a tweet
         traded_questions = list({t["title"] for t in trades})
-        filtered_questions = set(list(filter(lambda t: len(t) < 250, traded_questions)))
+        filtered_questions = list(filter(lambda t: len(t) < 250, traded_questions))
         some_questions = random.sample(
             filtered_questions, min(5, len(filtered_questions))
         )
