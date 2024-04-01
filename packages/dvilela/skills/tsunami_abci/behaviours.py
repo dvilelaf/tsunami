@@ -96,7 +96,7 @@ OLAS_REGISTRY_URL = "https://registry.olas.network"
 GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
 DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
-OMEN_RUN_HOUR = 16
+OMEN_RUN_HOUR = 15
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
