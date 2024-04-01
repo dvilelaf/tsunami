@@ -977,7 +977,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             # Get random sample of markets where its questions fit in a tweet
             some_markets = random.sample(
                 list(filter(lambda m: len(m) < 250, market_questions)),
-                min(5, n_markets),
+                min(3, n_markets),
             )
             some_questions = ["☴ " + m for m in some_markets]
             thread += some_questions
@@ -990,7 +990,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
         traded_questions = list({t["title"] for t in trades})
         filtered_questions = list(filter(lambda t: len(t) < 250, traded_questions))
         some_questions = random.sample(
-            filtered_questions, min(5, len(filtered_questions))
+            filtered_questions, min(3, len(filtered_questions))
         )
         some_questions = ["☴ " + q for q in some_questions]
         thread += some_questions
@@ -1028,12 +1028,16 @@ class PublishTweetsBehaviour(
                     response = yield from self.publish_tweet(tweet["text"])
                     tweet["twitter_published"] = response["success"]
 
+            # Publish casts
+            sleep_between_casts = len(tweets) > 10
+            for tweet in tweets:
                 if self.params.publish_farcaster and not tweet["farcaster_published"]:
                     response = yield from self.publish_cast(tweet["text"])
                     tweet["farcaster_published"] = response["success"]
 
-                # Avoid being rate limited
-                yield from self.sleep(0.5)
+                # Avoid being rate limited (10 casts/60 seconds)
+                if sleep_between_casts:
+                    yield from self.sleep(6)
 
             # Remove published tweets
             tweets = [
