@@ -21,6 +21,7 @@
 
 import json
 import random
+import secrets
 from abc import ABC
 from collections import Counter
 from datetime import datetime, timedelta
@@ -437,7 +438,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         # Randomly select a personality
         # TODO: this only works for a single agent
-        system_prompt_base = random.choice(SYSTEM_PROMPTS)  # nosec
+        system_prompt_base = secrets.choice(SYSTEM_PROMPTS)  # nosec
         self.context.logger.info("Llama is building a tweet...")
 
         attempts = 0
@@ -826,6 +827,8 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                     "Repo has not been updated during the last 24 hours"
                 )
                 continue
+
+            self.context.logger.info(f"A new version of {repo} has been released: {version}")
 
             user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
             thread = yield from self.build_thread(user_prompt)
