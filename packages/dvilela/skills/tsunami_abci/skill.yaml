@@ -8,11 +8,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeibho4goeypnp5mw4lcygxgxqb6n3naqphlrk6micefspohnfidapi
+  behaviours.py: bafybeieh4uz6vpohqlovgupbhj3haogbmwugjn3yrqt5ezflezwwuexiai
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeiacylwu5v7ppe65hrv643zy5sql3gogk7iuyxiq3m4zu5lfalyau4
   handlers.py: bafybeialhc4f2333c6lvyt3yhrwju6h46ph2fc4qysydhcf5fe45zw43ly
-  models.py: bafybeihyrhv7mwo7ldtdas3pokntjb7og7pw622cwbhpajzkx3jj3ftjsq
+  models.py: bafybeia6lhs5wpghe5rxmz2y6po6j7v7o2wx7muaq7x7kgmyzk34bdwbfe
   payloads.py: bafybeialfueiboflbrn5zgpqblkucrtobkulwvjkk25jdaw24r7pkujgta
   prompts.py: bafybeicd2wipnyq7azif3hcy6xff46j6y3xbpgmz3ipa2wp2zvwdrvedza
   rounds.py: bafybeigp5umjiu6ms6hifwmysygs5lc3crr7dsru2xhbpwf45wfdgdmlqi
