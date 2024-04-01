@@ -267,6 +267,35 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         return {"success": True, "cast_ids": cast_id}
 
+    def publish_telegram(
+        self, text: Union[str, List[str]]
+    ) -> Generator[None, None, Dict]:
+        """Publish telegram"""
+
+        if isinstance(text, list):
+            text = "\n\n".join(text)
+
+        self.context.logger.info(f"Creating Telegram message with text:\n{text}")
+
+        url = (
+            f"https://api.telegram.org/bot{self.params.telegram_token}/sendMessage?"
+            f"chat_id={self.params.telegram_chat_id}&text={text}&parse_mode=markdown&disable_web_page_preview=true"
+        )
+
+        # Send message
+        response = yield from self.get_http_response(  # type: ignore
+            method="GET", url=url
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error sending Telegram message: {response}"  # type: ignore
+            )
+            return {"success": False}
+
+        self.context.logger.info("Posted Telegram message")
+        return {"success": True}
+
     def _create_tweet(
         self,
         text: Union[str, List[str]],
@@ -633,6 +662,7 @@ class TrackChainEventsBehaviour(
                                 "text": thread,
                                 "twitter_published": False,
                                 "farcaster_published": False,
+                                "telegram_published": False,
                             }
                         )
 
@@ -874,7 +904,9 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             return tweets
 
         if now.hour < OMEN_RUN_HOUR:
-            self.context.logger.info("Not time to run Omen yet")
+            self.context.logger.info(
+                f"Not time to run Omen yet [{now.hour} < {OMEN_RUN_HOUR}]"
+            )
             return tweets
 
         # We are retrieving data for the last 24 hours
@@ -1039,11 +1071,19 @@ class PublishTweetsBehaviour(
                 if sleep_between_casts:
                     yield from self.sleep(6)
 
+            # Publish telegram
+            for tweet in tweets:
+                if self.params.publish_telegram and not tweet["telegram_published"]:
+                    response = yield from self.publish_telegram(tweet["text"])
+                    tweet["telegram_published"] = response["success"]
+
             # Remove published tweets
             tweets = [
                 t
                 for t in tweets
-                if not t["twitter_published"] or not t["farcaster_published"]
+                if not t["twitter_published"]
+                or not t["farcaster_published"]
+                or not t["telegram_published"]
             ]
 
             # Save tweets to the db

@@ -88,8 +88,9 @@ extra:
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
-        publish_twitter: ${PUBLISH_TWITTER:bool:true}
-        publish_farcaster: ${PUBLISH_FARCASTER:bool:true}
+        publish_twitter: ${PUBLISH_TWITTER:bool:false}
+        publish_farcaster: ${PUBLISH_FARCASTER:bool:false}
+        publish_telegram: ${PUBLISH_TELEGRAM:bool:false}
         service_registry_address_ethereum: ${SERVICE_REGISTRY_ADDRESS_ETHEREUM:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
         agent_registry_address_ethereum: ${AGENT_REGISTRY_ADDRESS_ETHEREUM:str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
         component_registry_address_ethereum: ${COMPONENT_REGISTRY_ADDRESS_ETHEREUM:str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
@@ -100,6 +101,8 @@ extra:
         event_tracking_enabled: ${EVENT_TRACKING_ENABLED:bool:true}
         repo_tracking_enabled: ${REPO_TRACKING_ENABLED:bool:true}
         omen_tracking_enabled: ${OMEN_TRACKING_ENABLED:bool:true}
+        telegram_token: ${TELEGRAM_TOKEN:str:null}
+        telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

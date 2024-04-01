@@ -203,6 +203,7 @@ models:
       termination_from_block: ${int:0}
       publish_twitter: ${bool:false}
       publish_farcaster: ${bool:false}
+      publish_telegram: ${bool:false}
       service_registry_address_ethereum: ${str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
       agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
@@ -213,3 +214,5 @@ models:
       event_tracking_enabled: ${bool:true}
       repo_tracking_enabled: ${bool:true}
       omen_tracking_enabled: ${bool:true}
+      telegram_token: ${str:null}
+      telegram_chat_id: ${int:null}

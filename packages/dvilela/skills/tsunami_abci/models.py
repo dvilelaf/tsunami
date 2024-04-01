@@ -54,6 +54,9 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         """Initialize the parameters object."""
         self.publish_twitter = self._ensure("publish_twitter", kwargs, bool)
         self.publish_farcaster = self._ensure("publish_farcaster", kwargs, bool)
+        self.publish_telegram = self._ensure("publish_telegram", kwargs, bool)
+        self.telegram_token = self._ensure("telegram_token", kwargs, str)
+        self.telegram_chat_id = self._ensure("telegram_chat_id", kwargs, int)
         self.service_registry_address_ethereum = self._ensure(
             "service_registry_address_ethereum", kwargs, str
         )
