@@ -2,6 +2,8 @@
 
 An [Olas](https://olas.network/) [service](https://registry.olas.network/ethereum/services/23) that tracks on-chain events on the Olas ecosystem and autonomously reports on it on Twitter and Farcaster.
 
+![Tsunami service image](/mints/service.jpg)
+
 ## System requirements
 
 - Python `>=3.8`
