@@ -69,6 +69,26 @@ def main() -> None:
             "omen_tracking_enabled"
         ] = f"${{bool:{os.getenv('OMEN_TRACKING_ENABLED')}}}"
 
+        config[7]["models"]["params"]["args"][
+            "telegram_chat_id"
+        ] = f"${{int:{os.getenv('TELEGRAM_CHAT_ID')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "telegram_token"
+        ] = f"${{str:{os.getenv('TELEGRAM_TOKEN')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "publish_twitter"
+        ] = f"${{bool:{os.getenv('PUBLISH_TWITTER')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "publish_farcaster"
+        ] = f"${{bool:{os.getenv('PUBLISH_FARCASTER')}}}"
+
+        config[7]["models"]["params"]["args"][
+            "publish_telegram"
+        ] = f"${{bool:{os.getenv('PUBLISH_TELEGRAM')}}}"
+
     with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 

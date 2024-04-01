@@ -279,12 +279,18 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         url = (
             f"https://api.telegram.org/bot{self.params.telegram_token}/sendMessage?"
-            f"chat_id={self.params.telegram_chat_id}&text={text}&parse_mode=markdown&disable_web_page_preview=true"
+            f"chat_id={self.params.telegram_chat_id}"
         )
+
+        data = {"text": text}
+
+        headers = {
+            "Content-Type": "application/json",
+        }
 
         # Send message
         response = yield from self.get_http_response(  # type: ignore
-            method="GET", url=url
+            method="POST", url=url, headers=headers, content=json.dumps(data).encode()
         )
 
         if response.status_code != HTTP_OK:  # type: ignore
@@ -835,6 +841,7 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                     "text": thread,
                     "twitter_published": False,
                     "farcaster_published": False,
+                    "telegram_published": False,
                 }
             )
 
@@ -1032,6 +1039,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
                 "text": thread,
                 "twitter_published": False,
                 "farcaster_published": False,
+                "telegram_published": False,
             }
         )
 
