@@ -1032,6 +1032,9 @@ class PublishTweetsBehaviour(
                     response = yield from self.publish_cast(tweet["text"])
                     tweet["farcaster_published"] = response["success"]
 
+                # Avoid being rate limited
+                yield from self.sleep(0.5)
+
             # Remove published tweets
             tweets = [
                 t
