@@ -1,0 +1,33 @@
+name: twitter
+author: valory
+version: 0.1.0
+type: connection
+description: Connection for interacting with the twitter API.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
+  connection.py: bafybeigyjxqsyu3e7x6dhvjlmb4xvdkikxkts6ik5v7thwpq5i2blixvta
+  readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
+class_name: TwitterConnection
+config:
+  access_secret: <access_secret>
+  access_token: <access_token>
+  auth_token: <auth_token>
+  consumer_key: <consumer_key>
+  consumer_secret: <consumer_secret>
+  use_staging_api: false
+  staging_api: http://host.docker.internal:5000/twitter/create_tweet
+excluded_protocols: []
+restricted_to_protocols: []
+dependencies:
+  tweepy:
+    version: ==4.14.0
+  requests:
+    version: ==2.28.1
+is_abstract: false
+cert_requests: []
