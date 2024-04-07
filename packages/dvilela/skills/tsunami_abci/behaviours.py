@@ -234,7 +234,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         if response.performative == TwitterMessage.Performative.ERROR:
             self.context.logger.error(
-                f"Writing tweet failed with following error message: {response.message}"
+                f"Writing tweet failed with following error message: {response}"
             )
             return {"success": False, "tweet_id": None}
 
@@ -256,7 +256,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
             if response.error:
                 self.context.logger.error(
-                    f"Writing cast failed with following error message: {response.payload}"
+                    f"Writing cast failed with following error message: {response}"
                 )
                 # Interrupt the process. If this was a thread, it will be cut short.
                 return {"success": False, "cast_id": cast_id}
@@ -641,7 +641,7 @@ class TrackChainEventsBehaviour(
 
                         if response.status_code != HTTP_OK:  # type: ignore
                             self.context.logger.error(
-                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response.status_code}"  # type: ignore
+                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response}"  # type: ignore
                             )
                             continue
 
@@ -828,7 +828,9 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 )
                 continue
 
-            self.context.logger.info(f"A new version of {repo} has been released: {version}")
+            self.context.logger.info(
+                f"A new version of {repo} has been released: {version}"
+            )
 
             user_prompt = REPO_USER_PROMPT_RELEASE.format(version=version, repo=repo)
             thread = yield from self.build_thread(user_prompt)
