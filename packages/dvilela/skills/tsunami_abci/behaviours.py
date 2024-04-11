@@ -670,6 +670,9 @@ class TrackChainEventsBehaviour(
                                 "twitter_published": False,
                                 "farcaster_published": False,
                                 "telegram_published": False,
+                                "timestamp": datetime.now().strftime(
+                                    "%Y-%m-%dT%H:%M:%SZ"
+                                ),
                             }
                         )
 
@@ -847,6 +850,7 @@ class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                     "twitter_published": False,
                     "farcaster_published": False,
                     "telegram_published": False,
+                    "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
                 }
             )
 
@@ -1045,6 +1049,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
                 "twitter_published": False,
                 "farcaster_published": False,
                 "telegram_published": False,
+                "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
         )
 
