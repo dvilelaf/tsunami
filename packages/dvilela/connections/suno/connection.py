@@ -169,7 +169,7 @@ class SunoAPI:
         title: Optional[str] = None,
         lyrics: Optional[str] = None,
         tags: Optional[str] = None,
-    ):
+    ) -> Optional[List]:
         """Generate music"""
 
         data = {
