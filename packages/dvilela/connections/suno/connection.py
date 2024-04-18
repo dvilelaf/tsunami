@@ -163,14 +163,26 @@ class SunoAPI:
         headers.update(COMMON_HEADERS)
         return requests.post(url=url, json=data, headers=headers, timeout=60)
 
-    def generate_songs(self, prompt: str) -> Optional[List]:
+    def generate_songs(
+        self,
+        prompt: Optional[str] = None,
+        title: Optional[str] = None,
+        lyrics: Optional[str] = None,
+        tags: Optional[str] = None,
+    ):
         """Generate music"""
+
         data = {
-            "gpt_description_prompt": prompt,
+            "title": title if title else "",
+            "prompt": lyrics if lyrics else "",
+            "tags": tags,
+            "gpt_description_prompt": prompt if prompt else None,
             "make_instrumental": False,
+            "continue_clip_id": None,
+            "continue_at": None,
             "mv": "chirp-v3-0",
-            "prompt": "",
         }
+
         headers = {"Authorization": f"Bearer {self.auth.token}"}
         api_url = f"{SUNO_BASE_URL}/api/generate/v2/"
         response = self.fetch(api_url, headers, data)
@@ -321,17 +333,10 @@ class SunoConnection(BaseSyncConnection):
     def _get_response(self, payload: dict) -> Tuple[Dict, bool]:
         """Get response from Llama."""
 
-        REQUIRED_PROPERTIES = ["prompt"]
-
-        if not all(i in payload for i in REQUIRED_PROPERTIES):
-            return {
-                "error": f"Some parameter is missing from the request data: required={REQUIRED_PROPERTIES}, got={list(payload.keys())}"
-            }, True
-
         self.logger.info(f"Calling Suno API: {payload}")
 
         try:
-            song_urls = self.api.generate_songs(payload["prompt"])
+            song_urls = self.api.generate_songs(**payload)
             self.logger.info(f"Suno response: {song_urls}")
         except Exception as e:
             return {"error": f"Exception while calling Suno:\n{e}"}, True

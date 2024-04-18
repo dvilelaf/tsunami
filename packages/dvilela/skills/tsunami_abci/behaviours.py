@@ -108,7 +108,7 @@ DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
 OMEN_RUN_HOUR = 15
 SUNO_RUN_HOUR = 10
-SUNO_RUN_DAY = 4
+SUNO_RUN_DAY = 3
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -1215,6 +1215,10 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             return tweets
 
         song_urls = response_json["response"]
+
+        if not song_urls:
+            self.context.logger.error("Error while creating the songs")
+            return tweets
 
         # Create a thread
         thread = yield from self.build_thread(

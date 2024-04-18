@@ -98,7 +98,7 @@ SUNO_USER_PROMPT = """
 A new {genre} song has been created in honor of the {agent_name} agent.
 """
 
-SUNO_PROMPT_TEMPLATE = "Create a {genre} song about {agent_name}, an autonomous agent on the Olas network whose description is: {agent_description}"
+SUNO_PROMPT_TEMPLATE = "Create a {genre} song about {agent_name}, an agent on the Olas network: {agent_description}"
 
 MUSIC_GENRES = [
     "metal",

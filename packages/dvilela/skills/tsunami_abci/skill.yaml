@@ -8,20 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeid5lw3woznstdmgsbpik53pkx5vyrph2pb2hpxvdhlxttjzdxgkb4
+  behaviours.py: bafybeih6pjmzv77hmc42svzjveeoezviuno7qumxspvijldeok7guscmem
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeibrbzzs726xnbay6yyknx7nkcyrvprrvb5sojlyxy4ndoksugcfq4
   handlers.py: bafybeialhc4f2333c6lvyt3yhrwju6h46ph2fc4qysydhcf5fe45zw43ly
   models.py: bafybeied5hnmxxd4wagdrhwss22c5cwaor4sz6vnjbjriu4nesxoypk5x4
   payloads.py: bafybeiapq3qfmrfusaoppkzce3mhzb4nryxz37wcgiivsjlvdzhdjhabba
-  prompts.py: bafybeicvo45ueso3myev4bab6xzllmc5hghtkcpbwn2jsdvdy4qhd4jhn4
+  prompts.py: bafybeifzfkcsiwaem45w2pji4gku3udx7kesflmgoz63xcwiby56nj6bbi
   rounds.py: bafybeia53kltimhqz5dcm5cyiia3fraiofjidjuwuz5dtwlvubtgrbdeqq
   subgraph.py: bafybeib7f63y2hozc73lgp3f4ehpssjd23oaotamemeg3xmwxy3esbdlii
 fingerprint_ignore_patterns: []
 connections:
 - dvilela/kv_store:0.1.0:bafybeihdjpafne6h3a7u2d5uwitmhmafpun73mukozp5dnempkjepsjk4a
 - dvilela/llama:0.1.0:bafybeientp27ic3s2wbmrxxsmxg3wvshcoecjl3nvo75lb5faw3rersu7u
-- dvilela/suno:0.1.0:bafybeidfuqxafbaimdpkqak5hkil25mfqhpz3xrdixmnq3wxivq5dgq44i
+- dvilela/suno:0.1.0:bafybeifaqzdkbpm46z4slcggqfhzxcadghsu5xfdhe5gggok62anjfvn6m
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq
 contracts:
