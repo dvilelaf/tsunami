@@ -41,51 +41,62 @@ def main() -> None:
         config[5]["config"]["ledger_apis"]["ethereum"][
             "address"
         ] = f"${{str:{os.getenv('ETHEREUM_LEDGER_RPC')}}}"
+
         config[5]["config"]["ledger_apis"]["gnosis"][
             "address"
         ] = f"${{str:{os.getenv('GNOSIS_LEDGER_RPC')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[7]["config"][
+            "suno_session_id"
+        ] = f"${{str:{os.getenv('SUNO_SESSION_ID')}}}"
+
+        config[7]["config"]["suno_cookie"] = f"${{str:{os.getenv('SUNO_COOKIE')}}}"
+
+        config[8]["models"]["params"]["args"][
             "twitter_credentials"
         ] = f"${{str:{os.getenv('TWITTER_CREDENTIALS')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "initial_block_ethereum"
         ] = f"${{int:{int(os.getenv('INITIAL_BLOCK_ETHEREUM'))}}}"  # type: ignore
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "initial_block_gnosis"
         ] = f"${{int:{int(os.getenv('INITIAL_BLOCK_GNOSIS'))}}}"  # type: ignore
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "event_tracking_enabled"
         ] = f"${{bool:{os.getenv('EVENT_TRACKING_ENABLED')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "repo_tracking_enabled"
         ] = f"${{bool:{os.getenv('REPO_TRACKING_ENABLED')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "omen_tracking_enabled"
         ] = f"${{bool:{os.getenv('OMEN_TRACKING_ENABLED')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
+            "suno_enabled"
+        ] = f"${{bool:{os.getenv('SUNO_ENABLED')}}}"
+
+        config[8]["models"]["params"]["args"][
             "telegram_chat_id"
         ] = f"${{int:{os.getenv('TELEGRAM_CHAT_ID')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "telegram_token"
         ] = f"${{str:{os.getenv('TELEGRAM_TOKEN')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "publish_twitter"
         ] = f"${{bool:{os.getenv('PUBLISH_TWITTER')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "publish_farcaster"
         ] = f"${{bool:{os.getenv('PUBLISH_FARCASTER')}}}"
 
-        config[7]["models"]["params"]["args"][
+        config[8]["models"]["params"]["args"][
             "publish_telegram"
         ] = f"${{bool:{os.getenv('PUBLISH_TELEGRAM')}}}"
 

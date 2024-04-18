@@ -36,6 +36,9 @@ from packages.dvilela.connections.kv_store.connection import (
 from packages.dvilela.connections.llama.connection import (
     PUBLIC_ID as LLAMA_CONNECTION_PUBLIC_ID,
 )
+from packages.dvilela.connections.suno.connection import (
+    PUBLIC_ID as SUNO_CONNECTION_PUBLIC_ID,
+)
 from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
 from packages.dvilela.protocols.kv_store.dialogues import (
     KvStoreDialogue,
@@ -105,7 +108,7 @@ DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
 OMEN_RUN_HOUR = 15
 SUNO_RUN_HOUR = 15
-SUNO_RUN_DAY = 4
+SUNO_RUN_DAY = 3
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -388,7 +391,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Send a request message from the skill context."""
         srr_dialogues = cast(SrrDialogues, self.context.srr_dialogues)
         srr_message, srr_dialogue = srr_dialogues.create(
-            counterparty=str(LLAMA_CONNECTION_PUBLIC_ID),
+            counterparty=str(SUNO_CONNECTION_PUBLIC_ID),
             performative=SrrMessage.Performative.REQUEST,
             payload=json.dumps({"prompt": prompt}),
         )
@@ -1183,11 +1186,11 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             )
             return tweets
 
-        response_json = json.loads(response.body)
+        response_json = json.loads(response.body)["data"]
         agents = [u for u in response_json["units"] if u["packageType"] == "agent"]
         agents = sorted(agents, key=lambda i: int(i["tokenId"]))
 
-        n_agents = len(agents["units"])
+        n_agents = len(agents)
         self.context.logger.info(f"Got {n_agents} agents")
 
         # Select a random agent and genre

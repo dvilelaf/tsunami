@@ -121,7 +121,7 @@ class SunoAuth:
 
     def keep_alive(self):
         """Keep alive"""
-        print("Starting keep alive...")
+        print("Starting Suno keep alive...")
         while not self.stop_flag:
             try:
                 self.update_token()
@@ -151,7 +151,6 @@ class SunoAPI:
         # Await for the auth to be ready
         while not self.auth.token:
             time.sleep(1)
-        print("Auth is ready")
 
     def fetch(self, url, headers=None, data=None):
         """Fetch API"""

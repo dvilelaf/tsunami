@@ -6,9 +6,9 @@ description: A connection that provides a wrapper around the Suno API.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifydrb4yumno6ph2nqjetqw3bseccgso4cjfarsedy4r5f73zl72m
-  connection.py: bafybeiayj4zkyallinkzm7ahx2h7mfydzupo2xvw3drrnmxmis4mdwpqbq
-  readme.md: bafybeiaulo2wb7znrotpnsh27idv2j3rlmslene7l3ygedjmshyna6tkxu
+  __init__.py: bafybeifxoli7jbukindea7tdpwvnedl6l63f2vj3mlllijdkgtw4sgymyu
+  connection.py: bafybeihjbgcsgaxp56dpsfnqh2zr76km5sduz5upqno52vt56gydj4et7i
+  readme.md: bafybeie3golx2w2eu2ptksgsr3wmedzpbqw3ymbpsgileybsmv27g7j7di
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
