@@ -156,6 +156,7 @@ models:
       event_tracking_enabled: true
       repo_tracking_enabled: true
       omen_tracking_enabled: true
+      suno_enabled: true
       telegram_token: null
       telegram_chat_id: null
     class_name: Params

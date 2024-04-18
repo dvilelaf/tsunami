@@ -86,7 +86,15 @@ config:
 ---
 public_id: dvilela/llama:0.1.0
 type: connection
-config: {}
+config:
+  repo_id: ${str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
+  filename: ${str:*Q2_K.gguf}
+---
+public_id: dvilela/suno:0.1.0
+type: connection
+config:
+  suno_session_id: ${str:null}
+  suno_cookie: ${str:null}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection
@@ -214,5 +222,6 @@ models:
       event_tracking_enabled: ${bool:true}
       repo_tracking_enabled: ${bool:true}
       omen_tracking_enabled: ${bool:true}
+      suno_enabled: ${bool:true}
       telegram_token: ${str:null}
       telegram_chat_id: ${int:null}

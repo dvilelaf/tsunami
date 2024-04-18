@@ -101,6 +101,7 @@ extra:
         event_tracking_enabled: ${EVENT_TRACKING_ENABLED:bool:true}
         repo_tracking_enabled: ${REPO_TRACKING_ENABLED:bool:true}
         omen_tracking_enabled: ${OMEN_TRACKING_ENABLED:bool:true}
+        suno_enabled: ${SUNO_ENABLED:bool:true}
         telegram_token: ${TELEGRAM_TOKEN:str:null}
         telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
 ---
@@ -152,7 +153,15 @@ config:
 ---
 public_id: dvilela/llama:0.1.0
 type: connection
-config: {}
+config:
+  repo_id: ${LLAMA_REPO_ID:str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
+  filename: ${LLAMA_FILENAME:str:*Q2_K.gguf}
+---
+public_id: dvilela/suno:0.1.0
+type: connection
+config:
+  suno_session_id: ${SUNO_SESSION_ID:str:null}
+  suno_cookie: ${SUNO_COOKIE:str:null}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection
