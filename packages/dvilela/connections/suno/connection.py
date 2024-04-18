@@ -21,19 +21,22 @@
 """Suno connection."""
 
 import json
-from typing import Any, Dict, Tuple, cast
 import time
+from http.cookies import SimpleCookie
+from threading import Thread
+from typing import Any, Dict, Tuple, cast
+
+import requests
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
-from threading import Thread
+
 from packages.valory.protocols.srr.dialogues import SrrDialogue
 from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
 from packages.valory.protocols.srr.message import SrrMessage
-import requests
-from http.cookies import SimpleCookie
+
 
 PUBLIC_ID = PublicId.from_str("dvilela/suno:0.1.0")
 
@@ -47,6 +50,7 @@ COMMON_HEADERS = {
     "Referer": "https://suno.com",
     "Origin": "https://suno.com",
 }
+
 
 class SunoAuth:
     """Suno Cookie"""
@@ -65,7 +69,9 @@ class SunoAuth:
     @property
     def cookie(self):
         """Cookie"""
-        return ";".join([f"{i}={self._cookie.get(i).value}" for i in self._cookie.keys()])
+        return ";".join(
+            [f"{i}={self._cookie.get(i).value}" for i in self._cookie.keys()]
+        )
 
     @cookie.setter
     def cookie(self, value):
@@ -102,7 +108,9 @@ class SunoAuth:
         )
 
         if response.status_code != HTTP_OK:
-            print(f"Error {response.status_code} while updating the token: {response.json()}")
+            print(
+                f"Error {response.status_code} while updating the token: {response.json()}"
+            )
 
         response_headers = dict(response.headers)
         cookie = response_headers.get("Set-Cookie")
@@ -160,7 +168,7 @@ class SunoAPI:
             "gpt_description_prompt": prompt,
             "make_instrumental": False,
             "mv": "chirp-v3-0",
-            "prompt": ""
+            "prompt": "",
         }
         headers = {"Authorization": f"Bearer {self.auth.token}"}
         api_url = f"{SUNO_BASE_URL}/api/generate/v2/"
@@ -173,8 +181,10 @@ class SunoAPI:
             print("No clips generated")
             return None
 
-        return [SUNO_SONG_URL.format(song_id=song["id"]) for song in response.json()["clips"]]
-
+        return [
+            SUNO_SONG_URL.format(song_id=song["id"])
+            for song in response.json()["clips"]
+        ]
 
     def stop(self):
         """Destructor"""
@@ -236,12 +246,8 @@ class SunoConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        suno_session_id = self.configuration.config.get(
-            "suno_session_id", None
-        )
-        suno_cookie = self.configuration.config.get(
-            "suno_cookie", None
-        )
+        suno_session_id = self.configuration.config.get("suno_session_id", None)
+        suno_cookie = self.configuration.config.get("suno_cookie", None)
 
         self.api = SunoAPI(suno_session_id, suno_cookie)
 

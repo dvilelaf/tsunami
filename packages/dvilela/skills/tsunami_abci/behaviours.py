@@ -49,17 +49,19 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
     EVENT_USER_PROMPT_TEMPLATES,
+    MUSIC_GENRES,
     OMEN_USER_PROMPT,
     REPO_USER_PROMPT_RELEASE,
+    SUNO_PROMPT_TEMPLATE,
+    SUNO_USER_PROMPT,
     SYSTEM_PROMPTS,
     SYSTEM_PROMPT_SUMMARIZER,
-    SUNO_PROMPT_TEMPLATE,
-    MUSIC_GENRES,
-    SUNO_USER_PROMPT,
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
     PublishTweetsPayload,
     PublishTweetsRound,
+    SunoPayload,
+    SunoRound,
     SynchronizedData,
     TrackChainEventsPayload,
     TrackChainEventsRound,
@@ -68,13 +70,11 @@ from packages.dvilela.skills.tsunami_abci.rounds import (
     TrackReposPayload,
     TrackReposRound,
     TsunamiAbciApp,
-    SunoRound,
-    SunoPayload,
 )
 from packages.dvilela.skills.tsunami_abci.subgraph import (
+    AGENT_QUERY,
     OMEN_XDAI_FPMMS_QUERY,
     OMEN_XDAI_TRADES_QUERY,
-    AGENT_QUERY,
 )
 from packages.valory.connections.farcaster.connection import (
     PUBLIC_ID as FARCASTER_CONNECTION_PUBLIC_ID,
@@ -1140,7 +1140,9 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         today = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
         if now.weekday() != SUNO_RUN_DAY:
-            self.context.logger.info(f"Suno task does not run today: {now.weekday()} != {SUNO_RUN_DAY}")
+            self.context.logger.info(
+                f"Suno task does not run today: {now.weekday()} != {SUNO_RUN_DAY}"
+            )
             return tweets
 
         if suno_last_run_date and today <= suno_last_run_date:
@@ -1163,13 +1165,16 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             "query": AGENT_QUERY,
             "variables": {
                 "package_type": "agent",
-            }
+            },
         }
 
         # Get all existing agents from the subgraph
         self.context.logger.info("Getting agents from subgraph")
         response = yield from self.get_http_response(  # type: ignore
-            method="POST", url=SUBGRAPH_URL, headers=headers, content=json.dumps(data).encode()
+            method="POST",
+            url=SUBGRAPH_URL,
+            headers=headers,
+            content=json.dumps(data).encode(),
         )
 
         if response.status_code != HTTP_OK:  # type: ignore
@@ -1190,13 +1195,15 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         agent_name = agent["publicId"].split("/")[-1]
         agent_description = agent["description"]
         genres = random.sample(MUSIC_GENRES, 2)
-        prompt = SUNO_PROMPT_TEMPLATE.format(genre=", ".join(genres), agent_name=agent_name, agent_description=agent_description)
+        prompt = SUNO_PROMPT_TEMPLATE.format(
+            genre=", ".join(genres),
+            agent_name=agent_name,
+            agent_description=agent_description,
+        )
         self.context.logger.info("Suno prompt is: {prompt}")
 
         # Call Suno conection
-        response = yield from self._call_suno(
-            prompt=prompt
-        )
+        response = yield from self._call_suno(prompt=prompt)
 
         response_json = json.loads(response.payload)
 
@@ -1207,12 +1214,12 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         song_urls = response_json["response"]
 
         # Create a thread
-        thread = yield from self.build_thread(SUNO_USER_PROMPT.format(genre=", ".join(genres), agent_name=agent_name))
+        thread = yield from self.build_thread(
+            SUNO_USER_PROMPT.format(genre=", ".join(genres), agent_name=agent_name)
+        )
 
         if thread is None:
-            self.context.logger.error(
-                "Error while building thread. Skipping..."
-            )
+            self.context.logger.error("Error while building thread. Skipping...")
             return tweets
 
         # Add a link to the unit

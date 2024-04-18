@@ -101,5 +101,17 @@ A new {genre} song has been created in honor of the {agent_name} agent.
 SUNO_PROMPT_TEMPLATE = "Create a {genre} song about {agent_name}, an autonomous agent on the Olas network whose description is: {agent_description}"
 
 MUSIC_GENRES = [
-    "metal", "rumba", "reggae", "rock", "funky", "edm", "techno", "country", "jazz", "bossa nova", "salsa", "tango", "rap"
+    "metal",
+    "rumba",
+    "reggae",
+    "rock",
+    "funky",
+    "edm",
+    "techno",
+    "country",
+    "jazz",
+    "bossa nova",
+    "salsa",
+    "tango",
+    "rap",
 ]

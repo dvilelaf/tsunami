@@ -25,10 +25,10 @@ from typing import Dict, FrozenSet, Set, cast
 
 from packages.dvilela.skills.tsunami_abci.payloads import (
     PublishTweetsPayload,
+    SunoPayload,
     TrackChainEventsPayload,
     TrackOmenPayload,
     TrackReposPayload,
-    SunoPayload,
 )
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,

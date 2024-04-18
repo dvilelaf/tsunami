@@ -44,11 +44,13 @@ class TrackOmenPayload(BaseTxPayload):
 
     tweets: str
 
+
 @dataclass(frozen=True)
 class SunoPayload(BaseTxPayload):
     """Represent a transaction payload for the SunoRound."""
 
     tweets: str
+
 
 @dataclass(frozen=True)
 class PublishTweetsPayload(BaseTxPayload):
