@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifxoli7jbukindea7tdpwvnedl6l63f2vj3mlllijdkgtw4sgymyu
-  connection.py: bafybeihjbgcsgaxp56dpsfnqh2zr76km5sduz5upqno52vt56gydj4et7i
+  connection.py: bafybeibhm2tyot3uaexbxcj7g2rmuvq6d5r6ewq3bhmvkzj77h3m43esyi
   readme.md: bafybeie3golx2w2eu2ptksgsr3wmedzpbqw3ymbpsgileybsmv27g7j7di
 fingerprint_ignore_patterns: []
 connections: []
@@ -19,6 +19,8 @@ config:
   suno_cookie: null
 excluded_protocols: []
 restricted_to_protocols: []
-dependencies: {}
+dependencies:
+  requests:
+    version: ==2.31.0
 is_abstract: false
 cert_requests: []

@@ -1186,7 +1186,7 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             )
             return tweets
 
-        response_json = json.loads(response.body)["data"]
+        response_json = json.loads(response.body)["data"]  # type: ignore
         agents = [u for u in response_json["units"] if u["packageType"] == "agent"]
         agents = sorted(agents, key=lambda i: int(i["tokenId"]))
 
@@ -1206,9 +1206,9 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         self.context.logger.info("Suno prompt is: {prompt}")
 
         # Call Suno conection
-        response = yield from self._call_suno(prompt=prompt)
+        suno_response = yield from self._call_suno(prompt=prompt)
 
-        response_json = json.loads(response.payload)
+        response_json = json.loads(suno_response.payload)
 
         if "error" in response_json:
             self.context.logger.error(response_json["error"])
