@@ -1243,6 +1243,9 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             }
         )
 
+        # Save run time to the db
+        yield from self._write_kv({"suno_last_run_date": today.strftime("%Y-%m-%d")})
+
         return tweets
 
 
