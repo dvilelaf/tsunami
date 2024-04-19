@@ -1149,7 +1149,7 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             return tweets
 
         if suno_last_run_date and today <= suno_last_run_date:
-            self.context.logger.info("Suno task already ran today")
+            self.context.logger.info("Suno task already ran this week")
             return tweets
 
         if now.hour < SUNO_RUN_HOUR:
