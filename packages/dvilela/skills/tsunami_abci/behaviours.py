@@ -108,7 +108,7 @@ DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
 OMEN_RUN_HOUR = 15
 SUNO_RUN_HOUR = 10
-SUNO_RUN_DAY = 3
+SUNO_RUN_DAY = 4
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
