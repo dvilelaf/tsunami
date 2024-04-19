@@ -30,5 +30,9 @@
     "kv_store_connection": {
         "id": 189,
         "image_hash": "QmTSzsCFxEg879y2EDw2e8AsgiHyF5sGW9n76SUufZRDyV"
+    },
+    "suno_connection": {
+        "id": null,
+        "image_hash": "QmUZyipion1iDFLMH3GxHS1TZzhaD99BQbdobK6Fdz8QdV"
     }
 }

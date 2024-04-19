@@ -36,6 +36,9 @@ from packages.dvilela.connections.kv_store.connection import (
 from packages.dvilela.connections.llama.connection import (
     PUBLIC_ID as LLAMA_CONNECTION_PUBLIC_ID,
 )
+from packages.dvilela.connections.suno.connection import (
+    PUBLIC_ID as SUNO_CONNECTION_PUBLIC_ID,
+)
 from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
 from packages.dvilela.protocols.kv_store.dialogues import (
     KvStoreDialogue,
@@ -49,14 +52,19 @@ from packages.dvilela.skills.tsunami_abci.dialogues import (
 from packages.dvilela.skills.tsunami_abci.models import Params
 from packages.dvilela.skills.tsunami_abci.prompts import (
     EVENT_USER_PROMPT_TEMPLATES,
+    MUSIC_GENRES,
     OMEN_USER_PROMPT,
     REPO_USER_PROMPT_RELEASE,
+    SUNO_PROMPT_TEMPLATE,
+    SUNO_USER_PROMPT,
     SYSTEM_PROMPTS,
     SYSTEM_PROMPT_SUMMARIZER,
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
     PublishTweetsPayload,
     PublishTweetsRound,
+    SunoPayload,
+    SunoRound,
     SynchronizedData,
     TrackChainEventsPayload,
     TrackChainEventsRound,
@@ -67,6 +75,7 @@ from packages.dvilela.skills.tsunami_abci.rounds import (
     TsunamiAbciApp,
 )
 from packages.dvilela.skills.tsunami_abci.subgraph import (
+    AGENT_QUERY,
     OMEN_XDAI_FPMMS_QUERY,
     OMEN_XDAI_TRADES_QUERY,
 )
@@ -98,6 +107,8 @@ GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
 DAY_IN_SECONDS = 3600 * 24
 OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
 OMEN_RUN_HOUR = 15
+SUNO_RUN_HOUR = 10
+SUNO_RUN_DAY = 3
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -367,6 +378,22 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             counterparty=str(LLAMA_CONNECTION_PUBLIC_ID),
             performative=SrrMessage.Performative.REQUEST,
             payload=json.dumps({"system": system_prompt, "user": user_prompt}),
+        )
+        srr_message = cast(SrrMessage, srr_message)
+        srr_dialogue = cast(SrrDialogue, srr_dialogue)
+        response = yield from self._do_connection_request(srr_message, srr_dialogue)  # type: ignore
+        return response  # type: ignore
+
+    def _call_suno(
+        self,
+        prompt: str,
+    ) -> Generator[None, None, SrrMessage]:
+        """Send a request message from the skill context."""
+        srr_dialogues = cast(SrrDialogues, self.context.srr_dialogues)
+        srr_message, srr_dialogue = srr_dialogues.create(
+            counterparty=str(SUNO_CONNECTION_PUBLIC_ID),
+            performative=SrrMessage.Performative.REQUEST,
+            payload=json.dumps({"prompt": prompt}),
         )
         srr_message = cast(SrrMessage, srr_message)
         srr_dialogue = cast(SrrDialogue, srr_dialogue)
@@ -1059,6 +1086,166 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
         return tweets
 
 
+class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """SunoBehaviour"""
+
+    matching_round: Type[AbstractRound] = SunoRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweets = self.synchronized_data.tweets
+            if self.params.suno_enabled:
+                suno_tweets = yield from self.get_suno_tweets()
+                tweets += suno_tweets
+
+                # Save tweets to the db
+                yield from self._write_kv({"tweets": json.dumps(tweets)})
+
+            payload = SunoPayload(
+                sender=self.context.agent_address, tweets=json.dumps(tweets)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_suno_tweets(  # pylint: disable=too-many-locals,too-many-return-statements,too-many-statements
+        self,
+    ) -> Generator[None, None, List]:
+        """Get tweets with songs from Suno"""
+
+        tweets: List[Dict] = []
+
+        response = yield from self._read_kv(keys=("suno_last_run_date",))
+
+        if response is None:
+            self.context.logger.error(
+                "Error reading suno_last_run_date from the database."
+            )
+            return tweets
+
+        suno_last_run_date = response["suno_last_run_date"]
+        suno_last_run_date = (
+            datetime.strptime(suno_last_run_date, "%Y-%m-%d")
+            if suno_last_run_date
+            else None
+        )
+        self.context.logger.info(
+            f"Loaded suno_last_run_date from db: {suno_last_run_date}"
+        )
+
+        # Check run time
+        now = datetime.now()
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        if now.weekday() != SUNO_RUN_DAY:
+            self.context.logger.info(
+                f"Suno task does not run today: {now.weekday()} != {SUNO_RUN_DAY}"
+            )
+            return tweets
+
+        if suno_last_run_date and today <= suno_last_run_date:
+            self.context.logger.info("Suno task already ran today")
+            return tweets
+
+        if now.hour < SUNO_RUN_HOUR:
+            self.context.logger.info(
+                f"Not time to run Suno yet [{now.hour} < {SUNO_RUN_HOUR}]"
+            )
+            return tweets
+
+        SUBGRAPH_URL = "https://subgraph.autonolas.tech/subgraphs/name/autonolas"
+
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        data = {
+            "query": AGENT_QUERY,
+            "variables": {
+                "package_type": "agent",
+            },
+        }
+
+        # Get all existing agents from the subgraph
+        self.context.logger.info("Getting agents from subgraph")
+        response = yield from self.get_http_response(  # type: ignore
+            method="POST",
+            url=SUBGRAPH_URL,
+            headers=headers,
+            content=json.dumps(data).encode(),
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error getting agents from subgraph: {response}"  # type: ignore
+            )
+            return tweets
+
+        response_json = json.loads(response.body)["data"]  # type: ignore
+        agents = [u for u in response_json["units"] if u["packageType"] == "agent"]
+        agents = sorted(agents, key=lambda i: int(i["tokenId"]))
+
+        n_agents = len(agents)
+        self.context.logger.info(f"Got {n_agents} agents")
+
+        # Select a random agent and genre
+        agent = secrets.choice(agents)  # nosec
+        agent_name = agent["publicId"].split("/")[-1]
+        agent_description = agent["description"]
+        genres = random.sample(MUSIC_GENRES, 2)
+        prompt = SUNO_PROMPT_TEMPLATE.format(
+            genre=", ".join(genres),
+            agent_name=agent_name,
+            agent_description=agent_description,
+        )
+        self.context.logger.info("Suno prompt is: {prompt}")
+
+        # Call Suno conection
+        suno_response = yield from self._call_suno(prompt=prompt)
+
+        response_json = json.loads(suno_response.payload)
+
+        if "error" in response_json:
+            self.context.logger.error(response_json["error"])
+            return tweets
+
+        song_urls = response_json["response"]
+
+        if not song_urls:
+            self.context.logger.error("Error while creating the songs")
+            return tweets
+
+        # Create a thread
+        thread = yield from self.build_thread(
+            SUNO_USER_PROMPT.format(genre=", ".join(genres), agent_name=agent_name)
+        )
+
+        if thread is None:
+            self.context.logger.error("Error while building thread. Skipping...")
+            return tweets
+
+        # Add a link to the unit
+        thread.append(song_urls[0])
+        self.context.logger.info(f"Created Suno thread: {thread}")
+
+        tweets.append(
+            {
+                "text": thread,
+                "twitter_published": False,
+                "farcaster_published": False,
+                "telegram_published": False,
+                "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+        )
+
+        return tweets
+
+
 class PublishTweetsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
@@ -1127,5 +1314,6 @@ class TsunamiRoundBehaviour(AbstractRoundBehaviour):
         TrackChainEventsBehaviour,
         TrackReposBehaviour,
         TrackOmenBehaviour,
+        SunoBehaviour,
         PublishTweetsBehaviour,
     ]

@@ -81,4 +81,5 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         )
         self.repo_tracking_enabled = self._ensure("repo_tracking_enabled", kwargs, bool)
         self.omen_tracking_enabled = self._ensure("omen_tracking_enabled", kwargs, bool)
+        self.suno_enabled = self._ensure("suno_enabled", kwargs, bool)
         super().__init__(*args, **kwargs)

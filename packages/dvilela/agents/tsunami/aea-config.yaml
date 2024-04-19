@@ -17,7 +17,8 @@ connections:
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq
 - dvilela/kv_store:0.1.0:bafybeihdjpafne6h3a7u2d5uwitmhmafpun73mukozp5dnempkjepsjk4a
-- dvilela/llama:0.1.0:bafybeia2pgj2eqmzhdl5aj3b5dixy663yuhtlevzyy63fqz6jowntsaigu
+- dvilela/llama:0.1.0:bafybeientp27ic3s2wbmrxxsmxg3wvshcoecjl3nvo75lb5faw3rersu7u
+- dvilela/suno:0.1.0:bafybeialefoyek6fxtlowsj34rmycdqvs7y5e73fmojy5te7yibu6mheia
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeibq77mgzhyb23blf2eqmia3kc6io5karedfzhntvpcebeqdzrgyqa
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeib6podeifufgmawvicm3xyz3uaplbcrsptjzz4unpseh7qtcpar74
@@ -43,8 +44,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
-- dvilela/tsunami_abci:0.1.0:bafybeia32u5a4wez33bh5xrxnmetyhbgjvaxbogczpkjog4colapn5e7mm
-- dvilela/tsunami_chained_abci:0.1.0:bafybeibsm67oyq3o4cr5z2v6eumsechagghqafyb3lqpn6uzdgqi2awsl4
+- dvilela/tsunami_abci:0.1.0:bafybeihzx5wb3f3yrptwtz7l3em5p3cswi7y2vniufrv2lq4jinwcypice
+- dvilela/tsunami_chained_abci:0.1.0:bafybeiekozcw37huhaoidneihjozhamuzbdkxcmf7duy5jwranc3bqh2jm
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -86,7 +87,9 @@ config:
 ---
 public_id: dvilela/llama:0.1.0
 type: connection
-config: {}
+config:
+  repo_id: ${str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
+  filename: ${str:*Q2_K.gguf}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection
@@ -130,6 +133,12 @@ cert_requests:
   not_before: '2022-01-01'
   public_key: ${str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
   save_path: .certs/acn_cosmos_11000.txt
+---
+public_id: dvilela/suno:0.1.0
+type: connection
+config:
+  suno_session_id: ${str:null}
+  suno_cookie: ${str:null}
 ---
 public_id: dvilela/tsunami_chained_abci:0.1.0
 type: skill
@@ -214,5 +223,6 @@ models:
       event_tracking_enabled: ${bool:true}
       repo_tracking_enabled: ${bool:true}
       omen_tracking_enabled: ${bool:true}
+      suno_enabled: ${bool:true}
       telegram_token: ${str:null}
       telegram_chat_id: ${int:null}

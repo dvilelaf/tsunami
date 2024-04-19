@@ -1,0 +1,26 @@
+name: suno
+author: dvilela
+version: 0.1.0
+type: connection
+description: A connection that provides a wrapper around the Suno API.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeifxoli7jbukindea7tdpwvnedl6l63f2vj3mlllijdkgtw4sgymyu
+  connection.py: bafybeihxtmlzzfx5dmlfuj6ap5zp67g6lvga73brf2bzhmtyzu3dsbqfsu
+  readme.md: bafybeie3golx2w2eu2ptksgsr3wmedzpbqw3ymbpsgileybsmv27g7j7di
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
+class_name: SunoConnection
+config:
+  suno_session_id: null
+  suno_cookie: null
+excluded_protocols: []
+restricted_to_protocols: []
+dependencies:
+  requests:
+    version: ==2.28.1
+is_abstract: false
+cert_requests: []

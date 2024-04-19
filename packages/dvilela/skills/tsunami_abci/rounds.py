@@ -25,6 +25,7 @@ from typing import Dict, FrozenSet, Set, cast
 
 from packages.dvilela.skills.tsunami_abci.payloads import (
     PublishTweetsPayload,
+    SunoPayload,
     TrackChainEventsPayload,
     TrackOmenPayload,
     TrackReposPayload,
@@ -81,6 +82,11 @@ class SynchronizedData(BaseSynchronizedData):
         return self._get_deserialized("participant_to_repos")
 
     @property
+    def participant_to_suno(self) -> DeserializedCollection:
+        """Get the participants to the Suno round."""
+        return self._get_deserialized("participant_to_suno")
+
+    @property
     def participant_to_publication(self) -> DeserializedCollection:
         """Get the participants to the tweet publication round."""
         return self._get_deserialized("participant_to_publication")
@@ -125,6 +131,19 @@ class TrackOmenRound(CollectSameUntilThresholdRound):
     # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
 
 
+class SunoRound(CollectSameUntilThresholdRound):
+    """SunoRound"""
+
+    payload_class = SunoPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_suno)
+    selection_key = get_name(SynchronizedData.tweets)
+
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
+
+
 class PublishTweetsRound(CollectSameUntilThresholdRound):
     """PublishTweetsRound"""
 
@@ -159,9 +178,14 @@ class TsunamiAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: TrackReposRound,
         },
         TrackOmenRound: {
-            Event.DONE: PublishTweetsRound,
+            Event.DONE: SunoRound,
             Event.NO_MAJORITY: TrackOmenRound,
             Event.ROUND_TIMEOUT: TrackOmenRound,
+        },
+        SunoRound: {
+            Event.DONE: PublishTweetsRound,
+            Event.NO_MAJORITY: SunoRound,
+            Event.ROUND_TIMEOUT: SunoRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,

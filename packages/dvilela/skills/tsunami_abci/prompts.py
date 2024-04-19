@@ -93,3 +93,25 @@ During the last 24 hours, the Market Creator agent has opened {n_markets} market
 During the same interval, {n_agents} agents have placed {n_trades} trades totalling ${usd_amount}.
 The biggest and craziest trader was {biggest_trader_address} with {biggest_trader_trades} trades.
 """
+
+SUNO_USER_PROMPT = """
+A new {genre} song has been created in honor of the {agent_name} agent.
+"""
+
+SUNO_PROMPT_TEMPLATE = "Create a {genre} song about {agent_name}, an agent on the Olas network: {agent_description}"
+
+MUSIC_GENRES = [
+    "metal",
+    "rumba",
+    "reggae",
+    "rock",
+    "funky",
+    "edm",
+    "techno",
+    "country",
+    "jazz",
+    "bossa nova",
+    "salsa",
+    "tango",
+    "rap",
+]

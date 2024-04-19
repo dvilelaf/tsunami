@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeibl7baeho5xnk4vjw35gsjmxmwzo7wtwttpn2jlbj732d2haazs6m
+agent: dvilela/tsunami:0.1.0:bafybeidfwb4tljmlvf4b2fmpyqmgtuxc7vltjysvsurp2hbi4tsndcibti
 number_of_agents: 1
 deployment:
   agent:
@@ -101,6 +101,7 @@ extra:
         event_tracking_enabled: ${EVENT_TRACKING_ENABLED:bool:true}
         repo_tracking_enabled: ${REPO_TRACKING_ENABLED:bool:true}
         omen_tracking_enabled: ${OMEN_TRACKING_ENABLED:bool:true}
+        suno_enabled: ${SUNO_ENABLED:bool:true}
         telegram_token: ${TELEGRAM_TOKEN:str:null}
         telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
 ---
@@ -152,7 +153,15 @@ config:
 ---
 public_id: dvilela/llama:0.1.0
 type: connection
-config: {}
+config:
+  repo_id: ${LLAMA_REPO_ID:str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
+  filename: ${LLAMA_FILENAME:str:*Q2_K.gguf}
+---
+public_id: dvilela/suno:0.1.0
+type: connection
+config:
+  suno_session_id: ${SUNO_SESSION_ID:str:null}
+  suno_cookie: ${SUNO_COOKIE:str:null}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection
