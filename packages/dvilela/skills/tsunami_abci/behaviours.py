@@ -1265,7 +1265,9 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         yield from self._write_kv({"suno_last_run_date": today.strftime("%Y-%m-%d")})
 
         # Save agents to the db
-        yield from self._write_kv({"previous_suno_agents": json.dumps(previous_suno_agents, sort_keys=True)})
+        yield from self._write_kv(
+            {"previous_suno_agents": json.dumps(previous_suno_agents, sort_keys=True)}
+        )
 
         return tweets
 
