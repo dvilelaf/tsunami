@@ -1193,6 +1193,23 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         n_agents = len(agents)
         self.context.logger.info(f"Got {n_agents} agents")
 
+        # Filter out agents from past songs
+        response = yield from self._read_kv(keys=("previous_suno_agents",))
+
+        if response is None:
+            self.context.logger.error(
+                "Error reading previous_suno_agents from the database."
+            )
+            return tweets
+
+        previous_suno_agents = response["previous_suno_agents"]
+        self.context.logger.info(
+            f"Loaded previous_suno_agents from db: {previous_suno_agents}"
+        )
+
+        previous_suno_agents = json.loads(previous_suno_agents or "[]")
+        agents = [a for a in agents if int(a["tokenId"]) not in previous_suno_agents]
+
         # Select a random agent and genre
         agent = secrets.choice(agents)  # nosec
         agent_name = agent["publicId"].split("/")[-1]
@@ -1204,6 +1221,7 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             agent_description=agent_description,
         )
         self.context.logger.info("Suno prompt is: {prompt}")
+        previous_suno_agents.append(int(agent["tokenId"]))
 
         # Call Suno conection
         suno_response = yield from self._call_suno(prompt=prompt)
@@ -1245,6 +1263,9 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
 
         # Save run time to the db
         yield from self._write_kv({"suno_last_run_date": today.strftime("%Y-%m-%d")})
+
+        # Save agents to the db
+        yield from self._write_kv({"previous_suno_agents": json.dumps(previous_suno_agents, sort_keys=True)})
 
         return tweets
 
