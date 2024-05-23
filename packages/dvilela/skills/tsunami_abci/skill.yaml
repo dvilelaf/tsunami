@@ -19,13 +19,13 @@ fingerprint:
   subgraph.py: bafybeib7f63y2hozc73lgp3f4ehpssjd23oaotamemeg3xmwxy3esbdlii
 fingerprint_ignore_patterns: []
 connections:
-- dvilela/kv_store:0.1.0:bafybeihdjpafne6h3a7u2d5uwitmhmafpun73mukozp5dnempkjepsjk4a
+- dvilela/kv_store:0.1.0:bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4
 - dvilela/llama:0.1.0:bafybeientp27ic3s2wbmrxxsmxg3wvshcoecjl3nvo75lb5faw3rersu7u
 - dvilela/suno:0.1.0:bafybeialefoyek6fxtlowsj34rmycdqvs7y5e73fmojy5te7yibu6mheia
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq
 contracts:
-- dvilela/olas_registries:0.1.0:bafybeidtongbh5yb4bh7ayspm2saiebtkly2ybs72haqaeonkscwbps6iq
+- dvilela/olas_registries:0.1.0:bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
@@ -33,7 +33,7 @@ protocols:
 - dvilela/kv_store:0.1.0:bafybeihimf5f37uupxmugvagmaxworgmz7cxuqpikkyzlgldtbq46jbvci
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
+- valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
 behaviours:
   main:
     args: {}
