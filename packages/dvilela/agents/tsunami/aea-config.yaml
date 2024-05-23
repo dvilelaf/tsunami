@@ -77,7 +77,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.50.0
+    version: ==1.52.0
 default_connection: null
 ---
 public_id: valory/farcaster:0.1.0
