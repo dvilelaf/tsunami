@@ -7,9 +7,9 @@
         "connection/valory/twitter/0.1.0": "bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq",
         "connection/dvilela/suno/0.1.0": "bafybeialefoyek6fxtlowsj34rmycdqvs7y5e73fmojy5te7yibu6mheia",
         "skill/dvilela/tsunami_abci/0.1.0": "bafybeihw7ecxhxxxhv5xru33lehu7jw2qcpf4l5ntspiby5sger5fwjdwm",
-        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeigvezvvzhnx3hbgz3zte2tsrtx7uczgems5uzrhx27dqdxndzz5wm",
-        "agent/dvilela/tsunami/0.1.0": "bafybeihktqlhcqx6hfx3m2mgxbpfovnqap2norpa574r3ssshmf2hgnzym",
-        "service/dvilela/tsunami/0.1.0": "bafybeie3algsst3s3lbsi6gnrvcihl55likwjivk7qzfgch5fmts5rujee"
+        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeidxdkha3jwsvtazylbytwpguvrf4pensg5526mfatsl6utqxd43tm",
+        "agent/dvilela/tsunami/0.1.0": "bafybeibwihr5uueeucyqwndqaxyger37e5hufku3y3lzjtvlhc5o6dqliq",
+        "service/dvilela/tsunami/0.1.0": "bafybeiagyyyyavcnk4nqvbtczerxo5r6xlorhuyxpona53q7i5qkom4vly"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
