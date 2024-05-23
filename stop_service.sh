@@ -21,7 +21,8 @@
 REPO_PATH=$PWD
 TSUNAMI_DB=$REPO_PATH/tsunami/abci_build/persistent_data/logs/tsunami.db
 
-poetry run autonomy deploy stop --build-dir tsunami/abci_build; cd ..
+# poetry run autonomy deploy stop --build-dir tsunami/abci_build; cd ..
+docker container stop tsunami_abci_0 tsunami_tm_0
 
 # Backup db
 if test -e $TSUNAMI_DB; then
