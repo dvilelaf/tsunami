@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeih5ltjmfpfdogaibhfhvkgvk5zajgmfkhih6kvrkzr7r2rgzwxmoq
+agent: dvilela/tsunami:0.1.0:bafybeigwrlo55aveldk4tfufppnjrqpqljgqz7dpzrrbzgsasnnpaos2ca
 number_of_agents: 1
 deployment:
   agent:
@@ -154,8 +154,8 @@ config:
 public_id: dvilela/llama:0.1.0
 type: connection
 config:
-  repo_id: ${LLAMA_REPO_ID:str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
-  filename: ${LLAMA_FILENAME:str:*Q2_K.gguf}
+  repo_id: ${LLAMA_REPO_ID:str:QuantFactory/Meta-Llama-3-8B-Instruct-GGUF}
+  filename: ${LLAMA_FILENAME:str:*Q4_0.gguf}
 ---
 public_id: dvilela/suno:0.1.0
 type: connection

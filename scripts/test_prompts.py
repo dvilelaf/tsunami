@@ -31,7 +31,10 @@ from packages.dvilela.skills.tsunami_abci.prompts import (
 
 
 def timer(func):
+    """Timer decorator"""
+
     def wrapper(*args, **kwargs):
+        """Wrapper"""
         start_time = time.time()
         result = func(*args, **kwargs)
         end_time = time.time()
@@ -43,16 +46,17 @@ def timer(func):
 
 
 llm = Llama.from_pretrained(
-    repo_id="TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF",
-    # repo_id="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
+    # repo_id="TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF",
     # filename="*Q2_K.gguf",
-    filename="*Q8_0.gguf",
+    repo_id="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
+    filename="*Q4_0.gguf",
     verbose=False,
 )
 
 
 @timer
 def run_llm():
+    """Run LLM"""
     output = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": SYSTEM_PROMPTS[-1]},  # type: ignore

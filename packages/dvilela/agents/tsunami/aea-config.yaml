@@ -17,7 +17,7 @@ connections:
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq
 - dvilela/kv_store:0.1.0:bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4
-- dvilela/llama:0.1.0:bafybeientp27ic3s2wbmrxxsmxg3wvshcoecjl3nvo75lb5faw3rersu7u
+- dvilela/llama:0.1.0:bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq
 - dvilela/suno:0.1.0:bafybeialefoyek6fxtlowsj34rmycdqvs7y5e73fmojy5te7yibu6mheia
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeidcb25wneezfd2iaiqa7ygxlimwwacvycahhenvpw7tdvwdigllzm
@@ -44,8 +44,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeifj7pjrhbqjcf7otpmi2vdltgwz7zf3bgm54oz3akydltt3jeaquy
-- dvilela/tsunami_chained_abci:0.1.0:bafybeihky3bisvfzyw562od22p2hbuzpz7cslexdezvw2oqrc3epipt2ya
+- dvilela/tsunami_abci:0.1.0:bafybeiclpmk5xnuprvwnp4zbaetuffoczjioonyfxvuxax4pa76foq2sfy
+- dvilela/tsunami_chained_abci:0.1.0:bafybeihg5vmugoeoheixxzlwoillnkiursrbybbrwkx73anx6ym6eshvz4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -88,8 +88,8 @@ config:
 public_id: dvilela/llama:0.1.0
 type: connection
 config:
-  repo_id: ${str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
-  filename: ${str:*Q2_K.gguf}
+  repo_id: ${str:QuantFactory/Meta-Llama-3-8B-Instruct-GGUF}
+  filename: ${str:*Q4_0.gguf}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection

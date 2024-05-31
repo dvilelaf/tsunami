@@ -96,14 +96,15 @@ class LlamaConnection(BaseSyncConnection):
         """
         super().__init__(*args, **kwargs)
         repo_id = self.configuration.config.get(
-            "repo_id", "TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF"
+            "repo_id", "QuantFactory/Meta-Llama-3-8B-Instruct-GGUF"
         )
+        filename = self.configuration.config.get("filename", "*Q4_0.gguf")
         self.logger.info(
-            f"Downloading LLM model {repo_id}. This might take a few minutes..."
+            f"Downloading LLM model {repo_id} [{filename}]. This might take a few minutes..."
         )
         self.llm = Llama.from_pretrained(
             repo_id=repo_id,
-            filename=self.configuration.config.get("filename", "*Q2_K.gguf"),
+            filename=filename,
             verbose=False,
         )
 
