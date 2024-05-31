@@ -125,6 +125,9 @@ TRACKED_REPOS = [
     "valory-xyz/agent-academy-2",
     "valory-xyz/agent-academy-1",
     "valory-xyz/generatooorr",
+    "valory-xyz/olas-operate-app",
+    "valory-xyz/trader",
+    "valory-xyz/trader-quickstart",
 ]
 
 
