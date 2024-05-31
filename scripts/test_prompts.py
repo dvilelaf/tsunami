@@ -31,7 +31,10 @@ from packages.dvilela.skills.tsunami_abci.prompts import (
 
 
 def timer(func):
+    """Timer decorator"""
+
     def wrapper(*args, **kwargs):
+        """Wrapper"""
         start_time = time.time()
         result = func(*args, **kwargs)
         end_time = time.time()
@@ -53,6 +56,7 @@ llm = Llama.from_pretrained(
 
 @timer
 def run_llm():
+    """Run LLM"""
     output = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": SYSTEM_PROMPTS[-1]},  # type: ignore
