@@ -43,10 +43,10 @@ def timer(func):
 
 
 llm = Llama.from_pretrained(
-    repo_id="TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF",
-    # repo_id="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
+    # repo_id="TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF",
     # filename="*Q2_K.gguf",
-    filename="*Q8_0.gguf",
+    repo_id="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
+    filename="*Q4_0.gguf",
     verbose=False,
 )
 

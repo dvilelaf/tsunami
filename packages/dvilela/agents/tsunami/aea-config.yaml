@@ -88,8 +88,8 @@ config:
 public_id: dvilela/llama:0.1.0
 type: connection
 config:
-  repo_id: ${str:TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF}
-  filename: ${str:*Q2_K.gguf}
+  repo_id: ${str:QuantFactory/Meta-Llama-3-8B-Instruct-GGUF}
+  filename: ${str:*Q4_0.gguf}
 ---
 public_id: dvilela/kv_store:0.1.0
 type: connection

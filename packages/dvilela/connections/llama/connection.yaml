@@ -15,8 +15,8 @@ protocols:
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
 class_name: LlamaConnection
 config:
-  repo_id: TheBloke/CapybaraHermes-2.5-Mistral-7B-GGUF
-  filename: '*Q2_K.gguf'
+  repo_id: QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
+  filename: '*Q4_0.gguf'
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:
