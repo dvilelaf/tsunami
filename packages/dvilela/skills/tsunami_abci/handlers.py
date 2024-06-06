@@ -141,17 +141,19 @@ class HttpHandler(BaseHttpHandler):
 
         # Route regexes
         hostname_regex = rf".*({config_uri_base_hostname}|{propel_uri_base_hostname}|localhost|127.0.0.1|0.0.0.0)(:\d+)?"
-        self.handler_url_regex = rf"{hostname_regex}\/.*"
+        self.handler_url_regex = (  # pylint: disable=attribute-defined-outside-init
+            rf"{hostname_regex}\/.*"
+        )
         health_url_regex = rf"{hostname_regex}\/healthcheck"
 
         # Routes
-        self.routes = {
+        self.routes = {  # pylint: disable=attribute-defined-outside-init
             (HttpMethod.GET.value, HttpMethod.HEAD.value): [
                 (health_url_regex, self._handle_get_health),
             ],
         }
 
-        self.json_content_header = "Content-Type: application/json\n"
+        self.json_content_header = "Content-Type: application/json\n"  # pylint: disable=attribute-defined-outside-init
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -162,6 +164,7 @@ class HttpHandler(BaseHttpHandler):
 
     def _get_handler(self, url: str, method: str) -> Tuple[Optional[Callable], Dict]:
         """Check if an url is meant to be handled in this handler
+
         We expect url to match the pattern {hostname}/.*,
         where hostname is allowed to be localhost, 127.0.0.1 or the service_endpoint's hostname.
         :param url: the url to check
@@ -195,6 +198,7 @@ class HttpHandler(BaseHttpHandler):
     def handle(self, message: Message) -> None:
         """
         Implement the reaction to an envelope.
+
         :param message: the message
         """
         http_msg = cast(HttpMessage, message)
@@ -241,6 +245,7 @@ class HttpHandler(BaseHttpHandler):
     ) -> None:
         """
         Handle a Http bad request.
+
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
@@ -263,6 +268,7 @@ class HttpHandler(BaseHttpHandler):
     ) -> None:
         """
         Handle a Http request of verb GET.
+
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
@@ -274,14 +280,16 @@ class HttpHandler(BaseHttpHandler):
 
         round_sequence = cast(SharedState, self.context.state).round_sequence
 
-        if round_sequence._last_round_transition_timestamp:
+        if (
+            round_sequence._last_round_transition_timestamp  # pylint: disable=protected-access
+        ):
             is_tm_unhealthy = cast(
                 SharedState, self.context.state
             ).round_sequence.block_stall_deadline_expired
 
             current_time = datetime.now().timestamp()
             seconds_since_last_transition = current_time - datetime.timestamp(
-                round_sequence._last_round_transition_timestamp
+                round_sequence._last_round_transition_timestamp  # pylint: disable=protected-access
             )
 
             is_transitioning_fast = (
@@ -290,10 +298,15 @@ class HttpHandler(BaseHttpHandler):
                 < 2 * self.context.params.reset_pause_duration
             )
 
-        if round_sequence._abci_app:
-            current_round = round_sequence._abci_app.current_round.round_id
+        if round_sequence._abci_app:  # pylint: disable=protected-access
+            current_round = (
+                round_sequence._abci_app.current_round.round_id  # pylint: disable=protected-access
+            )
             rounds = [
-                r.round_id for r in round_sequence._abci_app._previous_rounds[-25:]
+                r.round_id
+                for r in round_sequence._abci_app._previous_rounds[  # pylint: disable=protected-access
+                    -25:
+                ]
             ]
             rounds.append(current_round)
 
