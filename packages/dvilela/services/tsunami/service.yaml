@@ -8,12 +8,12 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeigyavkkw3shsadv7ihnuc3lwldrl4tjz6owyqwhfbpklo6qhl2k64
+agent: dvilela/tsunami:0.1.0:bafybeienvg3tkadcsqjqsklyv45cfiggypdkdlir2ah3xqu5ghpchcueay
 number_of_agents: 1
 deployment:
   agent:
     ports:
-      8000: 8000
+      8823: 8000
   local:
     volumes:
       0:
@@ -104,6 +104,7 @@ extra:
         suno_enabled: ${SUNO_ENABLED:bool:true}
         telegram_token: ${TELEGRAM_TOKEN:str:null}
         telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
+        service_endpoint: ${SERVICE_ENDPOINT:str:https://tsunami.dummy.com/}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
@@ -167,3 +168,9 @@ public_id: dvilela/kv_store:0.1.0
 type: connection
 config:
   db_path: ${DB_PATH:str:/logs/tsunami.db}
+---
+public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
+type: connection
+config:
+  host: ${HTTP_SERVER_HOST:str:0.0.0.0}
+  target_skill_id: dvilela/tsunami_chained_abci:0.1.0
