@@ -45,8 +45,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeifuwq6qbze57lmbi6kowo7b6pr75nnsvr6sct7b6l7nf7e3d2evo4
-- dvilela/tsunami_chained_abci:0.1.0:bafybeiaqcma4l5g4m6lfimvukrj2ihsry7sfsnucfo5wmg5l3ndfuad7y4
+- dvilela/tsunami_abci:0.1.0:bafybeicd6ln65wjk2p6xexj5vs6w35f5qodn6rjj72ot7xt2oiyjra3dlu
+- dvilela/tsunami_chained_abci:0.1.0:bafybeidgfufcnnzd3qoervzu3df7b3sxxcle72nnsttsrjk5o6ewots7hm
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -232,4 +232,4 @@ public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfezt
 type: connection
 config:
   host: ${str:0.0.0.0}
-  target_skill_id: valory/tsunami_abci:0.1.0
+  target_skill_id: dvilela/tsunami_chained_abci:0.1.0
