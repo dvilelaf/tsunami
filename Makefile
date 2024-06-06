@@ -94,6 +94,7 @@ tm:
 all-linters:
 	gitleaks detect --report-format json --report-path leak_report
 	tox -e spell-check
+	tox -e liccheck
 	tox -e check-doc-hashes
 	tox -e bandit
 	tox -e safety
