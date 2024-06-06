@@ -160,6 +160,7 @@ models:
       suno_enabled: true
       telegram_token: null
       telegram_chat_id: null
+      service_endpoint: tsunami.dummy.com/
     class_name: Params
   requests:
     args: {}

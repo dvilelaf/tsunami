@@ -1591,6 +1591,20 @@ multiaddr = ">=0.0.7"
 requests = ">=2.11"
 
 [[package]]
+name = "isodate"
+version = "0.6.1"
+description = "An ISO 8601 date/time/duration parser and formatter"
+optional = false
+python-versions = "*"
+files = [
+    {file = "isodate-0.6.1-py2.py3-none-any.whl", hash = "sha256:0751eece944162659049d35f4f549ed815792b38793f07cf73381c1c87cbed96"},
+    {file = "isodate-0.6.1.tar.gz", hash = "sha256:48c5881de7e8b0a0d648cb024c8062dc84e7b840ed81e864c7614fd3c127bde9"},
+]
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 name = "isort"
 version = "5.13.2"
 description = "A Python utility / library to sort Python imports."
@@ -1834,6 +1848,17 @@ files = [
     {file = "MarkupSafe-2.1.5-cp39-cp39-win32.whl", hash = "sha256:00e046b6dd71aa03a41079792f8473dc494d564611a8f89bbbd7cb93295ebdcf"},
     {file = "MarkupSafe-2.1.5-cp39-cp39-win_amd64.whl", hash = "sha256:fa173ec60341d6bb97a89f5ea19c85c5643c1e7dedebc22f5181eb73573142c5"},
     {file = "MarkupSafe-2.1.5.tar.gz", hash = "sha256:d283d37a890ba4c1ae73ffadf8046435c76e7bc2247bbb63c00bd1a709c6544b"},
+]
+
+[[package]]
+name = "more-itertools"
+version = "10.2.0"
+description = "More routines for operating on iterables, beyond itertools"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "more-itertools-10.2.0.tar.gz", hash = "sha256:8fccb480c43d3e99a00087634c06dd02b0d50fbf088b380de5a41a015ec239e1"},
+    {file = "more_itertools-10.2.0-py3-none-any.whl", hash = "sha256:686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684"},
 ]
 
 [[package]]
@@ -2175,6 +2200,72 @@ all = ["click (>=8.1.0,<9)", "coverage (>=6.4.4,<8.0.0)", "open-aea-cli-ipfs (==
 cli = ["click (>=8.1.0,<9)", "coverage (>=6.4.4,<8.0.0)", "open-aea-cli-ipfs (==1.52.0)", "pytest (>=7.0.0,<7.3.0)", "python-dotenv (>=0.14.5,<0.22.0)", "texttable (==1.6.7)"]
 
 [[package]]
+name = "openapi-core"
+version = "0.15.0"
+description = "client-side and server-side support for the OpenAPI Specification v3"
+optional = false
+python-versions = ">=3.7.0,<4.0.0"
+files = [
+    {file = "openapi-core-0.15.0.tar.gz", hash = "sha256:bb386117ce860ad0471c3d31180e20baf3ae53530f250ced6e78bacf96706dff"},
+    {file = "openapi_core-0.15.0-py3-none-any.whl", hash = "sha256:9af798aa933eb2e0e4672c6325bd87a31eb3a1100eb72be54c24a2a5c0fb6660"},
+]
+
+[package.dependencies]
+isodate = "*"
+more-itertools = "*"
+openapi-schema-validator = ">=0.2.0,<0.3.0"
+openapi-spec-validator = ">=0.4.0,<0.5.0"
+parse = "*"
+pathable = ">=0.4.0,<0.5.0"
+typing-extensions = ">=4.3.0,<5.0.0"
+werkzeug = "*"
+
+[package.extras]
+django = ["django (>=3.0)"]
+falcon = ["falcon (>=3.0)"]
+flask = ["flask"]
+requests = ["requests"]
+
+[[package]]
+name = "openapi-schema-validator"
+version = "0.2.3"
+description = "OpenAPI schema validation for Python"
+optional = false
+python-versions = ">=3.7.0,<4.0.0"
+files = [
+    {file = "openapi-schema-validator-0.2.3.tar.gz", hash = "sha256:2c64907728c3ef78e23711c8840a423f0b241588c9ed929855e4b2d1bb0cf5f2"},
+    {file = "openapi_schema_validator-0.2.3-py3-none-any.whl", hash = "sha256:9bae709212a19222892cabcc60cafd903cbf4b220223f48583afa3c0e3cc6fc4"},
+]
+
+[package.dependencies]
+jsonschema = ">=3.0.0,<5.0.0"
+
+[package.extras]
+isodate = ["isodate"]
+rfc3339-validator = ["rfc3339-validator"]
+strict-rfc3339 = ["strict-rfc3339"]
+
+[[package]]
+name = "openapi-spec-validator"
+version = "0.4.0"
+description = "OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0 spec validator"
+optional = false
+python-versions = ">=3.7.0,<4.0.0"
+files = [
+    {file = "openapi-spec-validator-0.4.0.tar.gz", hash = "sha256:97f258850afc97b048f7c2653855e0f88fa66ac103c2be5077c7960aca2ad49a"},
+    {file = "openapi_spec_validator-0.4.0-py3-none-any.whl", hash = "sha256:06900ac4d546a1df3642a779da0055be58869c598e3042a2fef067cfd99d04d0"},
+]
+
+[package.dependencies]
+jsonschema = ">=3.2.0,<5.0.0"
+openapi-schema-validator = ">=0.2.0,<0.3.0"
+PyYAML = ">=5.1"
+setuptools = "*"
+
+[package.extras]
+requests = ["requests"]
+
+[[package]]
 name = "packaging"
 version = "23.2"
 description = "Core utilities for Python packages"
@@ -2207,6 +2298,17 @@ gssapi = ["gssapi (>=1.4.1)", "pyasn1 (>=0.1.7)", "pywin32 (>=2.1.8)"]
 invoke = ["invoke (>=2.0)"]
 
 [[package]]
+name = "parse"
+version = "1.20.1"
+description = "parse() is the opposite of format()"
+optional = false
+python-versions = "*"
+files = [
+    {file = "parse-1.20.1-py2.py3-none-any.whl", hash = "sha256:76ddd5214255ae711db4c512be636151fbabaa948c6f30115aecc440422ca82c"},
+    {file = "parse-1.20.1.tar.gz", hash = "sha256:09002ca350ad42e76629995f71f7b518670bcf93548bdde3684fd55d2be51975"},
+]
+
+[[package]]
 name = "parsimonious"
 version = "0.9.0"
 description = "(Soon to be) the fastest pure-Python PEG parser I could muster"
@@ -2218,6 +2320,17 @@ files = [
 
 [package.dependencies]
 regex = ">=2022.3.15"
+
+[[package]]
+name = "pathable"
+version = "0.4.3"
+description = "Object-oriented paths"
+optional = false
+python-versions = ">=3.7.0,<4.0.0"
+files = [
+    {file = "pathable-0.4.3-py3-none-any.whl", hash = "sha256:cdd7b1f9d7d5c8b8d3315dbf5a86b2596053ae845f056f57d97c0eefff84da14"},
+    {file = "pathable-0.4.3.tar.gz", hash = "sha256:5c869d315be50776cc8a993f3af43e0c60dc01506b399643f919034ebf4cdcab"},
+]
 
 [[package]]
 name = "pathspec"
@@ -3016,6 +3129,21 @@ files = [
 ]
 
 [[package]]
+name = "setuptools"
+version = "70.0.0"
+description = "Easily download, build, install, upgrade, and uninstall Python packages"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "setuptools-70.0.0-py3-none-any.whl", hash = "sha256:54faa7f2e8d2d11bcd2c07bed282eef1046b5c080d1c32add737d7b5817b1ad4"},
+    {file = "setuptools-70.0.0.tar.gz", hash = "sha256:f211a66637b8fa059bb28183da127d4e86396c991a942b028c6650d4319c3fd0"},
+]
+
+[package.extras]
+docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
+testing = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "importlib-metadata", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "mypy (==1.9)", "packaging (>=23.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.1)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-home (>=0.5)", "pytest-mypy", "pytest-perf", "pytest-ruff (>=0.2.1)", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -3573,4 +3701,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "<4.0,>=3.10"
-content-hash = "2df5f1660c71b12632f913e31b2a3639a71ee935b96c270b78255f2da00ac45e"
+content-hash = "5faabf0413cc024d77d6a11f345aa789f02691b52f82cb8422614ddb9fe7d767"

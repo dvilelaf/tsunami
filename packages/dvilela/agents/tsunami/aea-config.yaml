@@ -226,3 +226,9 @@ models:
       suno_enabled: ${bool:true}
       telegram_token: ${str:null}
       telegram_chat_id: ${int:null}
+---
+public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
+type: connection
+config:
+  host: ${str:0.0.0.0}
+  target_skill_id: valory/tsunami_abci:0.1.0
