@@ -180,7 +180,7 @@ class SunoAPI:
             "make_instrumental": False,
             "continue_clip_id": None,
             "continue_at": None,
-            "mv": "chirp-v3-0",
+            "mv": "chirp-v3-5",
         }
 
         headers = {"Authorization": f"Bearer {self.auth.token}"}

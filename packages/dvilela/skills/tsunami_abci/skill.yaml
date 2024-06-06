@@ -21,7 +21,7 @@ fingerprint_ignore_patterns: []
 connections:
 - dvilela/kv_store:0.1.0:bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4
 - dvilela/llama:0.1.0:bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq
-- dvilela/suno:0.1.0:bafybeialefoyek6fxtlowsj34rmycdqvs7y5e73fmojy5te7yibu6mheia
+- dvilela/suno:0.1.0:bafybeihy2phtjwbz27ntv55wxfk754kp5tjceujzsdbppjafljoydjflhi
 - valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 - valory/twitter:0.1.0:bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq
 contracts:
