@@ -19,6 +19,7 @@ connections:
 - dvilela/kv_store:0.1.0:bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4
 - dvilela/llama:0.1.0:bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq
 - dvilela/suno:0.1.0:bafybeihy2phtjwbz27ntv55wxfk754kp5tjceujzsdbppjafljoydjflhi
+- valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeidcb25wneezfd2iaiqa7ygxlimwwacvycahhenvpw7tdvwdigllzm
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeidwwhkqin3zchbjl7ro6n3tj5kwbfhfvmrdpuxn7owy3b4ktrluba
@@ -44,8 +45,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeihum6jiuocyxhnbht5xdrqppjkgu6rfpxbquqoilzqironao33tza
-- dvilela/tsunami_chained_abci:0.1.0:bafybeihhazvf7ygdbbztpfwgb7ayyqbooxzjqsbvqlrdzosfhgkrdci27e
+- dvilela/tsunami_abci:0.1.0:bafybeifuwq6qbze57lmbi6kowo7b6pr75nnsvr6sct7b6l7nf7e3d2evo4
+- dvilela/tsunami_chained_abci:0.1.0:bafybeiaqcma4l5g4m6lfimvukrj2ihsry7sfsnucfo5wmg5l3ndfuad7y4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
