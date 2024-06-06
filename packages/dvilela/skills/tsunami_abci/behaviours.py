@@ -147,6 +147,7 @@ def tweet_to_thread(tweet: str) -> Optional[List[str]]:
         return [p.strip() for p in parts]
 
     sentences = [t.strip() for t in tweet.split(".")]
+    sentences = [s for s in sentences if s]
     thread: List[str] = []
 
     # Keep iterating while there are sentences to process
