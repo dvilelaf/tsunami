@@ -13,7 +13,7 @@ number_of_agents: 1
 deployment:
   agent:
     ports:
-      8000: 8000
+      8823: 8000
   local:
     volumes:
       0:
