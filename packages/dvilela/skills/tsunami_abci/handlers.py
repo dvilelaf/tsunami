@@ -259,7 +259,7 @@ class HttpHandler(BaseHttpHandler):
         )
 
         # Send response
-        self.context.logger.info("Responding with: {}".format(http_response))
+        self.context.logger.info(f"Responding with: {BAD_REQUEST_CODE}")
         self.context.outbox.put_message(message=http_response)
 
     def _handle_get_health(
