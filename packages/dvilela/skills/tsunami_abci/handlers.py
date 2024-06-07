@@ -259,7 +259,7 @@ class HttpHandler(BaseHttpHandler):
         )
 
         # Send response
-        self.context.logger.info(f"Responding with: {BAD_REQUEST_CODE}")
+        self.context.logger.info(f"Responding with {BAD_REQUEST_CODE}")
         self.context.outbox.put_message(message=http_response)
 
     def _handle_get_health(
@@ -335,7 +335,7 @@ class HttpHandler(BaseHttpHandler):
         )
 
         # Send response
-        self.context.logger.info("Responding with: {}".format(http_response))
+        self.context.logger.info(f"Responding with {OK_CODE}")
         self.context.outbox.put_message(message=http_response)
 
     def _send_not_found_response(
@@ -352,5 +352,5 @@ class HttpHandler(BaseHttpHandler):
             body=b"",
         )
         # Send response
-        self.context.logger.info("Responding with: {}".format(http_response))
+        self.context.logger.info(f"Responding with {NOT_FOUND_CODE}")
         self.context.outbox.put_message(message=http_response)
