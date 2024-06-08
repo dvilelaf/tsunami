@@ -150,7 +150,7 @@ def tweet_to_thread(tweet: str) -> Optional[List[str]]:
             p += separator.rstrip()
         return [p.strip() for p in parts]
 
-    def string_dot_split(text: str) -> str:
+    def string_dot_split(text: str) -> List:
         """Separates a string into parts"""
 
         # We use the dot to separate. In order to avoid ellipsis from being removed,
@@ -1400,7 +1400,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             proposal_url = (
-                f"https://boardroom.io/{protocol['protocol']}/proposal/{proposal_id}"
+                f"https://boardroom.io/{proposal['protocol']}/proposal/{proposal_id}"
                 if proposal["adapter"] == "onchain"
                 else proposal["externalUrl"]
             )
@@ -1457,7 +1457,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             proposal_url = (
-                f"https://boardroom.io/{protocol['protocol']}/proposal/{proposal_id}"
+                f"https://boardroom.io/{proposal['protocol']}/proposal/{proposal_id}"
                 if proposal["adapter"] == "onchain"
                 else proposal["externalUrl"]
             )

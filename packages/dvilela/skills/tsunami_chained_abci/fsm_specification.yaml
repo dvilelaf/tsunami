@@ -10,6 +10,7 @@ start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
+- GovernanceRound
 - PublishTweetsRound
 - RegistrationRound
 - RegistrationStartupRound
@@ -19,6 +20,9 @@ states:
 - TrackOmenRound
 - TrackReposRound
 transition_func:
+    (GovernanceRound, DONE): PublishTweetsRound
+    (GovernanceRound, NO_MAJORITY): GovernanceRound
+    (GovernanceRound, ROUND_TIMEOUT): GovernanceRound
     (PublishTweetsRound, DONE): ResetAndPauseRound
     (PublishTweetsRound, NO_MAJORITY): PublishTweetsRound
     (PublishTweetsRound, ROUND_TIMEOUT): PublishTweetsRound
@@ -28,7 +32,7 @@ transition_func:
     (ResetAndPauseRound, DONE): TrackChainEventsRound
     (ResetAndPauseRound, NO_MAJORITY): ResetAndPauseRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): ResetAndPauseRound
-    (SunoRound, DONE): PublishTweetsRound
+    (SunoRound, DONE): GovernanceRound
     (SunoRound, NO_MAJORITY): SunoRound
     (SunoRound, ROUND_TIMEOUT): SunoRound
     (TrackChainEventsRound, DONE): TrackReposRound
