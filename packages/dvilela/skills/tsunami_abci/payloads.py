@@ -53,6 +53,13 @@ class SunoPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
+class GovernancePayload(BaseTxPayload):
+    """Represent a transaction payload for the GovernanceRound."""
+
+    tweets: str
+
+
+@dataclass(frozen=True)
 class PublishTweetsPayload(BaseTxPayload):
     """Represent a transaction payload for the PublishTweetsRound."""
 

@@ -100,6 +100,14 @@ def main() -> None:
             "publish_telegram"
         ] = f"${{bool:{os.getenv('PUBLISH_TELEGRAM')}}}"
 
+        config[8]["models"]["params"]["args"][
+            "governance_enabled"
+        ] = f"${{bool:{os.getenv('GOVERNANCE_ENABLED')}}}"
+
+        config[8]["models"]["params"]["args"][
+            "boardroom_api_key"
+        ] = f"${{str:{os.getenv('BOARDROOM_API_KEY')}}}"
+
     with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 

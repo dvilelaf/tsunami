@@ -83,4 +83,6 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.omen_tracking_enabled = self._ensure("omen_tracking_enabled", kwargs, bool)
         self.suno_enabled = self._ensure("suno_enabled", kwargs, bool)
         self.service_endpoint = self._ensure("service_endpoint", kwargs, str)
+        self.governance_enabled = self._ensure("governance_enabled", kwargs, bool)
+        self.boardroom_api_key = self._ensure("boardroom_api_key", kwargs, str)
         super().__init__(*args, **kwargs)

@@ -45,8 +45,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeics5v6ligynfcc3phfpft7rw4lwiaqfmnw5p4mmicymojfsn5lxmm
-- dvilela/tsunami_chained_abci:0.1.0:bafybeieeflg2skvavn7hzznsaxgp2lty7dliyk4cy6tfeb4w7hkdf6q4li
+- dvilela/tsunami_abci:0.1.0:bafybeif4vflp5cvfgkmrmdxt5ohncbdboqsda4ayj77xdw4vmxyivs2usy
+- dvilela/tsunami_chained_abci:0.1.0:bafybeicajtkm4ywt2odt6r45koxek2nqji647t53lqwqxcvrevdd5lvmda
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -225,9 +225,11 @@ models:
       repo_tracking_enabled: ${bool:true}
       omen_tracking_enabled: ${bool:true}
       suno_enabled: ${bool:true}
+      governance_enabled: ${bool:true}
       telegram_token: ${str:null}
       telegram_chat_id: ${int:null}
       service_endpoint: ${str:https://tsunami.dummy.com/}
+      boardroom_api_key: ${str:null}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
