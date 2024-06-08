@@ -1363,7 +1363,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
         headers = {
             "Accept": "application/json",
         }
-        parameters = {"key": self.params.boardroom_api_key, "status": "active"}
+        parameters = {"key": self.params.boardroom_api_key, "status": "pending"}
 
         response = yield from self.get_http_response(  # type: ignore
             method="GET", url=url, headers=headers, parameters=parameters
@@ -1391,6 +1391,9 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
         closed_proposals = {
             k: v for k, v in governance_proposals.items() if k not in active_proposals
         }
+        self.context.logger.info(
+            f"Got {len(new_proposals)} new proposals and {len(closed_proposals)} closed proposals"
+        )
 
         # Prepare tweets (new proposals)
         for proposal_id, proposal in new_proposals.items():
