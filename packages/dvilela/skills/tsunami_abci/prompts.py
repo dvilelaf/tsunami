@@ -98,7 +98,9 @@ SUNO_USER_PROMPT = """
 A new {genre} song has been created in honor of the {agent_name} agent.
 """
 
-PROPOSAL_NEW_USER_PROMPT = "A new governance proposal with id {proposal_id} has been opened. Its title is: {proposal_title}"
+PROPOSAL_NEW_USER_PROMPT = (
+    "A new governance proposal has been opened. Its title is: {proposal_title}"
+)
 
 PROPOSAL_CLOSED_USER_PROMPT = 'The governance proposal titled "{proposal_title}" has been closed. The Olas community has voted "{vote_result}"'
 

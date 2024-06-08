@@ -490,7 +490,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         return response
 
     def build_thread(
-        self, user_prompt: str
+        self, user_prompt: str, header: Optional[str] = None
     ) -> Generator[None, None, Optional[List[str]]]:
         """Build thread"""
 
@@ -520,6 +520,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 continue
 
             tweet_attempt = response_json["response"]
+
+            # Add header
+            if header:
+                tweet_attempt = header + tweet_attempt
 
             # Add Contribute's hashtag
             if "#OlasNetwork" not in tweet_attempt:
@@ -1391,9 +1395,10 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
         # Prepare tweets (new proposals)
         for proposal_id, proposal in new_proposals.items():
             user_prompt = PROPOSAL_NEW_USER_PROMPT.format(
-                proposal_id=proposal_id, proposal_title=proposal["title"]
+                proposal_title=proposal["title"]
             )
-            thread = yield from self.build_thread(user_prompt)
+            thread_header = "🚨 Governance alert: new proposal 🚨\n\n"
+            thread = yield from self.build_thread(user_prompt, header=thread_header)
 
             if thread is None:
                 self.context.logger.error("Error while building thread. Skipping...")
@@ -1450,7 +1455,8 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
             user_prompt = PROPOSAL_CLOSED_USER_PROMPT.format(
                 proposal_title=proposal["title"], vote_result=vote_result
             )
-            thread = yield from self.build_thread(user_prompt)
+            thread_header = "🚨 Governance alert: closed proposal 🚨\n\n"
+            thread = yield from self.build_thread(user_prompt, header=thread_header)
 
             if thread is None:
                 self.context.logger.error("Error while building thread. Skipping...")
