@@ -140,14 +140,37 @@ def tweet_to_thread(tweet: str) -> Optional[List[str]]:
     """Create a thread from a long text"""
 
     def sentence_split(sentence: str, separator: str) -> List[str]:
-        """Separates a string into parts"""
+        """Separates a sentence into parts"""
         parts = sentence.split(separator)
         for p in parts[:-1]:
             p += separator.rstrip()
         return [p.strip() for p in parts]
 
-    sentences = [t.strip() for t in tweet.split(".")]
-    sentences = [s for s in sentences if s]
+    def string_dot_split(text: str) -> str:
+        """Separates a string into parts"""
+
+        # We use the dot to separate. In order to avoid ellipsis from being removed,
+        # we replace them with a special code
+        ellipsis = "..."
+        if ellipsis in text:
+            parts = text.split(ellipsis)
+
+            # Pre-append dot if the sentence starts with uppercase
+            parts = [part if part[0].islower() else "." + part for part in parts]
+            joined_parts = "<ellipsis>".join(parts)
+
+            # Remove inital dot if it exists
+            text = (
+                joined_parts if not joined_parts.startswith(".") else joined_parts[1:]
+            )
+        # Recover ellipsis and strip
+        sentences = [s.replace("<ellipsis>", "...").strip() for s in text.split(".")]
+
+        # Remove empty sentences
+        sentences = [s for s in sentences if s]
+        return sentences
+
+    sentences = string_dot_split(tweet)
     thread: List[str] = []
 
     # Keep iterating while there are sentences to process
