@@ -1363,7 +1363,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
         headers = {
             "Accept": "application/json",
         }
-        parameters = {"key": self.params.boardroom_api_key, "status": "pending"}
+        parameters = {"key": self.params.boardroom_api_key, "status": "active"}
 
         response = yield from self.get_http_response(  # type: ignore
             method="GET", url=url, headers=headers, parameters=parameters
