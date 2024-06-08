@@ -157,9 +157,11 @@ models:
       repo_tracking_enabled: true
       omen_tracking_enabled: true
       suno_enabled: true
+      governance_enabled: true
       telegram_token: null
       telegram_chat_id: null
       service_endpoint: tsunami.dummy.com/
+      boardroom_api_key: null
     class_name: Params
   randomness_api:
     args:

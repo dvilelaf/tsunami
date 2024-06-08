@@ -54,6 +54,8 @@ from packages.dvilela.skills.tsunami_abci.prompts import (
     EVENT_USER_PROMPT_TEMPLATES,
     MUSIC_GENRES,
     OMEN_USER_PROMPT,
+    PROPOSAL_CLOSED_USER_PROMPT,
+    PROPOSAL_NEW_USER_PROMPT,
     REPO_USER_PROMPT_RELEASE,
     SUNO_PROMPT_TEMPLATE,
     SUNO_USER_PROMPT,
@@ -61,6 +63,8 @@ from packages.dvilela.skills.tsunami_abci.prompts import (
     SYSTEM_PROMPT_SUMMARIZER,
 )
 from packages.dvilela.skills.tsunami_abci.rounds import (
+    GovernancePayload,
+    GovernanceRound,
     PublishTweetsPayload,
     PublishTweetsRound,
     SunoPayload,
@@ -1299,6 +1303,187 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
         return tweets
 
 
+class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """GovernanceBehaviour"""
+
+    matching_round: Type[AbstractRound] = GovernanceRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweets = self.synchronized_data.tweets
+            if self.params.governance_enabled:
+                suno_tweets = yield from self.get_governance_tweets()
+                tweets += suno_tweets
+
+                # Save tweets to the db
+                yield from self._write_kv({"tweets": json.dumps(tweets)})
+
+            payload = GovernancePayload(
+                sender=self.context.agent_address, tweets=json.dumps(tweets)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_governance_tweets(  # pylint: disable=too-many-locals,too-many-return-statements,too-many-statements
+        self,
+    ) -> Generator[None, None, List]:
+        """Get tweets with governance proposals"""
+
+        tweets: List[Dict] = []
+
+        # Load proposals from the db
+        response = yield from self._read_kv(keys=("governance_proposals",))
+
+        if response is None:
+            self.context.logger.error(
+                "Error reading governance_proposals from the database."
+            )
+            return tweets
+
+        governance_proposals = json.loads(response["governance_proposals"] or "{}")
+
+        self.context.logger.info(
+            f"Loaded governance_proposals from db: {governance_proposals}"
+        )
+
+        # Get active proposals from Boardroom
+        self.context.logger.info("Getting active proposals from Boardroom")
+
+        url = "https://api.boardroom.info/v1/protocols/autonolas/proposals"
+        headers = {
+            "Accept": "application/json",
+        }
+        parameters = {"key": self.params.boardroom_api_key, "status": "active"}
+
+        response = yield from self.get_http_response(  # type: ignore
+            method="GET", url=url, headers=headers, parameters=parameters
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error getting active proposals from Boardroom: {response}"  # type: ignore
+            )
+            return tweets
+
+        active_proposals = json.loads(response.body)["data"]  # type: ignore
+
+        # Filter some info out
+        KEEP_FIELDS = ("title", "adapter", "externalUrl")
+        active_proposals = {
+            ap["refId"]: {k: v for k, v in ap.items() if k in KEEP_FIELDS}
+            for ap in active_proposals
+        }
+
+        # Create new and closed proposals
+        new_proposals = {
+            k: v for k, v in active_proposals.items() if k not in governance_proposals
+        }
+        closed_proposals = {
+            k: v for k, v in governance_proposals.items() if k not in active_proposals
+        }
+
+        # Prepare tweets (new proposals)
+        for proposal_id, proposal in new_proposals.items():
+            user_prompt = PROPOSAL_NEW_USER_PROMPT.format(
+                proposal_id=proposal_id, proposal_title=proposal["title"]
+            )
+            thread = yield from self.build_thread(user_prompt)
+
+            if thread is None:
+                self.context.logger.error("Error while building thread. Skipping...")
+                continue
+
+            proposal_url = (
+                f"https://boardroom.io/{protocol['protocol']}/proposal/{proposal_id}"
+                if proposal["adapter"] == "onchain"
+                else proposal["externalUrl"]
+            )
+            thread.append(proposal_url)
+
+            tweets.append(
+                {
+                    "text": thread,
+                    "twitter_published": False,
+                    "farcaster_published": False,
+                    "telegram_published": False,
+                    "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                }
+            )
+
+            # Add proposal to the db
+            governance_proposals[proposal_id] = proposal
+
+        # Prepare tweets (closed proposals)
+        for proposal_id, proposal in closed_proposals.items():
+            # Get the vote result
+            self.context.logger.info(f"Getting proposal from Boardroom: {proposal_id}")
+
+            url = f"https://api.boardroom.info/v1/proposals/{proposal_id}"
+            headers = {
+                "Accept": "application/json",
+            }
+            parameters = {
+                "key": self.params.boardroom_api_key,
+            }
+
+            response = yield from self.get_http_response(  # type: ignore
+                method="GET", url=url, headers=headers, parameters=parameters
+            )
+
+            if response.status_code != HTTP_OK:  # type: ignore
+                self.context.logger.error(
+                    f"Error getting proposal from Boardroom: {response}"  # type: ignore
+                )
+                continue
+
+            proposal = json.loads(response.body)["data"]  # type: ignore
+            vote_result = proposal["choices"][proposal["results"]["choice"]]
+
+            self.context.logger.error(f"Vote result was: {vote_result}")  # type: ignore
+
+            user_prompt = PROPOSAL_CLOSED_USER_PROMPT.format(
+                proposal_title=proposal["title"], vote_result=vote_result
+            )
+            thread = yield from self.build_thread(user_prompt)
+
+            if thread is None:
+                self.context.logger.error("Error while building thread. Skipping...")
+                continue
+
+            proposal_url = (
+                f"https://boardroom.io/{protocol['protocol']}/proposal/{proposal_id}"
+                if proposal["adapter"] == "onchain"
+                else proposal["externalUrl"]
+            )
+            thread.append(proposal_url)
+
+            tweets.append(
+                {
+                    "text": thread,
+                    "twitter_published": False,
+                    "farcaster_published": False,
+                    "telegram_published": False,
+                    "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                }
+            )
+
+            # Remove proposal from the db
+            del governance_proposals[proposal_id]
+
+        # Save proposals to the db
+        yield from self._write_kv(
+            {"governance_proposals": json.dumps(governance_proposals, sort_keys=True)}
+        )
+
+        return tweets
+
+
 class PublishTweetsBehaviour(
     TsunamiBaseBehaviour
 ):  # pylint: disable=too-many-ancestors
@@ -1368,5 +1553,6 @@ class TsunamiRoundBehaviour(AbstractRoundBehaviour):
         TrackReposBehaviour,
         TrackOmenBehaviour,
         SunoBehaviour,
+        GovernanceBehaviour,
         PublishTweetsBehaviour,
     ]

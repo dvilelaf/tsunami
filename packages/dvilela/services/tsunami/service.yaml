@@ -103,9 +103,11 @@ extra:
         repo_tracking_enabled: ${REPO_TRACKING_ENABLED:bool:true}
         omen_tracking_enabled: ${OMEN_TRACKING_ENABLED:bool:true}
         suno_enabled: ${SUNO_ENABLED:bool:true}
+        governance_enabled: ${GOVERNANCE_ENABLED:bool:true}
         telegram_token: ${TELEGRAM_TOKEN:str:null}
         telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
         service_endpoint: ${SERVICE_ENDPOINT:str:https://tsunami.dummy.com/}
+        boardroom_api_key: ${BOARDROOM_API_KEY:str:null}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

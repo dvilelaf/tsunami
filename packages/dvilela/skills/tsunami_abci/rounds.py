@@ -24,6 +24,7 @@ from enum import Enum
 from typing import Dict, FrozenSet, Set, cast
 
 from packages.dvilela.skills.tsunami_abci.payloads import (
+    GovernancePayload,
     PublishTweetsPayload,
     SunoPayload,
     TrackChainEventsPayload,
@@ -87,6 +88,11 @@ class SynchronizedData(BaseSynchronizedData):
         return self._get_deserialized("participant_to_suno")
 
     @property
+    def participant_to_governance(self) -> DeserializedCollection:
+        """Get the participants to the Governance round."""
+        return self._get_deserialized("participant_to_governance")
+
+    @property
     def participant_to_publication(self) -> DeserializedCollection:
         """Get the participants to the tweet publication round."""
         return self._get_deserialized("participant_to_publication")
@@ -144,6 +150,19 @@ class SunoRound(CollectSameUntilThresholdRound):
     # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
 
 
+class GovernanceRound(CollectSameUntilThresholdRound):
+    """GovernanceRound"""
+
+    payload_class = GovernancePayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_governance)
+    selection_key = get_name(SynchronizedData.tweets)
+
+    # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
+
+
 class PublishTweetsRound(CollectSameUntilThresholdRound):
     """PublishTweetsRound"""
 
@@ -183,9 +202,14 @@ class TsunamiAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: TrackOmenRound,
         },
         SunoRound: {
-            Event.DONE: PublishTweetsRound,
+            Event.DONE: GovernanceRound,
             Event.NO_MAJORITY: SunoRound,
             Event.ROUND_TIMEOUT: SunoRound,
+        },
+        GovernanceRound: {
+            Event.DONE: PublishTweetsRound,
+            Event.NO_MAJORITY: GovernanceRound,
+            Event.ROUND_TIMEOUT: GovernanceRound,
         },
         PublishTweetsRound: {
             Event.DONE: FinishedPublishRound,
