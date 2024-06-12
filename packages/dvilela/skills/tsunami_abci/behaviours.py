@@ -1451,7 +1451,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             proposal = json.loads(response.body)["data"]  # type: ignore
-            vote_result = proposal["choices"][proposal["results"]["choice"]]
+            vote_result = proposal["choices"][proposal["results"][0]["choice"]]
 
             self.context.logger.error(f"Vote result was: {vote_result}")  # type: ignore
 
