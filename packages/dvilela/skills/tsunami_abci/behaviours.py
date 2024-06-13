@@ -229,30 +229,30 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         self.tracked_events = {
             "ethereum": {
-                "service_registry": {
-                    "contract_id": str(OlasRegistriesContract.contract_id),
-                    "contract_address": self.params.service_registry_address_ethereum,
-                    "event_to_template": {
-                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
-                    },
-                    "build_thread_function": self.build_registry_tweet,
-                },
-                "agent_registry": {
-                    "contract_id": str(OlasRegistriesContract.contract_id),
-                    "contract_address": self.params.agent_registry_address_ethereum,
-                    "event_to_template": {
-                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
-                    },
-                    "build_thread_function": self.build_registry_tweet,
-                },
-                "component_registry": {
-                    "contract_id": str(OlasRegistriesContract.contract_id),
-                    "contract_address": self.params.component_registry_address_ethereum,
-                    "event_to_template": {
-                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
-                    },
-                    "build_thread_function": self.build_registry_tweet,
-                },
+                # "service_registry": {
+                #     "contract_id": str(OlasRegistriesContract.contract_id),
+                #     "contract_address": self.params.service_registry_address_ethereum,
+                #     "event_to_template": {
+                #         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
+                #     },
+                #     "build_thread_function": self.build_registry_tweet,
+                # },
+                # "agent_registry": {
+                #     "contract_id": str(OlasRegistriesContract.contract_id),
+                #     "contract_address": self.params.agent_registry_address_ethereum,
+                #     "event_to_template": {
+                #         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
+                #     },
+                #     "build_thread_function": self.build_registry_tweet,
+                # },
+                # "component_registry": {
+                #     "contract_id": str(OlasRegistriesContract.contract_id),
+                #     "contract_address": self.params.component_registry_address_ethereum,
+                #     "event_to_template": {
+                #         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
+                #     },
+                #     "build_thread_function": self.build_registry_tweet,
+                # },
                 "tokenomics": {
                     "contract_id": str(OlasTokenomicsContract.contract_id),
                     "contract_address": self.params.tokenomics_address_ethereum,
@@ -630,7 +630,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             0
         ]  # service, agent or component
 
-        self.context.logger.info(f"Processing event {event}")
+        self.context.logger.info(f"Processing registry event {event}")
 
         unit_id = getattr(event.args, f"{unit_type}Id")
 
@@ -688,6 +688,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
     ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
         """Build a thread for a tokenomics event"""
 
+        self.context.logger.info(f"Processing tokenomics event {event}")
+
+        kwargs = {
+            "n_epoch": event.args["epochCounter"],
+            "eth_rewards": event.args["accountRewards"] / 1e18,
+            "olas_topups": event.args["accountTopUps"] / 1e18,
+        }
+
+        user_prompt = event_template.format(**kwargs)
+        thread = yield from self.build_thread(user_prompt)
+
+        return thread, None
+
     def build_treasury_tweet(
         self,
         chain_id,
@@ -699,6 +712,23 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         event_template,
     ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
         """Build a thread for a treasury event"""
+
+        self.context.logger.info(f"Processing treasury event {event}")
+
+        donations = ""
+        for amount, service_id in zip(event.args["amounts"], event.args["serviceIds"]):
+            donations += f"* {amount / 1e18:.2f} ETH to service {service_id}\n"
+
+        kwargs = {
+            "donator": event.args["sender"],
+            "amount": event.args["donation"] / 1e18,
+            "donations": donations,
+        }
+
+        user_prompt = event_template.format(**kwargs)
+        thread = yield from self.build_thread(user_prompt)
+
+        return thread, None
 
 
 class TrackChainEventsBehaviour(

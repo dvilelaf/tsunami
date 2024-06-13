@@ -77,10 +77,8 @@ SYSTEM_PROMPTS = [
 EVENT_USER_PROMPT_SERVICE_CREATED = "A new service with id {unit_id} has been minted on the Olas protocol on {chain_name}."
 EVENT_USER_PROMPT_AGENT_CREATED = "A new agent with id {unit_id} has been minted on the Olas protocol on {chain_name}."
 EVENT_USER_PROMPT_COMPONENT_CREATED = "A new component with id {unit_id} has been minted on the Olas protocol on {chain_name}."
-EVENT_USER_PROMPT_EPOCH_SETTLED = "Tokenomics epoch {n_epoch} has finished. A total of {eth_rewards} ETH and {olas_topups} OLAS have been distributed to Olas developers."
-EVENT_USER_PROMPT_DONATION_SENT = (
-    "Address {donator} has donated {donation_eth} ETH to {service_name}."
-)
+EVENT_USER_PROMPT_EPOCH_SETTLED = "Tokenomics epoch {n_epoch} has finished. A total of {eth_rewards:.2f} ETH and {olas_topups:.2f} OLAS have been distributed to Olas developers."
+EVENT_USER_PROMPT_DONATION_SENT = "Address {donator} has donated {amount:.2f} ETH to the following services:\n{donations}"
 
 EVENT_USER_PROMPT_TEMPLATES = {
     "service_minted": EVENT_USER_PROMPT_SERVICE_CREATED,
