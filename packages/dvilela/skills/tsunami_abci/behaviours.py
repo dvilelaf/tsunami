@@ -235,6 +235,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "event_to_template": {
                         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
+                    "build_thread_function": self.build_registry_tweet,
                 },
                 "agent_registry": {
                     "contract_id": str(OlasRegistriesContract.contract_id),
@@ -242,6 +243,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "event_to_template": {
                         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
                     },
+                    "build_thread_function": self.build_registry_tweet,
                 },
                 "component_registry": {
                     "contract_id": str(OlasRegistriesContract.contract_id),
@@ -249,6 +251,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "event_to_template": {
                         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
                     },
+                    "build_thread_function": self.build_registry_tweet,
                 },
                 "tokenomics": {
                     "contract_id": str(OlasTokenomicsContract.contract_id),
@@ -256,6 +259,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "event_to_template": {
                         "EpochSettled": EVENT_USER_PROMPT_TEMPLATES["epoch_settled"]
                     },
+                    "build_thread_function": self.build_tokenomics_tweet,
                 },
                 "treasury": {
                     "contract_id": str(OlasTreasuryContract.contract_id),
@@ -265,6 +269,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                             "donation_sent"
                         ]
                     },
+                    "build_thread_function": self.build_treasury_tweet,
                 },
             },
             "gnosis": {
@@ -578,6 +583,123 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         return thread
 
+    def get_token_uri(
+        self, chain_id: str, contract_id: str, contract_address: str, unit_id: str
+    ) -> Generator[None, None, Optional[str]]:
+        """Get registries events"""
+
+        self.context.logger.info(
+            f"Retrieving uri for unit_id {unit_id} on contract {chain_id}::{contract_id}::{contract_address}"
+        )
+
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=contract_address,
+            contract_id=contract_id,
+            contract_callable="get_token_uri",
+            unit_id=unit_id,
+            chain_id=chain_id,
+        )
+
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.info(
+                f"Error retrieving the events [{contract_api_msg.performative}]"
+            )
+            return None
+
+        uri = cast(dict, contract_api_msg.state.body)["result"]
+
+        self.context.logger.info(f"Got uri: {uri}")
+
+        return uri
+
+    def build_registry_tweet(
+        self,
+        chain_id,
+        contract_id,
+        contract_name,
+        contract_address,
+        event_name,
+        event,
+        event_template,
+    ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
+        """Build a thread for a registry event"""
+
+        unit_type = "service" if contract_name == "service_registry" else "unit"
+        component_type = contract_name.split("_", maxsplit=1)[
+            0
+        ]  # service, agent or component
+
+        self.context.logger.info(f"Processing event {event}")
+
+        unit_id = getattr(event.args, f"{unit_type}Id")
+
+        kwargs = {
+            "unit_id": unit_id,
+            "chain_name": chain_id,
+        }
+
+        user_prompt = event_template.format(**kwargs)
+
+        # Get token URI
+        uri = yield from self.get_token_uri(
+            chain_id, contract_id, contract_address, unit_id
+        )
+
+        if uri is None:
+            self.context.logger.error(
+                f"Error while retieving uri: {uri}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}..."
+            )
+            return None
+
+        # Get unit data
+        self.context.logger.info("Getting token data...")
+        response = yield from self.get_http_response(  # type: ignore
+            method="GET", url=uri
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error while download token data: {response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response}"  # type: ignore
+            )
+            return None
+
+        response_json = json.loads(response.body)  # type: ignore
+        self.context.logger.info(f"Got token data: {response_json}")
+
+        unit_name = response_json["name"]
+        unit_description = response_json["description"]
+        user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
+        unit_url = f"{OLAS_REGISTRY_URL}/{chain_id}/{component_type}s/{unit_id}"
+
+        thread = yield from self.build_thread(user_prompt)
+
+        return thread, unit_url
+
+    def build_tokenomics_tweet(
+        self,
+        chain_id,
+        contract_id,
+        contract_name,
+        contract_address,
+        event_name,
+        event,
+        event_template,
+    ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
+        """Build a thread for a tokenomics event"""
+
+    def build_treasury_tweet(
+        self,
+        chain_id,
+        contract_id,
+        contract_name,
+        contract_address,
+        event_name,
+        event,
+        event_template,
+    ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
+        """Build a thread for a treasury event"""
+
 
 class TrackChainEventsBehaviour(
     TsunamiBaseBehaviour
@@ -663,10 +785,6 @@ class TrackChainEventsBehaviour(
             for contract_name, contract_data in contracts_data.items():
                 contract_id = contract_data["contract_id"]
                 contract_address = contract_data["contract_address"]
-                unit_type = "service" if contract_name == "service_registry" else "unit"
-                component_type = contract_name.split("_", maxsplit=1)[
-                    0
-                ]  # service, agent or component
 
                 # Event type loop
                 for event_name, event_template in contract_data[
@@ -694,49 +812,17 @@ class TrackChainEventsBehaviour(
 
                     # Event loop
                     for event in events:
-                        self.context.logger.info(f"Processing event {event}")
+                        build_thread_function = contract_data["build_thread_function"]
 
-                        unit_id = getattr(event.args, f"{unit_type}Id")
-
-                        kwargs = {
-                            "unit_id": unit_id,
-                            "chain_name": chain_id,
-                        }
-
-                        user_prompt = event_template.format(**kwargs)
-
-                        # Get token URI
-                        uri = yield from self.get_token_uri(
-                            chain_id, contract_id, contract_address, unit_id
+                        thread, link = yield from build_thread_function(
+                            chain_id,
+                            contract_id,
+                            contract_name,
+                            contract_address,
+                            event_name,
+                            event,
+                            event_template,
                         )
-
-                        if uri is None:
-                            self.context.logger.error(
-                                f"Error while retieving uri: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}..."
-                            )
-                            continue
-
-                        # Get unit data
-                        self.context.logger.info("Getting token data...")
-                        response = yield from self.get_http_response(  # type: ignore
-                            method="GET", url=uri
-                        )
-
-                        if response.status_code != HTTP_OK:  # type: ignore
-                            self.context.logger.error(
-                                f"Error while download token data: {ledger_api_response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response}"  # type: ignore
-                            )
-                            continue
-
-                        response_json = json.loads(response.body)  # type: ignore
-                        self.context.logger.info(f"Got token data: {response_json}")
-
-                        unit_name = response_json["name"]
-                        unit_description = response_json["description"]
-                        user_prompt += f" The {unit_type}'s name is {unit_name}. Its description is: {unit_description}'"
-                        unit_url = f"{OLAS_REGISTRY_URL}/{chain_id}/{component_type}s/{unit_id}"
-
-                        thread = yield from self.build_thread(user_prompt)
 
                         if thread is None:
                             self.context.logger.error(
@@ -744,8 +830,9 @@ class TrackChainEventsBehaviour(
                             )
                             continue
 
-                        # Add a link to the unit
-                        thread.append(unit_url)
+                        # Add a link to the event
+                        if link:
+                            thread.append(link)
 
                         tweets.append(
                             {
@@ -810,36 +897,6 @@ class TrackChainEventsBehaviour(
         )
 
         return events, latest_block
-
-    def get_token_uri(
-        self, chain_id: str, contract_id: str, contract_address: str, unit_id: str
-    ) -> Generator[None, None, Optional[str]]:
-        """Get registries events"""
-
-        self.context.logger.info(
-            f"Retrieving uri for unit_id {unit_id} on contract {chain_id}::{contract_id}::{contract_address}"
-        )
-
-        contract_api_msg = yield from self.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=contract_address,
-            contract_id=contract_id,
-            contract_callable="get_token_uri",
-            unit_id=unit_id,
-            chain_id=chain_id,
-        )
-
-        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.context.logger.info(
-                f"Error retrieving the events [{contract_api_msg.performative}]"
-            )
-            return None
-
-        uri = cast(dict, contract_api_msg.state.body)["result"]
-
-        self.context.logger.info(f"Got uri: {uri}")
-
-        return uri
 
 
 class TrackReposBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors

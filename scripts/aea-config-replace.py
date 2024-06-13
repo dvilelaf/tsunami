@@ -38,6 +38,10 @@ def main() -> None:
             "farcaster_mnemonic"
         ] = f"${{str:{os.getenv('FARCASTER_MNEMONIC')}}}"
 
+        config[2]["config"]["repo_id"] = f"${{str:{os.getenv('LLAMA_REPO_ID')}}}"
+
+        config[2]["config"]["filename"] = f"${{str:{os.getenv('LLAMA_FILENAME')}}}"
+
         config[5]["config"]["ledger_apis"]["ethereum"][
             "address"
         ] = f"${{str:{os.getenv('ETHEREUM_LEDGER_RPC')}}}"

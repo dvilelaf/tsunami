@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeidfrp3tabbdwbblk5rhyyndvghxmelvyaklbfr5lcgxbntrxbrtwi
+agent: dvilela/tsunami:0.1.0:bafybeiapxepyznrq2tsixmjgl6vcbf3iisqut63nek3uxbdm5umpqjh3kq
 number_of_agents: 1
 deployment:
   agent:
@@ -178,4 +178,5 @@ public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfezt
 type: connection
 config:
   host: ${HTTP_SERVER_HOST:str:0.0.0.0}
+  port: ${HTTP_SERVER_PORT:int:8000}
   target_skill_id: dvilela/tsunami_chained_abci:0.1.0
