@@ -2,16 +2,16 @@
     "dev": {
         "protocol/dvilela/kv_store/0.1.0": "bafybeihimf5f37uupxmugvagmaxworgmz7cxuqpikkyzlgldtbq46jbvci",
         "contract/dvilela/olas_registries/0.1.0": "bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa",
-        "contract/dvilela/olas_tokenomics/0.1.0": "bafybeibmpcw6it2zbmu5ttpnqpnn4aafvrij3abzifkqmvswjnysnclkeu",
-        "contract/dvilela/olas_treasury/0.1.0": "bafybeihbne26js7q73m3lgddun4nlps36dmf4u7pwdryyr7h5povsvklni",
+        "contract/dvilela/olas_tokenomics/0.1.0": "bafybeifslkoofg3ohscvovzhgaa3up5jhmb6fac4r35b5wcdjphafzssxu",
+        "contract/dvilela/olas_treasury/0.1.0": "bafybeidd6yelhuztyvtbso6fkc4iiq2pmegh734exyrtcbqh62yfwgluqy",
         "connection/dvilela/kv_store/0.1.0": "bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4",
         "connection/dvilela/llama/0.1.0": "bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq",
         "connection/valory/twitter/0.1.0": "bafybeihotqawulig3g4a7fosi4pljsjii2neiqxtepd42e2neemhqecfcq",
         "connection/dvilela/suno/0.1.0": "bafybeihy2phtjwbz27ntv55wxfk754kp5tjceujzsdbppjafljoydjflhi",
-        "skill/dvilela/tsunami_abci/0.1.0": "bafybeigqnnxh2hnzeegvwjsv6dhfyexguavbgo7libwnf3oey3qignkvxa",
-        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeieuts7pclyhxgourt24dze4edniefjx2fj3kqfgfrdbex373vhwca",
-        "agent/dvilela/tsunami/0.1.0": "bafybeidkhbz7jd4ugnwccslpnqt3562c3oheicnjwfntdrbn3aajbayrrq",
-        "service/dvilela/tsunami/0.1.0": "bafybeigenwarqk3clag5ulkvwimwc2jvkho5euzg42vyakvewsvoc2l6cy"
+        "skill/dvilela/tsunami_abci/0.1.0": "bafybeihk3pveqdr6cta44zitlnnpbgc4osc7jf7j35oy3ooptfvcwrs3qm",
+        "skill/dvilela/tsunami_chained_abci/0.1.0": "bafybeic55smrkhd2jihynbfhkqitxugsdto6rwwfy6udetg4gyyc2useeu",
+        "agent/dvilela/tsunami/0.1.0": "bafybeig3sle3mjj6yfxdsaxxdvfl7jv66rlvfbsdrcjrqxqw53pipi67r4",
+        "service/dvilela/tsunami/0.1.0": "bafybeihbr6pcdasvu4fjjmwywdzrtcpvw4jwur734ewjjubheha2ajs3ou"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",

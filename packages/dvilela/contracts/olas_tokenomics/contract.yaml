@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigluox22eqqusqzynkbowsq4bnrw4gwodaawets5i2hrp42v43jfm
   build/OlasTokenomics.json: bafybeic4dyhqnnfnivfee5krnfyffmglk7icnmoo4wr7kmoixnllrh2jje
-  contract.py: bafybeid67bxfb2zhwvjdlkyxfv63qbatged3qxde3jpp3ihvbcdidgnhym
+  contract.py: bafybeiafc7acx2ffv2p2ys6kzq3ltptreud26rkoindvqkyxlild42xzde
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: OlasTokenomicsContract

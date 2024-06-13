@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigv5vccsux5xbgxdowpxet2qwzyym6jzxxycvuuf3bqpaxe6zpaem
   build/OlasTreasury.json: bafybeier45zqqza5guhusfhchu6d63yktigfxvojq4so2ftmslxeezbk3m
-  contract.py: bafybeienzxhlb2yxnypeidl32nihie7bmlak4nbbnconft4eqvbyq72r5q
+  contract.py: bafybeidoby6xmkztlqdkeqmg6larbibbwavrf7b563ngemie24k664jnlq
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: OlasTreasuryContract

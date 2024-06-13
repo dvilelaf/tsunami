@@ -229,30 +229,30 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         self.tracked_events = {
             "ethereum": {
-                # "service_registry": {
-                #     "contract_id": str(OlasRegistriesContract.contract_id),
-                #     "contract_address": self.params.service_registry_address_ethereum,
-                #     "event_to_template": {
-                #         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
-                #     },
-                #     "build_thread_function": self.build_registry_tweet,
-                # },
-                # "agent_registry": {
-                #     "contract_id": str(OlasRegistriesContract.contract_id),
-                #     "contract_address": self.params.agent_registry_address_ethereum,
-                #     "event_to_template": {
-                #         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
-                #     },
-                #     "build_thread_function": self.build_registry_tweet,
-                # },
-                # "component_registry": {
-                #     "contract_id": str(OlasRegistriesContract.contract_id),
-                #     "contract_address": self.params.component_registry_address_ethereum,
-                #     "event_to_template": {
-                #         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
-                #     },
-                #     "build_thread_function": self.build_registry_tweet,
-                # },
+                "service_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
+                    "contract_address": self.params.service_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
+                    },
+                    "build_thread_function": self.build_registry_tweet,
+                },
+                "agent_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
+                    "contract_address": self.params.agent_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
+                    },
+                    "build_thread_function": self.build_registry_tweet,
+                },
+                "component_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
+                    "contract_address": self.params.component_registry_address_ethereum,
+                    "event_to_template": {
+                        "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
+                    },
+                    "build_thread_function": self.build_registry_tweet,
+                },
                 "tokenomics": {
                     "contract_id": str(OlasTokenomicsContract.contract_id),
                     "contract_address": self.params.tokenomics_address_ethereum,
@@ -613,15 +613,15 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         return uri
 
-    def build_registry_tweet(
+    def build_registry_tweet(  # pylint: disable=too-many-arguments,too-many-locals
         self,
-        chain_id,
-        contract_id,
-        contract_name,
-        contract_address,
-        event_name,
-        event,
-        event_template,
+        chain_id: str,
+        contract_id: str,
+        contract_name: str,
+        contract_address: str,
+        event_name: str,
+        event: Any,
+        event_template: str,
     ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
         """Build a thread for a registry event"""
 
@@ -650,7 +650,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             self.context.logger.error(
                 f"Error while retieving uri: {uri}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}..."
             )
-            return None
+            return None, None
 
         # Get unit data
         self.context.logger.info("Getting token data...")
@@ -662,7 +662,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             self.context.logger.error(
                 f"Error while download token data: {response}\n. Skipping event {chain_id}:{contract_name}:{event_name}:{event}...\n{response}"  # type: ignore
             )
-            return None
+            return None, None
 
         response_json = json.loads(response.body)  # type: ignore
         self.context.logger.info(f"Got token data: {response_json}")
@@ -676,15 +676,15 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         return thread, unit_url
 
-    def build_tokenomics_tweet(
+    def build_tokenomics_tweet(  # pylint: disable=too-many-arguments,too-many-locals,unused-argument
         self,
-        chain_id,
-        contract_id,
-        contract_name,
-        contract_address,
-        event_name,
-        event,
-        event_template,
+        chain_id: str,
+        contract_id: str,
+        contract_name: str,
+        contract_address: str,
+        event_name: str,
+        event: Any,
+        event_template: str,
     ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
         """Build a thread for a tokenomics event"""
 
@@ -701,15 +701,15 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         return thread, None
 
-    def build_treasury_tweet(
+    def build_treasury_tweet(  # pylint: disable=too-many-arguments,too-many-locals,unused-argument
         self,
-        chain_id,
-        contract_id,
-        contract_name,
-        contract_address,
-        event_name,
-        event,
-        event_template,
+        chain_id: str,
+        contract_id: str,
+        contract_name: str,
+        contract_address: str,
+        event_name: str,
+        event: Any,
+        event_template: str,
     ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
         """Build a thread for a treasury event"""
 

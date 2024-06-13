@@ -42,7 +42,7 @@ class OlasTreasuryContract(Contract):
     contract_id = PUBLIC_ID
 
     @classmethod
-    def get_events(
+    def get_events(  # pylint: disable=unused-argument
         cls,
         ledger_api: EthereumApi,
         contract_address: str,
