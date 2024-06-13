@@ -69,6 +69,12 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.service_registry_address_gnosis = self._ensure(
             "service_registry_address_gnosis", kwargs, str
         )
+        self.treasury_address_ethereum = self._ensure(
+            "treasury_address_ethereum", kwargs, str
+        )
+        self.tokenomics_address_ethereum = self._ensure(
+            "tokenomics_address_ethereum", kwargs, str
+        )
         self.initial_block_ethereum = self._ensure(
             "initial_block_ethereum", kwargs, int
         )

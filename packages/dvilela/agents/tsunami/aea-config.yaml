@@ -218,6 +218,8 @@ models:
       agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
       service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
+      treasury_address_ethereum: ${str:0xa0DA53447C0f6C4987964d8463da7e6628B30f82}
+      tokenomics_address_ethereum: ${str:0xc096362fa6f4A4B1a9ea68b1043416f3381ce300}
       initial_block_ethereum: ${int:19423661}
       initial_block_gnosis: ${int:33047920}
       twitter_credentials: ${str:{}}

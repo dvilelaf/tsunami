@@ -40,6 +40,8 @@ from packages.dvilela.connections.suno.connection import (
     PUBLIC_ID as SUNO_CONNECTION_PUBLIC_ID,
 )
 from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
+from packages.dvilela.contracts.olas_tokenomics.contract import OlasTokenomicsContract
+from packages.dvilela.contracts.olas_treasury.contract import OlasTreasuryContract
 from packages.dvilela.protocols.kv_store.dialogues import (
     KvStoreDialogue,
     KvStoreDialogues,
@@ -228,26 +230,46 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         self.tracked_events = {
             "ethereum": {
                 "service_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
                     "contract_address": self.params.service_registry_address_ethereum,
                     "event_to_template": {
                         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
                 },
                 "agent_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
                     "contract_address": self.params.agent_registry_address_ethereum,
                     "event_to_template": {
                         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["agent_minted"]
                     },
                 },
                 "component_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
                     "contract_address": self.params.component_registry_address_ethereum,
                     "event_to_template": {
                         "CreateUnit": EVENT_USER_PROMPT_TEMPLATES["component_minted"]
                     },
                 },
+                "tokenomics": {
+                    "contract_id": str(OlasTokenomicsContract.contract_id),
+                    "contract_address": self.params.tokenomics_address_ethereum,
+                    "event_to_template": {
+                        "EpochSettled": EVENT_USER_PROMPT_TEMPLATES["epoch_settled"]
+                    },
+                },
+                "treasury": {
+                    "contract_id": str(OlasTreasuryContract.contract_id),
+                    "contract_address": self.params.treasury_address_ethereum,
+                    "event_to_template": {
+                        "DonateToServicesETH": EVENT_USER_PROMPT_TEMPLATES[
+                            "donation_sent"
+                        ]
+                    },
+                },
             },
             "gnosis": {
                 "service_registry": {
+                    "contract_id": str(OlasRegistriesContract.contract_id),
                     "contract_address": self.params.service_registry_address_gnosis,
                     "event_to_template": {
                         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
@@ -601,8 +623,6 @@ class TrackChainEventsBehaviour(
                 tweets = json.loads(response["tweets"])
                 self.context.logger.info(f"Loaded tweets from db: {tweets}")
 
-        contract_id = str(OlasRegistriesContract.contract_id)
-
         # Chain loop
         for chain_id, contracts_data in self.tracked_events.items():
             # Default from_block
@@ -641,6 +661,7 @@ class TrackChainEventsBehaviour(
 
             # Contract loop
             for contract_name, contract_data in contracts_data.items():
+                contract_id = contract_data["contract_id"]
                 contract_address = contract_data["contract_address"]
                 unit_type = "service" if contract_name == "service_registry" else "unit"
                 component_type = contract_name.split("_", maxsplit=1)[
