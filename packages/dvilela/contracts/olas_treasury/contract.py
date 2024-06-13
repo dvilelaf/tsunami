@@ -49,6 +49,7 @@ class OlasTreasuryContract(Contract):
         event_name: str,
         from_block: int,
         to_block: Union[int, str] = "latest",
+        chain_name: str = "ethereum",
     ) -> Optional[JSONLike]:
         """Get events."""
         contract_instance = cls.get_instance(ledger_api, contract_address)

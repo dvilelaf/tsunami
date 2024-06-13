@@ -27,6 +27,8 @@ connections:
 - valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
 contracts:
 - dvilela/olas_registries:0.1.0:bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa
+- dvilela/olas_tokenomics:0.1.0:bafybeibmpcw6it2zbmu5ttpnqpnn4aafvrij3abzifkqmvswjnysnclkeu
+- dvilela/olas_treasury:0.1.0:bafybeihbne26js7q73m3lgddun4nlps36dmf4u7pwdryyr7h5povsvklni
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni

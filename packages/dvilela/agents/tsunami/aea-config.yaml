@@ -26,6 +26,8 @@ contracts:
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeiekytropd5ysnap2wkekub3byi5jbda3qll7awchvhu5plbpafhmi
 - dvilela/olas_registries:0.1.0:bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa
+- dvilela/olas_tokenomics:0.1.0:bafybeibmpcw6it2zbmu5ttpnqpnn4aafvrij3abzifkqmvswjnysnclkeu
+- dvilela/olas_treasury:0.1.0:bafybeihbne26js7q73m3lgddun4nlps36dmf4u7pwdryyr7h5povsvklni
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -45,8 +47,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeib6sbveqpns35ahs75ai6wrdlevftffeqrx5i4lx2rbcmoqqdktvm
-- dvilela/tsunami_chained_abci:0.1.0:bafybeigiiisvp727vahqsfj2gvstnywjc6qaozfeehamcf35i2jnwrmxl4
+- dvilela/tsunami_abci:0.1.0:bafybeid33vcxz7nt5y2vpjantbm6xpx7psbnge7mlx4flcv36kwm2rn4ee
+- dvilela/tsunami_chained_abci:0.1.0:bafybeie2ymexe5xedc6vgvsav44hkoh72weoot4f5illc4lwtelmx2itgq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
