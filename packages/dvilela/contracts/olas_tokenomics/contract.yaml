@@ -1,0 +1,23 @@
+name: olas_tokenomics
+author: dvilela
+version: 0.1.0
+type: contract
+description: Service Registry contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigluox22eqqusqzynkbowsq4bnrw4gwodaawets5i2hrp42v43jfm
+  build/OlasTokenomics.json: bafybeic4dyhqnnfnivfee5krnfyffmglk7icnmoo4wr7kmoixnllrh2jje
+  contract.py: bafybeiafc7acx2ffv2p2ys6kzq3ltptreud26rkoindvqkyxlild42xzde
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: OlasTokenomicsContract
+contract_interface_paths:
+  ethereum: build/OlasTokenomics.json
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.52.0
+  open-aea-test-autonomy:
+    version: ==0.14.12
+  web3:
+    version: <7,>=6.0.0

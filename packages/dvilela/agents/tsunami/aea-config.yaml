@@ -26,6 +26,8 @@ contracts:
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeiekytropd5ysnap2wkekub3byi5jbda3qll7awchvhu5plbpafhmi
 - dvilela/olas_registries:0.1.0:bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa
+- dvilela/olas_tokenomics:0.1.0:bafybeifslkoofg3ohscvovzhgaa3up5jhmb6fac4r35b5wcdjphafzssxu
+- dvilela/olas_treasury:0.1.0:bafybeidd6yelhuztyvtbso6fkc4iiq2pmegh734exyrtcbqh62yfwgluqy
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -45,8 +47,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeidzlzl4yqkw36uw6c3tbq5mz2twmkto6fkerv2skkcvmbtdnjmfjq
-- dvilela/tsunami_chained_abci:0.1.0:bafybeicqrebte42fxb4eokfemydjwmfqcfsr7gogl3jeiqrxrlklgmsibi
+- dvilela/tsunami_abci:0.1.0:bafybeifb4oatjxqa5tc37xxb36ru5wktebqqy4f5ig6d6wnwsovvyjysii
+- dvilela/tsunami_chained_abci:0.1.0:bafybeiaj7y4bnugd45nlnfb6fz36ixnpzlhbgs76frukd7r2zyjooopngq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -218,6 +220,8 @@ models:
       agent_registry_address_ethereum: ${str:0x2F1f7D38e4772884b88f3eCd8B6b9faCdC319112}
       component_registry_address_ethereum: ${str:0x15bd56669F57192a97dF41A2aa8f4403e9491776}
       service_registry_address_gnosis: ${str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
+      treasury_address_ethereum: ${str:0xa0DA53447C0f6C4987964d8463da7e6628B30f82}
+      tokenomics_address_ethereum: ${str:0xc096362fa6f4A4B1a9ea68b1043416f3381ce300}
       initial_block_ethereum: ${int:19423661}
       initial_block_gnosis: ${int:33047920}
       twitter_credentials: ${str:{}}
@@ -235,4 +239,5 @@ public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfezt
 type: connection
 config:
   host: ${str:0.0.0.0}
+  port: ${int:8000}
   target_skill_id: dvilela/tsunami_chained_abci:0.1.0

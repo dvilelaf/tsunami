@@ -4,3 +4,5 @@
 a4c606c6635c2562f67e4d2cb7c614e0d10d58f8:packages/dvilela/skills/prepare_tweets_abci/skill.yaml:generic-api-key:80
 a4c606c6635c2562f67e4d2cb7c614e0d10d58f8:packages/dvilela/skills/tsunami_abci/skill.yaml:generic-api-key:80
 117e66917c1ddac74c0958c5b6d9d5435f55b02d:packages/dvilela/services/tsunami/service.yaml:generic-api-key:69
+3ffffb92954da6ffe5391bd13385c571c1db53db:packages/dvilela/contracts/olas_tokenomics/contract.yaml:generic-api-key:11
+f465f892ab8e6520d1fa57a2daeafb1fc1e5e66c:packages/dvilela/contracts/olas_tokenomics/contract.yaml:generic-api-key:10
