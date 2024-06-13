@@ -517,7 +517,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         return response
 
     def build_thread(
-        self, user_prompt: str, header: Optional[str] = None
+        self,
+        user_prompt: str,
+        header: Optional[str] = None,
+        footer: Optional[str] = None,
     ) -> Generator[None, None, Optional[List[str]]]:
         """Build thread"""
 
@@ -555,6 +558,10 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             # Add Contribute's hashtag
             if "#OlasNetwork" not in tweet_attempt:
                 tweet_attempt += " #OlasNetwork"
+
+            # Add footer
+            if footer:
+                tweet_attempt = tweet_attempt + footer
 
             # Create a single-tweet thread
             if tweet_len(tweet_attempt) < MAX_TWEET_CHARS:
@@ -715,20 +722,72 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         self.context.logger.info(f"Processing treasury event {event}")
 
-        donations = ""
-        for amount, service_id in zip(event.args["amounts"], event.args["serviceIds"]):
-            donations += f"* {amount / 1e18:.2f} ETH to service {service_id}\n"
+        packages = yield from self.get_packages(package_type="service")
+        service_id_to_name = {
+            str(s["tokenId"]): s["publicId"] for s in packages["units"]  # type: ignore
+        }
+
+        donations = [
+            f"Here's the complete list of donations from address {event.args['sender']}:"
+        ]
+        if packages:
+            for amount, service_id in zip(
+                event.args["amounts"], event.args["serviceIds"]
+            ):
+                service_name = service_id_to_name[str(service_id)]
+                donations.append(f"☴ {amount / 1e18:.2f} ETH for {service_name}")
 
         kwargs = {
             "donator": event.args["sender"],
             "amount": event.args["donation"] / 1e18,
-            "donations": donations,
+            "n_services": len(event.args["serviceIds"]),
         }
 
         user_prompt = event_template.format(**kwargs)
         thread = yield from self.build_thread(user_prompt)
 
+        if not thread:
+            return None, None
+
+        thread += donations
+
         return thread, None
+
+    def get_packages(self, package_type: str) -> Generator[None, None, Optional[Dict]]:
+        """Gets minted packages from the subgraph"""
+
+        self.context.logger.info("Getting packages from Olas subgraph...")
+
+        SUBGRAPH_URL = "https://subgraph.autonolas.tech/subgraphs/name/autonolas"
+
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        data = {
+            "query": AGENT_QUERY,
+            "variables": {
+                "package_type": package_type,
+            },
+        }
+
+        # Get all existing agents from the subgraph
+        self.context.logger.info("Getting agents from subgraph")
+        response = yield from self.get_http_response(  # type: ignore
+            method="POST",
+            url=SUBGRAPH_URL,
+            headers=headers,
+            content=json.dumps(data).encode(),
+        )
+
+        if response.status_code != HTTP_OK:  # type: ignore
+            self.context.logger.error(
+                f"Error getting agents from subgraph: {response}"  # type: ignore
+            )
+            return None
+
+        response_json = json.loads(response.body)["data"]  # type: ignore
+        return response_json
 
 
 class TrackChainEventsBehaviour(
@@ -1301,36 +1360,11 @@ class SunoBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ancestors
             )
             return tweets
 
-        SUBGRAPH_URL = "https://subgraph.autonolas.tech/subgraphs/name/autonolas"
-
-        headers = {
-            "Content-Type": "application/json",
-        }
-
-        data = {
-            "query": AGENT_QUERY,
-            "variables": {
-                "package_type": "agent",
-            },
-        }
-
-        # Get all existing agents from the subgraph
-        self.context.logger.info("Getting agents from subgraph")
-        response = yield from self.get_http_response(  # type: ignore
-            method="POST",
-            url=SUBGRAPH_URL,
-            headers=headers,
-            content=json.dumps(data).encode(),
-        )
-
-        if response.status_code != HTTP_OK:  # type: ignore
-            self.context.logger.error(
-                f"Error getting agents from subgraph: {response}"  # type: ignore
-            )
+        packages = yield from self.get_packages(package_type="agent")
+        if not packages:
             return tweets
 
-        response_json = json.loads(response.body)["data"]  # type: ignore
-        agents = [u for u in response_json["units"] if u["packageType"] == "agent"]
+        agents = [u for u in packages["units"] if u["packageType"] == "agent"]
         agents = sorted(agents, key=lambda i: int(i["tokenId"]))
 
         n_agents = len(agents)
