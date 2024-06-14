@@ -279,6 +279,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "event_to_template": {
                         "CreateService": EVENT_USER_PROMPT_TEMPLATES["service_minted"],
                     },
+                    "build_thread_function": self.build_registry_tweet,
                 },
             },
         }
