@@ -239,7 +239,6 @@ class TwitterConnection(BaseSyncConnection):
                 consumer_secret=credentials["consumer_secret"],
                 access_token=credentials["access_token"],
                 access_token_secret=credentials["access_secret"],
-                wait_on_rate_limit=True
             )
         )
         try:
@@ -295,7 +294,6 @@ class TwitterConnection(BaseSyncConnection):
             consumer_secret=self.consumer_secret,
             access_token=self.access_token,
             access_token_secret=self.access_secret,
-            wait_on_rate_limit=True
         )
 
     def on_disconnect(self) -> None:
