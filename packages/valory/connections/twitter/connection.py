@@ -239,6 +239,7 @@ class TwitterConnection(BaseSyncConnection):
                 consumer_secret=credentials["consumer_secret"],
                 access_token=credentials["access_token"],
                 access_token_secret=credentials["access_secret"],
+                wait_on_rate_limit=True
             )
         )
         try:
@@ -249,9 +250,11 @@ class TwitterConnection(BaseSyncConnection):
                 for tweet in text:
                     if not previous_tweet_id:
                         response = api.create_tweet(text=tweet)
+                        self.logger.info(f"Tweepy response: {response}")
                         first_tweet_id = response.data["id"]
                     else:
                         response = api.create_tweet(text=tweet, in_reply_to_tweet_id=previous_tweet_id)
+                        self.logger.info(f"Tweepy response: {response}")
                     previous_tweet_id = response.data["id"]
                     time.sleep(1)
 
@@ -292,6 +295,7 @@ class TwitterConnection(BaseSyncConnection):
             consumer_secret=self.consumer_secret,
             access_token=self.access_token,
             access_token_secret=self.access_secret,
+            wait_on_rate_limit=True
         )
 
     def on_disconnect(self) -> None:
