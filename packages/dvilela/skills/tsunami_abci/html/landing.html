@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Bienvenida</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
+        h1 {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+            z-index: 10;
+            position: relative;
+        }
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tsunami</h1>
+    <video id="backgroundVideo" class="video-background" autoplay muted>
+        <source src="https://videos.pexels.com/video-files/1390942/1390942-uhd_4096_2160_24fps.mp4" type="video/mp4">
+        Tu navegador no soporta la etiqueta de video.
+    </video>
+    <script>
+        const video = document.getElementById('backgroundVideo');
+        video.addEventListener('timeupdate', function() {
+            if (video.currentTime >= 20) {
+                video.currentTime = 0;
+                video.play();
+            }
+        });
+    </script>
+</body>
+</html>

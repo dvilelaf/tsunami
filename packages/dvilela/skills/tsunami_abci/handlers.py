@@ -23,7 +23,8 @@ import json
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Callable, Dict, Optional, Tuple, cast
+from pathlib import Path
+from typing import Callable, Dict, List, Optional, Tuple, Union, cast
 from urllib.parse import urlparse
 
 from aea.configurations.data_types import PublicId
@@ -136,23 +137,31 @@ class HttpHandler(BaseHttpHandler):
             self.context.params.service_endpoint
         ).hostname
 
+        ip_regex = r"(\d{1,3}\.){3}\d{1,3}"
+
         # Route regexes
-        hostname_regex = (
-            rf".*({config_uri_base_hostname}|localhost|127.0.0.1|0.0.0.0)(:\d+)?"
-        )
+        hostname_regex = rf".*({config_uri_base_hostname}|{ip_regex}|localhost)(:\d+)?"
         self.handler_url_regex = (  # pylint: disable=attribute-defined-outside-init
             rf"{hostname_regex}\/.*"
         )
         health_url_regex = rf"{hostname_regex}\/healthcheck"
+        tweets_url_regex = rf"{hostname_regex}\/tweets"
+        landing_url_regex = rf"{hostname_regex}"
 
         # Routes
         self.routes = {  # pylint: disable=attribute-defined-outside-init
             (HttpMethod.GET.value, HttpMethod.HEAD.value): [
                 (health_url_regex, self._handle_get_health),
+                (tweets_url_regex, self._handle_get_tweets),
+                (landing_url_regex, self._handle_get_landing),
             ],
         }
 
         self.json_content_header = "Content-Type: application/json\n"  # pylint: disable=attribute-defined-outside-init
+        self.html_content_header = "Content-Type: text/html\n"  # pylint: disable=attribute-defined-outside-init
+        self.landing_html = open(
+            Path(Path(__file__).parent, "html", "landing.html"), "r", encoding="utf-8"
+        ).read()
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -320,8 +329,34 @@ class HttpHandler(BaseHttpHandler):
 
         self._send_ok_response(http_msg, http_dialogue, data)
 
+    def _handle_get_tweets(
+        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
+    ) -> None:
+        """
+        Handle a Http request of verb GET.
+
+        :param http_msg: the http message
+        :param http_dialogue: the http dialogue
+        """
+        tweets = self.synchronized_data.tweets
+        self._send_ok_response(http_msg, http_dialogue, tweets)
+
+    def _handle_get_landing(
+        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
+    ) -> None:
+        """
+        Handle a Http request of verb GET.
+
+        :param http_msg: the http message
+        :param http_dialogue: the http dialogue
+        """
+        self._send_ok_response(http_msg, http_dialogue, self.landing_html)
+
     def _send_ok_response(
-        self, http_msg: HttpMessage, http_dialogue: HttpDialogue, data: Dict
+        self,
+        http_msg: HttpMessage,
+        http_dialogue: HttpDialogue,
+        data: Union[Dict, List, str],
     ) -> None:
         """Send an OK response with the provided data"""
         http_response = http_dialogue.reply(
@@ -330,8 +365,10 @@ class HttpHandler(BaseHttpHandler):
             version=http_msg.version,
             status_code=OK_CODE,
             status_text="Success",
-            headers=f"{self.json_content_header}{http_msg.headers}",
-            body=json.dumps(data).encode("utf-8"),
+            headers=f"{self.html_content_header}{http_msg.headers}"
+            if isinstance(data, str)
+            else f"{self.json_content_header}{http_msg.headers}",
+            body=(data if isinstance(data, str) else json.dumps(data)).encode("utf-8"),
         )
 
         # Send response
