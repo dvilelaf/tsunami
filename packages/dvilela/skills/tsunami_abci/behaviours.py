@@ -82,9 +82,9 @@ from packages.dvilela.skills.tsunami_abci.rounds import (
     TsunamiAbciApp,
 )
 from packages.dvilela.skills.tsunami_abci.subgraph import (
-    AGENT_QUERY,
     OMEN_XDAI_FPMMS_QUERY,
     OMEN_XDAI_TRADES_QUERY,
+    PACKAGE_QUERY,
 )
 from packages.valory.connections.farcaster.connection import (
     PUBLIC_ID as FARCASTER_CONNECTION_PUBLIC_ID,
@@ -774,7 +774,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         }
 
         data = {
-            "query": AGENT_QUERY,
+            "query": PACKAGE_QUERY,
             "variables": {
                 "package_type": package_type,
             },

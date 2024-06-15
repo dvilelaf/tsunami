@@ -52,7 +52,7 @@ OMEN_XDAI_TRADES_QUERY = Template(
 )
 
 
-AGENT_QUERY = """
+PACKAGE_QUERY = """
 query getPackages($package_type: String!) {
     units(where: {packageType: $package_type}) {
         id,
