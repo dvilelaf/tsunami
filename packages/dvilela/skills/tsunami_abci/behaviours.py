@@ -21,6 +21,7 @@
 
 import json
 import random
+import re
 import secrets
 from abc import ABC
 from collections import Counter
@@ -115,6 +116,7 @@ OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai
 OMEN_RUN_HOUR = 15
 SUNO_RUN_HOUR = 10
 SUNO_RUN_DAY = 4
+TWITTER_PIC_URL = r"pic\.twitter\.com\S+"
 
 TRACKED_REPOS = [
     "dvilelaf/tsunami",
@@ -563,6 +565,12 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             # Add footer
             if footer:
                 tweet_attempt = tweet_attempt + footer
+
+            # Remove hallucinated pic.twitter.com urls
+            tweet_attempt = re.sub(TWITTER_PIC_URL, "", tweet_attempt)
+            tweet_attempt = re.sub(
+                r"\s\s", " ", tweet_attempt
+            )  # replace double spaces with single space
 
             # Create a single-tweet thread
             if tweet_len(tweet_attempt) < MAX_TWEET_CHARS:
@@ -1672,13 +1680,13 @@ class PublishTweetsBehaviour(
                     response = yield from self.publish_telegram(tweet["text"])
                     tweet["telegram_published"] = response["success"]
 
-            # Remove published tweets
+            # Keep pending tweets only
             tweets = [
                 t
                 for t in tweets
-                if not t["twitter_published"]
-                or not t["farcaster_published"]
-                or not t["telegram_published"]
+                if (self.params.publish_twitter and not t["twitter_published"])
+                or (self.params.publish_farcaster and not t["farcaster_published"])
+                or (self.params.publish_telegram and not t["telegram_published"])
             ]
 
             # Save tweets to the db
