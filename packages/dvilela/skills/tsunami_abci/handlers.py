@@ -146,16 +146,16 @@ class HttpHandler(BaseHttpHandler):
         )
         health_url_regex = rf"{hostname_regex}\/healthcheck"
         tweets_url_regex = rf"{hostname_regex}\/tweets"
-        index_url_regex = rf"{hostname_regex}"
         surf_url_regex = rf"{hostname_regex}\/surf"
+        index_url_regex = rf"{hostname_regex}"
 
         # Routes
         self.routes = {  # pylint: disable=attribute-defined-outside-init
             (HttpMethod.GET.value, HttpMethod.HEAD.value): [
                 (health_url_regex, self._handle_get_health),
                 (tweets_url_regex, self._handle_get_tweets),
-                (index_url_regex, self._handle_get_index),
                 (surf_url_regex, self._handle_get_surf),
+                (index_url_regex, self._handle_get_index),
             ],
         }
 
@@ -237,6 +237,8 @@ class HttpHandler(BaseHttpHandler):
         if not handler:
             super().handle(message)
             return
+
+        self.context.logger.info(f"Selected hander: {handler}")
 
         # Retrieve dialogues
         http_dialogues = cast(HttpDialogues, self.context.http_dialogues)
