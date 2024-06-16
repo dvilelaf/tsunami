@@ -238,8 +238,10 @@
 
                 // Playing
                 } else if (state === 'playing') {
-                    surfer.dy = surfer.jumpPower;
-                    surfer.grounded = false;
+                    if (surfer.grounded) {
+                        surfer.dy = surfer.jumpPower;
+                        surfer.grounded = false;
+                    }
                 }
             }
         });
