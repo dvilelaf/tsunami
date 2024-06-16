@@ -112,6 +112,14 @@ def main() -> None:
             "boardroom_api_key"
         ] = f"${{str:{os.getenv('BOARDROOM_API_KEY')}}}"
 
+        config[8]["models"]["params"]["args"][
+            "reset_tendermint_after"
+        ] = f"${{int:{os.getenv('RESET_TENDERMINT_AFTER')}}}"
+
+        config[8]["models"]["params"]["args"][
+            "reset_pause_duration"
+        ] = f"${{int:{os.getenv('RESET_PAUSE_DURATION')}}}"
+
     with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 
