@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/34c69eee47.js" crossorigin="anonymous"></script>
+    <title>Tsunami</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
+        h1 {
+            font-size: 3em;
+            font-family: "Helvetica";
+            z-index: 10;
+            position: relative;
+            margin-bottom: 0;
+        }
+        h2 {
+            font-size: 1.5em;
+            font-family: "Helvetica";
+            z-index: 10;
+            position: relative;
+            margin-top: 0;
+        }
+        .text {
+            text-align: justify;
+            text-align-last: left;
+
+        }
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .card {
+            background-color: #faf7f7;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 80%;
+            z-index: 1;
+            width: 50%; /* Ocupa el 50% del ancho de la pantalla */
+            height: 40%;
+            max-width: 600px; /* Máximo ancho para asegurar legibilidad */
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px; /* Distancia desde la parte inferior */
+            right: 10px; /* Alineación a la derecha */
+            z-index: 1;
+        }
+        .footer img {
+            width: 220px; /* Tamaño de la imagen */
+            height: auto;
+        }
+        .social-icons a {
+            margin: 0 10px; /* Añade un margen horizontal de 10px a cada icono */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Tsunami</h1>
+        <h2>津波</h2>
+
+        <div class="text">
+            <ol>
+            <li>A series of waves in a water body caused by the displacement of a large volume of water, generally in an ocean or a large lake.</li>
+            </br></br>
+            <li>An autonomous service reporting on the Olas network growth.</li>
+            </ol>
+        </div>
+
+        </br>
+
+        <div class="social-icons">
+            <a href="https://twitter.com/tsunami_0x" target="_blank"><i class="fab fa-twitter" style="font-size:24px; color:#1DA1F2;"></i></a>
+            <a href="https://github.com/dvilelaf/tsunami" target="_blank"><i class="fab fa-github" style="font-size:24px; color:black;"></i></a>
+            <a href="https://tsunami.rocks/surf" target="_blank"><i class="fa-solid fa-star" style="font-size:24px; color:black;"></i></a>
+          </div>
+
+    </div>
+
+    <i class="fa fa-solid" style="font-size:36px"></i>
+
+    <div class="footer">
+        <a href="https://olas.network/"><img src="/home/david/Descargas/olas.png" alt="Imagen pequeña"></a>
+    </div>
+
+    <video id="backgroundVideo" class="video-background" autoplay muted>
+        <source src="https://videos.pexels.com/video-files/1390942/1390942-uhd_4096_2160_24fps.mp4" type="video/mp4">
+        Tu navegador no soporta la etiqueta de video.
+    </video>
+
+    <script>
+        const video = document.getElementById('backgroundVideo');
+        video.addEventListener('timeupdate', function() {
+            if (video.currentTime >= 20) {
+                video.currentTime = 0;
+                video.play();
+            }
+        });
+    </script>
+
+</body>
+</html>

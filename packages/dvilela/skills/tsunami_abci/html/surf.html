@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsunami's Olas Candlestick Surfer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        canvas {
+            background-color: #fff;
+            border: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <audio id="backgroundMusic" src="https://cdn1.suno.ai/a6747bae-891f-4122-8b8e-6e0aa2da75cc.mp3" loop></audio>
+    <audio id="splashSound" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_65623c4693.mp3"></audio>
+    <audio id="seaSound" src="https://cdn.pixabay.com/download/audio/2021/08/03/audio_d9d49e5f71.mp3" loop></audio>
+    <script>
+
+        // Get canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resources
+        const coverImg = new Image();
+        coverImg.src = 'https://i.imgur.com/5w8wrGc.png';
+
+        const surferImg = new Image();
+        surferImg.src = 'https://i.imgur.com/lzJ84eW.png';
+
+        const backgroundImg = new Image();
+        backgroundImg.src = 'https://i.imgur.com/USVKyNN.jpg';
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const splashSound = document.getElementById('splashSound');
+        const seaSound = document.getElementById('seaSound');
+
+        // Init state
+        let surfer, obstacles, frameCount, state, score;
+        const obstacleSpeed = 6;
+        const obstacleFrequency = 90;
+
+        function initializeGame() {
+            state = 'idle';
+            surfer = {
+                x: 50,
+                y: canvas.height - 100,
+                width: 100,
+                height: 100,
+                dy: 0,
+                gravity: 0.8,
+                jumpPower: -16,
+                grounded: true
+            };
+            obstacles = [];
+            frameCount = 0;
+            score = 0;
+            seaSound.play();
+            backgroundMusic.play();
+        }
+
+        // Draw functions
+        function drawCover(showText) {
+            ctx.drawImage(coverImg, 0, 0, canvas.width, canvas.height);
+            if (showText) {
+                let text = 'Press Space to Start';
+                let x = canvas.width / 2 - 170;
+                let y = canvas.height / 2 + 10;
+                ctx.fillStyle = 'white';
+                ctx.strokeStyle = 'black';
+                ctx.font = 'bold 32px serif';
+                ctx.fillText(text, x, y);
+                ctx.strokeText(text, x, y);
+            }
+        }
+
+        function drawGameOver(showText) {
+            ctx.drawImage(coverImg, 0, 0, canvas.width, canvas.height);
+            if (showText) {
+                let text = 'GAME OVER';
+                let x = canvas.width / 2 - 130;
+                let y = canvas.height / 2 + 10;
+                ctx.fillStyle = 'red';
+                ctx.strokeStyle = 'black';
+                ctx.font = 'bold 32px serif';
+                ctx.fillText(text, x, y);
+                ctx.strokeText(text, x, y);
+            }
+        }
+
+        function drawBackground() {
+            ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSurfer() {
+            ctx.drawImage(surferImg, surfer.x, surfer.y, surfer.width, surfer.height);
+        }
+
+        function drawObstacle(obstacle) {
+            ctx.fillStyle = obstacle.color;
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        }
+
+        function drawScore() {
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 24px serif';
+            ctx.fillText(`Olas: ${score}`, 20, 30);
+        }
+
+        function updateScore() {
+            score++;
+        }
+
+        // Update functions
+        function updateSurfer() {
+            if (!surfer.grounded) {
+                surfer.dy += surfer.gravity;
+                surfer.y += surfer.dy;
+
+                if (surfer.y + surfer.height >= canvas.height) {
+                    surfer.y = canvas.height - surfer.height;
+                    surfer.grounded = true;
+                }
+            }
+        }
+
+        function updateObstacles() {
+            for (let i = 0; i < obstacles.length; i++) {
+                obstacles[i].x -= obstacleSpeed;
+
+                if (obstacles[i].x + obstacles[i].width < 0) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    updateScore();
+                }
+            }
+
+            if (frameCount % obstacleFrequency === 0) {
+                let obstacleHeight = Math.random() * 30 + 20;
+                let obstacleY = canvas.height - obstacleHeight;
+                let obstacleColor = 'brown';
+
+                if (obstacles.length !== 0) {
+                    obstacleColor = (obstacleY < obstacles[obstacles.length-1].y) ? 'green' : 'brown';
+                }
+
+                obstacles.push({
+                    x: canvas.width,
+                    y: obstacleY,
+                    width: 20,
+                    height: obstacleHeight,
+                    color: obstacleColor,
+                });
+            }
+        }
+
+        function checkCollision() {
+            for (let obstacle of obstacles) {
+                if (
+                    surfer.x < obstacle.x + obstacle.width &&
+                    surfer.x + surfer.width > obstacle.x &&
+                    surfer.y < obstacle.y + obstacle.height &&
+                    surfer.y + surfer.height > obstacle.y
+                ) {
+                    state = 'gameover';
+                    splashSound.play();
+                    backgroundMusic.pause();
+                    backgroundMusic.currentTime = 0;
+                }
+            }
+        }
+
+        // Game loop
+        let blinkInterval = 0;
+
+        function gameLoop() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Blink logic
+            let showText = blinkInterval % 60 < 30;
+            blinkInterval++;
+
+            // Check for idle
+            if (state === 'idle') {
+                drawCover(showText);
+                drawScore();
+            }
+
+            // Check for game over
+            if (state === 'gameover') {
+                drawGameOver(showText);
+                drawScore();
+            }
+
+            // Check for playing
+            if (state === 'playing') {
+                drawBackground();
+                drawScore();
+
+                updateSurfer();
+                drawSurfer();
+
+                updateObstacles();
+                for (let obstacle of obstacles) {
+                    drawObstacle(obstacle);
+                }
+
+                // Check for collisions
+                checkCollision();
+
+                frameCount++;
+            }
+
+            // Animate
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Event listener
+        document.addEventListener('keydown', (e) => {
+
+            // On spacebar
+            if (e.code === 'Space') {
+
+                // Idle or game over
+                if (state === 'idle' || state === 'gameover') {
+                    initializeGame();
+                    state = 'playing';
+
+                // Playing
+                } else if (state === 'playing') {
+                    surfer.dy = surfer.jumpPower;
+                    surfer.grounded = false;
+                }
+            }
+        });
+
+        // Main
+        initializeGame();
+        requestAnimationFrame(gameLoop);
+
+    </script>
+</body>
+</html>

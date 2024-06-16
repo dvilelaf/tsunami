@@ -147,6 +147,7 @@ class HttpHandler(BaseHttpHandler):
         health_url_regex = rf"{hostname_regex}\/healthcheck"
         tweets_url_regex = rf"{hostname_regex}\/tweets"
         landing_url_regex = rf"{hostname_regex}"
+        surf_url_regex = rf"{hostname_regex}\/surf"
 
         # Routes
         self.routes = {  # pylint: disable=attribute-defined-outside-init
@@ -154,6 +155,7 @@ class HttpHandler(BaseHttpHandler):
                 (health_url_regex, self._handle_get_health),
                 (tweets_url_regex, self._handle_get_tweets),
                 (landing_url_regex, self._handle_get_landing),
+                (surf_url_regex, self._handle_get_surf),
             ],
         }
 
@@ -161,6 +163,9 @@ class HttpHandler(BaseHttpHandler):
         self.html_content_header = "Content-Type: text/html\n"  # pylint: disable=attribute-defined-outside-init
         self.landing_html = open(
             Path(Path(__file__).parent, "html", "landing.html"), "r", encoding="utf-8"
+        ).read()
+        self.surf_html = open(
+            Path(Path(__file__).parent, "html", "surf.html"), "r", encoding="utf-8"
         ).read()
 
     @property
@@ -351,6 +356,17 @@ class HttpHandler(BaseHttpHandler):
         :param http_dialogue: the http dialogue
         """
         self._send_ok_response(http_msg, http_dialogue, self.landing_html)
+
+    def _handle_get_surf(
+        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
+    ) -> None:
+        """
+        Handle a Http request of verb GET.
+
+        :param http_msg: the http message
+        :param http_dialogue: the http dialogue
+        """
+        self._send_ok_response(http_msg, http_dialogue, self.surf_html)
 
     def _send_ok_response(
         self,
