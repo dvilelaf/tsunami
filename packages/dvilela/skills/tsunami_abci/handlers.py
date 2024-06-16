@@ -146,7 +146,7 @@ class HttpHandler(BaseHttpHandler):
         )
         health_url_regex = rf"{hostname_regex}\/healthcheck"
         tweets_url_regex = rf"{hostname_regex}\/tweets"
-        landing_url_regex = rf"{hostname_regex}"
+        index_url_regex = rf"{hostname_regex}"
         surf_url_regex = rf"{hostname_regex}\/surf"
 
         # Routes
@@ -154,19 +154,27 @@ class HttpHandler(BaseHttpHandler):
             (HttpMethod.GET.value, HttpMethod.HEAD.value): [
                 (health_url_regex, self._handle_get_health),
                 (tweets_url_regex, self._handle_get_tweets),
-                (landing_url_regex, self._handle_get_landing),
+                (index_url_regex, self._handle_get_index),
                 (surf_url_regex, self._handle_get_surf),
             ],
         }
 
         self.json_content_header = "Content-Type: application/json\n"  # pylint: disable=attribute-defined-outside-init
         self.html_content_header = "Content-Type: text/html\n"  # pylint: disable=attribute-defined-outside-init
-        self.landing_html = open(
-            Path(Path(__file__).parent, "html", "landing.html"), "r", encoding="utf-8"
-        ).read()
-        self.surf_html = open(
+
+        with open(
+            Path(Path(__file__).parent, "html", "index.html"), "r", encoding="utf-8"
+        ) as file:
+            self.index_html = (  # pylint: disable=attribute-defined-outside-init
+                file.read()
+            )
+
+        with open(
             Path(Path(__file__).parent, "html", "surf.html"), "r", encoding="utf-8"
-        ).read()
+        ) as file:
+            self.surf_html = (  # pylint: disable=attribute-defined-outside-init
+                file.read()
+            )
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -346,7 +354,7 @@ class HttpHandler(BaseHttpHandler):
         tweets = self.synchronized_data.tweets
         self._send_ok_response(http_msg, http_dialogue, tweets)
 
-    def _handle_get_landing(
+    def _handle_get_index(
         self, http_msg: HttpMessage, http_dialogue: HttpDialogue
     ) -> None:
         """
@@ -355,7 +363,7 @@ class HttpHandler(BaseHttpHandler):
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
-        self._send_ok_response(http_msg, http_dialogue, self.landing_html)
+        self._send_ok_response(http_msg, http_dialogue, self.index_html)
 
     def _handle_get_surf(
         self, http_msg: HttpMessage, http_dialogue: HttpDialogue
