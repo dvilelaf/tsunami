@@ -1559,7 +1559,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             proposal_url = (
-                f"https://boardroom.io/{proposal['protocol']}/proposal/{proposal_id}"
+                f"https://boardroom.io/autonolas/proposal/{proposal_id}"
                 if proposal["adapter"] == "onchain"
                 else proposal["externalUrl"]
             )
