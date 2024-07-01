@@ -767,7 +767,9 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
 
         self.context.logger.info("Getting packages from Olas subgraph...")
 
-        SUBGRAPH_URL = "https://subgraph.autonolas.tech/subgraphs/name/autonolas"
+        SUBGRAPH_URL = (
+            "https://subgraph.autonolas.tech/subgraphs/name/autonolas-staging"
+        )
 
         headers = {
             "Content-Type": "application/json",
