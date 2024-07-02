@@ -120,6 +120,10 @@ def main() -> None:
             "reset_pause_duration"
         ] = f"${{int:{os.getenv('RESET_PAUSE_DURATION')}}}"
 
+        config[8]["models"]["params"]["args"][
+            "subgraph_api_key"
+        ] = f"${{str:{os.getenv('SUBGRAPH_API_KEY')}}}"
+
     with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 
