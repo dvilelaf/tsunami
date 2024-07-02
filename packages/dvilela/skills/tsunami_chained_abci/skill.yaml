@@ -164,6 +164,7 @@ models:
       telegram_chat_id: null
       service_endpoint: tsunami.dummy.com/
       boardroom_api_key: null
+      subgraph_api_key: null
     class_name: Params
   randomness_api:
     args:

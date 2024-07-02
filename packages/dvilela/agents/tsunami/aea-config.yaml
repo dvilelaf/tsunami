@@ -234,6 +234,7 @@ models:
       telegram_chat_id: ${int:null}
       service_endpoint: ${str:https://tsunami.dummy.com/}
       boardroom_api_key: ${str:null}
+      subgraph_api_key: ${str:null}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
