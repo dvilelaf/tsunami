@@ -91,4 +91,5 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.service_endpoint = self._ensure("service_endpoint", kwargs, str)
         self.governance_enabled = self._ensure("governance_enabled", kwargs, bool)
         self.boardroom_api_key = self._ensure("boardroom_api_key", kwargs, str)
+        self.subgraph_api_key = self._ensure("subgraph_api_key", kwargs, str)
         super().__init__(*args, **kwargs)

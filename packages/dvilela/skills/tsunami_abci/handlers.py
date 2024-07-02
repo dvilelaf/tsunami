@@ -238,7 +238,9 @@ class HttpHandler(BaseHttpHandler):
             super().handle(message)
             return
 
-        self.context.logger.info(f"Selected hander: {handler}")
+        self.context.logger.info(
+            f"Selected hander: {handler.__name__ if handler else None}"
+        )
 
         # Retrieve dialogues
         http_dialogues = cast(HttpDialogues, self.context.http_dialogues)

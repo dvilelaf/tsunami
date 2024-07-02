@@ -112,7 +112,7 @@ HTTP_OK = 200
 OLAS_REGISTRY_URL = "https://registry.olas.network"
 GITHUB_REPO_LATEST_URL = "https://api.github.com/repos/{repo}/releases/latest"
 DAY_IN_SECONDS = 3600 * 24
-OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
+OMEN_API_ENDPOINT = "https://gateway-arbitrum.network.thegraph.com/api/{SUBGRAPH_API_KEY}/subgraphs/id/9fUVQpFwzpdWS9bq5WkAnmKbNNcoBwatMR4yZq81pbbz"
 OMEN_RUN_HOUR = 15
 SUNO_RUN_HOUR = 10
 SUNO_RUN_DAY = 4
@@ -744,7 +744,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 event.args["amounts"], event.args["serviceIds"]
             ):
                 service_name = service_id_to_name[str(service_id)]
-                donations.append(f"☴ {amount / 1e18:.2f} ETH for {service_name}")
+                donations.append(f"☴ {amount / 1e18:.4f} ETH for {service_name}")
 
         kwargs = {
             "donator": event.args["sender"],
@@ -1186,9 +1186,13 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             "extensions": {"headers": None},
         }
 
+        url = OMEN_API_ENDPOINT.replace(
+            "{SUBGRAPH_API_KEY}", self.params.subgraph_api_key
+        )
+
         response = yield from self.get_http_response(  # type: ignore
             method="POST",
-            url=OMEN_API_ENDPOINT,
+            url=url,
             content=json.dumps(content_json).encode(),
             headers=headers,
         )
@@ -1217,7 +1221,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
 
         response = yield from self.get_http_response(  # type: ignore
             method="POST",
-            url=OMEN_API_ENDPOINT,
+            url=url,
             content=json.dumps(content_json).encode(),
             headers=headers,
         )

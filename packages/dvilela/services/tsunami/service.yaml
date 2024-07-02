@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeiaewgming24cl54mwgrh4x7u3u4rrnmfwywyq65x527zguy2sc224
+agent: dvilela/tsunami:0.1.0:bafybeiflmxrzfchky2cloqcdtwa4htgr6zniel3xj4bpqtzmpbads3c2vy
 number_of_agents: 1
 deployment:
   agent:
@@ -110,6 +110,7 @@ extra:
         telegram_chat_id: ${TELEGRAM_CHAT_ID:int:null}
         service_endpoint: ${SERVICE_ENDPOINT:str:https://tsunami.dummy.com/}
         boardroom_api_key: ${BOARDROOM_API_KEY:str:null}
+        subgraph_api_key: ${SUBGRAPH_API_KEY:str:null}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
