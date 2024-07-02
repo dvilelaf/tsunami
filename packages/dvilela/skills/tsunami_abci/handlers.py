@@ -239,7 +239,7 @@ class HttpHandler(BaseHttpHandler):
             return
 
         self.context.logger.info(
-            f"Selected hander: {handler.__name__ if handler else None}"
+            f"Selected hander: {handler.__name__ if handler is not None else None}"
         )
 
         # Retrieve dialogues
