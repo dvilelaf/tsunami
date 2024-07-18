@@ -1242,7 +1242,12 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
         traders = [t["creator"]["id"] for t in trades]
         trader_counter = Counter(traders)
         n_traders = len(trader_counter)
-        biggest_trader_address, biggest_trader_trades = trader_counter.most_common(1)[0]
+        most_common_traders = trader_counter.most_common(1)
+        if most_common_traders:
+            biggest_trader_address, biggest_trader_trades = most_common_traders[0]
+        else:
+            biggest_trader_address = "?"
+            biggest_trader_trades = "?"
 
         # Build thread
         user_prompt = OMEN_USER_PROMPT.format(
