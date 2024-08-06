@@ -43,6 +43,7 @@ from packages.dvilela.connections.suno.connection import (
 from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
 from packages.dvilela.contracts.olas_tokenomics.contract import OlasTokenomicsContract
 from packages.dvilela.contracts.olas_treasury.contract import OlasTreasuryContract
+from packages.dvilela.contracts.veolas.contract import veOLASContract
 from packages.dvilela.protocols.kv_store.dialogues import (
     KvStoreDialogue,
     KvStoreDialogues,
@@ -268,10 +269,19 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "contract_address": self.params.treasury_address_ethereum,
                     "event_to_template": {
                         "DonateToServicesETH": EVENT_USER_PROMPT_TEMPLATES[
-                            "donation_sent"
+                            "olas_locked"
                         ]
                     },
                     "build_thread_function": self.build_treasury_tweet,
+                },
+                "veolas": {
+                    "contract_id": str(veOLASContract.contract_id),
+                    "contract_address": self.params.veolas_address_ethereum,
+                    "event_to_template": {
+                        "Deposit": EVENT_USER_PROMPT_TEMPLATES["olas_locked"],
+                        "Withdraw": EVENT_USER_PROMPT_TEMPLATES["olas_unlocked"],
+                    },
+                    "build_thread_function": self.build_veolas_tweet,
                 },
             },
             "gnosis": {
@@ -759,6 +769,30 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             return None, None
 
         thread += donations
+
+        return thread, None
+
+    def build_veolas_tweet(  # pylint: disable=too-many-arguments,too-many-locals,unused-argument
+        self,
+        chain_id: str,
+        contract_id: str,
+        contract_name: str,
+        contract_address: str,
+        event_name: str,
+        event: Any,
+        event_template: str,
+    ) -> Generator[None, None, Tuple[Optional[List[str]], Optional[str]]]:
+        """Build a thread for a veOLAS event"""
+
+        self.context.logger.info(f"Processing veOLAS event {event}")
+
+        kwargs = {
+            "address": event.args["account"],
+            "amount": event.args["amount"] / 1e18,
+        }
+
+        user_prompt = event_template.format(**kwargs)
+        thread = yield from self.build_thread(user_prompt)
 
         return thread, None
 

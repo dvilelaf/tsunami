@@ -31,6 +31,7 @@ from packages.dvilela.skills.tsunami_abci.subgraph import (
     OMEN_XDAI_TRADES_QUERY,
 )
 
+
 SUBGRAPH_API_KEY = ""
 OMEN_API_ENDPOINT = f"https://gateway-arbitrum.network.thegraph.com/api/{SUBGRAPH_API_KEY}/subgraphs/id/9fUVQpFwzpdWS9bq5WkAnmKbNNcoBwatMR4yZq81pbbz"
 

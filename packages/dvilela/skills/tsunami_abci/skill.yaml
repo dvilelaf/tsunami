@@ -159,6 +159,7 @@ models:
       service_registry_address_gnosis: '0x9338b5153AE39BB89f50468E608eD9d764B755fD'
       treasury_address_ethereum: '0xa0DA53447C0f6C4987964d8463da7e6628B30f82'
       tokenomics_address_ethereum: '0xc096362fa6f4A4B1a9ea68b1043416f3381ce300'
+      veolas_address_ethereum: '0x7e01a500805f8a52fad229b3015ad130a332b7b3'
       initial_block_ethereum: 18500000
       initial_block_gnosis: 18500000
       twitter_credentials: '{}'

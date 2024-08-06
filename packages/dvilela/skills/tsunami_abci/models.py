@@ -78,6 +78,9 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.initial_block_ethereum = self._ensure(
             "initial_block_ethereum", kwargs, int
         )
+        self.veolas_address_ethereum = self._ensure(
+            "veolas_address_ethereum", kwargs, int
+        )
         self.initial_block_gnosis = self._ensure("initial_block_gnosis", kwargs, int)
         self.twitter_credentials = json.loads(
             self._ensure("twitter_credentials", kwargs, str)

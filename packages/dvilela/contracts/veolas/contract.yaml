@@ -1,0 +1,23 @@
+name: veOLAS
+author: dvilela
+version: 0.1.0
+type: contract
+description: veOLAS contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigv5vccsux5xbgxdowpxet2qwzyym6jzxxycvuuf3bqpaxe6zpaem
+  build/veOLAS.json: bafybeier45zqqza5guhusfhchu6d63yktigfxvojq4so2ftmslxeezbk3m
+  contract.py: bafybeidoby6xmkztlqdkeqmg6larbibbwavrf7b563ngemie24k664jnlq
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: veOLASContract
+contract_interface_paths:
+  ethereum: build/veOLAS.json
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.52.0
+  open-aea-test-autonomy:
+    version: ==0.14.12
+  web3:
+    version: <7,>=6.0.0
