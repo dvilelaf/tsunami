@@ -1281,7 +1281,7 @@ class TrackOmenBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-ance
             biggest_trader_address, biggest_trader_trades = most_common_traders[0]
         else:
             biggest_trader_address = "?"
-            biggest_trader_trades = "?"
+            biggest_trader_trades = "?"  # type: ignore
 
         # Build thread
         user_prompt = OMEN_USER_PROMPT.format(
