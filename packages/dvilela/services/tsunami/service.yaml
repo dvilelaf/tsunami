@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeieog6ljhbifuy243fcwy5m2vrgxmnrml5uxyefd57wavv6rdm7coe
+agent: dvilela/tsunami:0.1.0:bafybeigaej3tsq7tb6vur64cgzf3g35ricqijy25obs7sajagvjv4toggm
 number_of_agents: 1
 deployment:
   agent:
@@ -98,6 +98,7 @@ extra:
         service_registry_address_gnosis: ${SERVICE_REGISTRY_ADDRESS_GNOSIS:str:0x9338b5153AE39BB89f50468E608eD9d764B755fD}
         treasury_address_ethereum: ${TREASURY_ADDRESS_ETHEREUM:str:0xa0DA53447C0f6C4987964d8463da7e6628B30f82}
         tokenomics_address_ethereum: ${TOKENOMICS_ADDRESS_ETHEREUM:str:0xc096362fa6f4A4B1a9ea68b1043416f3381ce300}
+        veolas_address_ethereum: ${VEOLAS_ADDRESS_ETHEREUM:str:0x7e01a500805f8a52fad229b3015ad130a332b7b3}
         initial_block_ethereum: ${INITIAL_BLOCK_ETHEREUM:int:18500000}
         initial_block_gnosis: ${INITIAL_BLOCK_GNOSIS:int:18500000}
         twitter_credentials: ${TWITTER_CREDENTIALS:str:{}}

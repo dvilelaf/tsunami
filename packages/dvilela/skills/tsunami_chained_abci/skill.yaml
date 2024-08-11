@@ -23,7 +23,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/termination_abci:0.1.0:bafybeif2zim2de356eo3sipkmoev5emwadpqqzk3huwqarywh4tmqt3vzq
-- dvilela/tsunami_abci:0.1.0:bafybeibscfqbqtq7twpzevmocwkekcujimlhjkijf64suub4nf4l33appu
+- dvilela/tsunami_abci:0.1.0:bafybeif7gbqphbkttswhdyjqwq2ck55dviuoom5fmphq7evngot74hdcbe
 behaviours:
   main:
     args: {}
@@ -152,6 +152,7 @@ models:
       service_registry_address_gnosis: '0x9338b5153AE39BB89f50468E608eD9d764B755fD'
       treasury_address_ethereum: '0xa0DA53447C0f6C4987964d8463da7e6628B30f82'
       tokenomics_address_ethereum: '0xc096362fa6f4A4B1a9ea68b1043416f3381ce300'
+      veolas_address_ethereum: '0x7e01a500805f8a52fad229b3015ad130a332b7b3'
       initial_block_ethereum: 18500000
       initial_block_gnosis: 18500000
       twitter_credentials: '{}'

@@ -81,6 +81,8 @@ EVENT_USER_PROMPT_EPOCH_SETTLED = "Tokenomics epoch {n_epoch} has finished. A to
 EVENT_USER_PROMPT_DONATION_SENT = (
     "Address {donator} has donated {amount:.2f} ETH to {n_services} services."
 )
+EVENT_USER_PROMPT_OLAS_LOCKED = "Address {address} has locked {amount:.2f} OLAS."
+EVENT_USER_PROMPT_OLAS_UNLOCKED = "Address {address} has unlocked {amount:.2f} OLAS."
 
 EVENT_USER_PROMPT_TEMPLATES = {
     "service_minted": EVENT_USER_PROMPT_SERVICE_CREATED,
@@ -88,6 +90,8 @@ EVENT_USER_PROMPT_TEMPLATES = {
     "component_minted": EVENT_USER_PROMPT_COMPONENT_CREATED,
     "epoch_settled": EVENT_USER_PROMPT_EPOCH_SETTLED,
     "donation_sent": EVENT_USER_PROMPT_DONATION_SENT,
+    "olas_locked": EVENT_USER_PROMPT_OLAS_LOCKED,
+    "olas_unlocked": EVENT_USER_PROMPT_OLAS_UNLOCKED,
 }
 
 REPO_USER_PROMPT_RELEASE = (

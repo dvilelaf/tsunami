@@ -32,7 +32,8 @@ from packages.dvilela.skills.tsunami_abci.subgraph import (
 )
 
 
-OMEN_API_ENDPOINT = "https://api.thegraph.com/subgraphs/name/protofire/omen-xdai"
+SUBGRAPH_API_KEY = ""
+OMEN_API_ENDPOINT = f"https://gateway-arbitrum.network.thegraph.com/api/{SUBGRAPH_API_KEY}/subgraphs/id/9fUVQpFwzpdWS9bq5WkAnmKbNNcoBwatMR4yZq81pbbz"
 
 now = datetime.now() - timedelta(hours=1)
 creation_timestamp_gt = str(int((now - timedelta(days=1)).timestamp()))
@@ -92,8 +93,12 @@ usd_amount = sum([float(t["collateralAmountUSD"]) for t in trades])
 traders = [t["creator"]["id"] for t in trades]
 trader_counter = Counter(traders)
 n_traders = len(trader_counter)
-biggest_trader_address, biggest_trader_trades = trader_counter.most_common(1)[0]
-
+most_common_traders = trader_counter.most_common(1)
+if most_common_traders:
+    biggest_trader_address, biggest_trader_trades = most_common_traders[0]
+else:
+    biggest_trader_address = "?"
+    biggest_trader_trades = "?"
 
 print(f"n_markets={n_markets}")
 print(f"n_trades={n_trades}")
