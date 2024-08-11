@@ -1,4 +1,4 @@
-name: veOLAS
+name: veolas
 author: dvilela
 version: 0.1.0
 type: contract
@@ -6,9 +6,9 @@ description: veOLAS contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeigv5vccsux5xbgxdowpxet2qwzyym6jzxxycvuuf3bqpaxe6zpaem
-  build/veOLAS.json: bafybeier45zqqza5guhusfhchu6d63yktigfxvojq4so2ftmslxeezbk3m
-  contract.py: bafybeidoby6xmkztlqdkeqmg6larbibbwavrf7b563ngemie24k664jnlq
+  __init__.py: bafybeifboiohyza3gyde4xnqtolw7ywcuou6l7ahpjnphnnqkcsjkjcxsy
+  build/veOLAS.json: bafybeigc3mbrmbme7iumkcsqw47ki4mwnggkpebzfp5ghlyyodj5s5ffvm
+  contract.py: bafybeiennonte3bbr4k3pun3blkkijshezhzzys4ttmbnxi3suz5eaulo4
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: veOLASContract

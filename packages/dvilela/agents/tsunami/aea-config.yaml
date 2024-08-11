@@ -28,6 +28,7 @@ contracts:
 - dvilela/olas_registries:0.1.0:bafybeict2xpt56m2a5ehezd2oylrhbhahrsas3dht2fdfbnrejlr5mdqpa
 - dvilela/olas_tokenomics:0.1.0:bafybeifslkoofg3ohscvovzhgaa3up5jhmb6fac4r35b5wcdjphafzssxu
 - dvilela/olas_treasury:0.1.0:bafybeidd6yelhuztyvtbso6fkc4iiq2pmegh734exyrtcbqh62yfwgluqy
+- dvilela/veolas:0.1.0:bafybeianbmtmg2mn3nh4p7ih4xnugvofdvrtdtbzasdo66hidzxh27ndle
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -47,8 +48,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeibscfqbqtq7twpzevmocwkekcujimlhjkijf64suub4nf4l33appu
-- dvilela/tsunami_chained_abci:0.1.0:bafybeiftt5s55w3bvckb26lrp3va47mk5euf4pg3h7djl3xcakfxxcilzi
+- dvilela/tsunami_abci:0.1.0:bafybeieitt3i27s3lpkatrodl5apedqqze3wwbxhicugivndar7wqu2uza
+- dvilela/tsunami_chained_abci:0.1.0:bafybeihltcj6lvy2o3pc2yk3w2f4p7vohqztrw5otaezlkuh3azuufdmx4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
