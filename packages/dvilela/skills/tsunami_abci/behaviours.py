@@ -269,7 +269,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                     "contract_address": self.params.treasury_address_ethereum,
                     "event_to_template": {
                         "DonateToServicesETH": EVENT_USER_PROMPT_TEMPLATES[
-                            "olas_locked"
+                            "donation_sent"
                         ]
                     },
                     "build_thread_function": self.build_treasury_tweet,
