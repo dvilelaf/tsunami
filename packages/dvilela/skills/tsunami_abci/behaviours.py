@@ -583,13 +583,14 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             )  # replace double spaces with single space
 
             # Create a single-tweet thread
-            if tweet_len(tweet_attempt) < MAX_TWEET_CHARS:
+            t_len = tweet_len(tweet_attempt)
+            if t_len < MAX_TWEET_CHARS:
                 self.context.logger.info("Tweet is OK!")
                 thread = [tweet_attempt]
                 break
 
             self.context.logger.error(
-                f"Tweet is too long [{tweet_len}]: {tweet_attempt}"
+                f"Tweet is too long [{t_len}]: {tweet_attempt}"
             )
 
             # Create a multi-tweet thread instead
@@ -1662,7 +1663,7 @@ class GovernanceBehaviour(TsunamiBaseBehaviour):  # pylint: disable=too-many-anc
                 continue
 
             proposal_url = (
-                f"https://boardroom.io/{proposal['protocol']}/proposal/{proposal_id}"
+                "https://govern.olas.network/proposals"
                 if proposal["adapter"] == "onchain"
                 else proposal["externalUrl"]
             )
