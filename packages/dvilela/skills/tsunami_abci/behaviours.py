@@ -40,6 +40,9 @@ from packages.dvilela.connections.llama.connection import (
 from packages.dvilela.connections.suno.connection import (
     PUBLIC_ID as SUNO_CONNECTION_PUBLIC_ID,
 )
+from packages.dvilela.connections.twikit.connection import (
+    PUBLIC_ID as TWIKIT_CONNECTION_PUBLIC_ID,
+)
 from packages.dvilela.contracts.olas_registries.contract import OlasRegistriesContract
 from packages.dvilela.contracts.olas_tokenomics.contract import OlasTokenomicsContract
 from packages.dvilela.contracts.olas_treasury.contract import OlasTreasuryContract
@@ -310,18 +313,40 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         """Publish tweet"""
 
         self.context.logger.info(f"Creating tweet with text: {text}")
-        response = yield from self._create_tweet(
-            text=text, credentials=self.params.twitter_credentials
+
+        # Use tweepy
+        # Tweepy supports both str and List[str]. It treats tweet lists as threads.
+        if not self.params.use_twikit:
+            response = yield from self._call_tweepy(
+                text=text, credentials=self.params.twitter_credentials
+            )
+
+            if response.performative == TwitterMessage.Performative.ERROR:
+                self.context.logger.error(
+                    f"Writing tweet failed with following error message: {response}"
+                )
+                return {"success": False, "tweet_id": None}
+
+            self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
+            return {"success": True, "tweet_id": response.tweet_id}
+
+        # Use twikit
+        # Twikit always expects a list. It also treats lists as threads.
+        if isinstance(text, list):
+            tweets = [{"text": t} for t in text]
+        else:
+            tweets = [{"text": text}]
+
+        tweet_ids = yield from self._call_twikit(
+            method="post",
+            tweets=tweets,
         )
 
-        if response.performative == TwitterMessage.Performative.ERROR:
-            self.context.logger.error(
-                f"Writing tweet failed with following error message: {response}"
-            )
+        if tweet_ids is None:
+            self.context.logger.error("Writing tweet failed")
             return {"success": False, "tweet_id": None}
 
-        self.context.logger.info(f"Posted tweet with ID: {response.tweet_id}")
-        return {"success": True, "tweet_id": response.tweet_id}
+        return {"success": True, "tweet_id": tweet_ids[0]}
 
     def publish_cast(self, text: Union[str, List[str]]) -> Generator[None, None, Dict]:
         """Publish cast"""
@@ -385,7 +410,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
         self.context.logger.info("Posted Telegram message")
         return {"success": True}
 
-    def _create_tweet(
+    def _call_tweepy(
         self,
         text: Union[str, List[str]],
         credentials: dict,
@@ -405,6 +430,26 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
             twitter_message, twitter_dialogue
         )
         return response
+
+    def _call_twikit(self, method: str, **kwargs: Any) -> Generator[None, None, Any]:
+        """Send a request message from the skill context."""
+        srr_dialogues = cast(SrrDialogues, self.context.srr_dialogues)
+        srr_message, srr_dialogue = srr_dialogues.create(
+            counterparty=str(TWIKIT_CONNECTION_PUBLIC_ID),
+            performative=SrrMessage.Performative.REQUEST,
+            payload=json.dumps({"method": method, "kwargs": kwargs}),
+        )
+        srr_message = cast(SrrMessage, srr_message)
+        srr_dialogue = cast(SrrDialogue, srr_dialogue)
+        response = yield from self._do_connection_request(srr_message, srr_dialogue)  # type: ignore
+
+        response_json = json.loads(response.payload)  # type: ignore
+
+        if "error" in response_json:
+            self.context.logger.error(response_json["error"])
+            return None
+
+        return response_json["response"]  # type: ignore
 
     def _do_twitter_request(
         self,
@@ -589,9 +634,7 @@ class TsunamiBaseBehaviour(BaseBehaviour, ABC):  # pylint: disable=too-many-ance
                 thread = [tweet_attempt]
                 break
 
-            self.context.logger.error(
-                f"Tweet is too long [{t_len}]: {tweet_attempt}"
-            )
+            self.context.logger.error(f"Tweet is too long [{t_len}]: {tweet_attempt}")
 
             # Create a multi-tweet thread instead
             thread_attempt = tweet_to_thread(tweet_attempt)

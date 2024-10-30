@@ -11,6 +11,7 @@ packages/valory/contracts/
 packages/valory/protocols/
 packages/valory/skills/
 packages/valory/connections/*
+packages/dvilela/connections/twikit
 !packages/valory/connections/twitter
 leak_report
 /Pipfile.lock

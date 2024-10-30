@@ -21,110 +21,113 @@
 
 """Updates fetched agent with correct config"""
 import os
+import re
 from pathlib import Path
 
 import yaml
 from dotenv import load_dotenv
 
 
+AGENT_NAME = "tsunami"
+
+PATH_TO_VAR = {
+    # Chains
+    "config/ledger_apis/ethereum/address": "ETHEREUM_LEDGER_RPC",
+    "config/ledger_apis/gnosis/address": "GNOSIS_LEDGER_RPC",
+    # Params
+    "models/params/args/setup/all_participants": "ALL_PARTICIPANTS",
+    "models/params/args/reset_tendermint_after": "RESET_TENDERMINT_AFTER",
+    "models/params/args/reset_pause_duration": "RESET_PAUSE_DURATION",
+    "models/params/args/termination_from_block": "TERMINATION_FROM_BLOCK",
+    "models/params/args/fact_checker_api_key": "FACT_CHECKER_API_KEY",
+    "models/params/args/enable_posting": "ENABLE_POSTING",
+    "models/params/args/on_chain_service_id": "ON_CHAIN_SERVICE_ID",
+    "models/params/args/max_tweets_per_period": "MAX_TWEETS_PER_PERIOD",
+    "models/params/args/initial_block_ethereum": "INITIAL_BLOCK_ETHEREUM",
+    "models/params/args/initial_block_gnosis": "INITIAL_BLOCK_GNOSIS",
+    "models/params/args/event_tracking_enabled": "EVENT_TRACKING_ENABLED",
+    "models/params/args/repo_tracking_enabled": "REPO_TRACKING_ENABLED",
+    "models/params/args/omen_tracking_enabled": "OMEN_TRACKING_ENABLED",
+    "models/params/args/suno_enabled": "SUNO_ENABLED",
+    "models/params/args/telegram_chat_id": "TELEGRAM_CHAT_ID",
+    "models/params/args/telegram_token": "TELEGRAM_TOKEN",
+    "models/params/args/publish_twitter": "PUBLISH_TWITTER",
+    "models/params/args/publish_farcaster": "PUBLISH_FARCASTER",
+    "models/params/args/publish_telegram": "PUBLISH_TELEGRAM",
+    "models/params/args/governance_enabled": "GOVERNANCE_ENABLED",
+    "models/params/args/boardroom_api_key": "BOARDROOM_API_KEY",
+    "models/params/args/subgraph_api_key": "SUBGRAPH_API_KEY",
+    "models/params/args/use_twikit": "USE_TWIKIT",
+    # Tweepy connection
+    "config/twitter_credentials": "TWITTER_CREDENTIALS",
+    # Twikit connection
+    "config/twikit_username": "TWIKIT_USERNAME",
+    "config/twikit_email": "TWIKIT_EMAIL",
+    "config/twikit_password": "TWIKIT_PASSWORD",
+    "config/twikit_cookies": "TWIKIT_COOKIES",
+    # Farcaster
+    "config/farcaster_mnemonic": "FARCASTER_MNEMONIC",
+    # Llama
+    "config/repo_id": "LLAMA_REPO_ID",
+    "config/filename": "LLAMA_FILENAME",
+    # Suno
+    "config/suno_session_id": "SUNO_SESSION_ID",
+    "config/suno_cookie": "SUNO_COOKIE",
+    # DB
+    "config/db_path": "DB_PATH",
+}
+
+CONFIG_REGEX = r"\${.*?:(.*)}"
+
+
+def find_and_replace(config, path, new_value):
+    """Find and replace a variable"""
+
+    # Find the correct section where this variable fits
+    section_index = None
+    for i, section in enumerate(config):
+        value = section
+        try:
+            for part in path:
+                value = value[part]
+            section_index = i
+        except KeyError:
+            continue
+
+    # To persist the changes in the config variable,
+    # access iterating the path parts but the last part
+    sub_dic = config[section_index]
+    for part in path[:-1]:
+        sub_dic = sub_dic[part]
+
+    # Now, get the whole string value
+    old_str_value = sub_dic[path[-1]]
+
+    # Extract the old variable value
+    match = re.match(CONFIG_REGEX, old_str_value)
+    old_var_value = match.groups()[0]
+
+    # Replace the old variable with the secret value in the complete string
+    new_str_value = old_str_value.replace(old_var_value, new_value)
+    sub_dic[path[-1]] = new_str_value
+
+    return config
+
+
 def main() -> None:
     """Main"""
     load_dotenv()
 
-    with open(Path("tsunami", "aea-config.yaml"), "r", encoding="utf-8") as file:
+    # Load the aea config
+    with open(Path(AGENT_NAME, "aea-config.yaml"), "r", encoding="utf-8") as file:
         config = list(yaml.safe_load_all(file))
 
-        config[1]["config"][
-            "farcaster_mnemonic"
-        ] = f"${{str:{os.getenv('FARCASTER_MNEMONIC')}}}"
+    # Search and replace all the secrets
+    for path, var in PATH_TO_VAR.items():
+        config = find_and_replace(config, path.split("/"), os.getenv(var))
 
-        config[2]["config"]["repo_id"] = f"${{str:{os.getenv('LLAMA_REPO_ID')}}}"
-
-        config[2]["config"]["filename"] = f"${{str:{os.getenv('LLAMA_FILENAME')}}}"
-
-        config[5]["config"]["ledger_apis"]["ethereum"][
-            "address"
-        ] = f"${{str:{os.getenv('ETHEREUM_LEDGER_RPC')}}}"
-
-        config[5]["config"]["ledger_apis"]["gnosis"][
-            "address"
-        ] = f"${{str:{os.getenv('GNOSIS_LEDGER_RPC')}}}"
-
-        config[7]["config"][
-            "suno_session_id"
-        ] = f"${{str:{os.getenv('SUNO_SESSION_ID')}}}"
-
-        config[7]["config"]["suno_cookie"] = f"${{str:{os.getenv('SUNO_COOKIE')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "twitter_credentials"
-        ] = f"${{str:{os.getenv('TWITTER_CREDENTIALS')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "initial_block_ethereum"
-        ] = f"${{int:{int(os.getenv('INITIAL_BLOCK_ETHEREUM'))}}}"  # type: ignore
-
-        config[8]["models"]["params"]["args"][
-            "initial_block_gnosis"
-        ] = f"${{int:{int(os.getenv('INITIAL_BLOCK_GNOSIS'))}}}"  # type: ignore
-
-        config[8]["models"]["params"]["args"][
-            "event_tracking_enabled"
-        ] = f"${{bool:{os.getenv('EVENT_TRACKING_ENABLED')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "repo_tracking_enabled"
-        ] = f"${{bool:{os.getenv('REPO_TRACKING_ENABLED')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "omen_tracking_enabled"
-        ] = f"${{bool:{os.getenv('OMEN_TRACKING_ENABLED')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "suno_enabled"
-        ] = f"${{bool:{os.getenv('SUNO_ENABLED')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "telegram_chat_id"
-        ] = f"${{int:{os.getenv('TELEGRAM_CHAT_ID')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "telegram_token"
-        ] = f"${{str:{os.getenv('TELEGRAM_TOKEN')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "publish_twitter"
-        ] = f"${{bool:{os.getenv('PUBLISH_TWITTER')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "publish_farcaster"
-        ] = f"${{bool:{os.getenv('PUBLISH_FARCASTER')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "publish_telegram"
-        ] = f"${{bool:{os.getenv('PUBLISH_TELEGRAM')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "governance_enabled"
-        ] = f"${{bool:{os.getenv('GOVERNANCE_ENABLED')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "boardroom_api_key"
-        ] = f"${{str:{os.getenv('BOARDROOM_API_KEY')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "reset_tendermint_after"
-        ] = f"${{int:{os.getenv('RESET_TENDERMINT_AFTER')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "reset_pause_duration"
-        ] = f"${{int:{os.getenv('RESET_PAUSE_DURATION')}}}"
-
-        config[8]["models"]["params"]["args"][
-            "subgraph_api_key"
-        ] = f"${{str:{os.getenv('SUBGRAPH_API_KEY')}}}"
-
-    with open(Path("tsunami", "aea-config.yaml"), "w", encoding="utf-8") as file:
+    # Dump the updated config
+    with open(Path(AGENT_NAME, "aea-config.yaml"), "w", encoding="utf-8") as file:
         yaml.dump_all(config, file, sort_keys=False)
 
 

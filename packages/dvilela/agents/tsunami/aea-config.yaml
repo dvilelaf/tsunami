@@ -20,6 +20,7 @@ connections:
 - dvilela/llama:0.1.0:bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq
 - dvilela/suno:0.1.0:bafybeihy2phtjwbz27ntv55wxfk754kp5tjceujzsdbppjafljoydjflhi
 - valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
+- dvilela/twikit:0.1.0:bafybeibi2mvq6kfuqzub5wlwo6bmztol24o2gxpo667sziyu3x6yr76fby
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeidcb25wneezfd2iaiqa7ygxlimwwacvycahhenvpw7tdvwdigllzm
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeidwwhkqin3zchbjl7ro6n3tj5kwbfhfvmrdpuxn7owy3b4ktrluba
@@ -237,6 +238,7 @@ models:
       service_endpoint: ${str:https://tsunami.dummy.com/}
       boardroom_api_key: ${str:null}
       subgraph_api_key: ${str:null}
+      use_twikit: ${bool:false}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
@@ -244,3 +246,11 @@ config:
   host: ${str:0.0.0.0}
   port: ${int:8000}
   target_skill_id: dvilela/tsunami_chained_abci:0.1.0
+---
+public_id: dvilela/twikit:0.1.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
+type: connection
+config:
+  twikit_username: ${str:null}
+  twikit_email: ${str:null}
+  twikit_password: ${str:null}
+  twikit_cookies: ${str:null}

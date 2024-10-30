@@ -112,6 +112,7 @@ extra:
         service_endpoint: ${SERVICE_ENDPOINT:str:https://tsunami.dummy.com/}
         boardroom_api_key: ${BOARDROOM_API_KEY:str:null}
         subgraph_api_key: ${SUBGRAPH_API_KEY:str:null}
+        use_twikit: ${USE_TWIKIT:bool:false}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
@@ -182,3 +183,11 @@ config:
   host: ${HTTP_SERVER_HOST:str:0.0.0.0}
   port: ${HTTP_SERVER_PORT:int:8000}
   target_skill_id: dvilela/tsunami_chained_abci:0.1.0
+---
+public_id: dvilela/twikit:0.1.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
+type: connection
+config:
+  twikit_username: ${TWIKIT_USERNAME:str:null}
+  twikit_email: ${TWIKIT_EMAIL:str:null}
+  twikit_password: ${TWIKIT_PASSWORD:str:null}
+  twikit_cookies: ${TWIKIT_COOKIES:str:null}

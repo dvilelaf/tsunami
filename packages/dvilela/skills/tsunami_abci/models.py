@@ -95,4 +95,6 @@ class Params(BaseParams):  # pylint: disable=too-many-instance-attributes
         self.governance_enabled = self._ensure("governance_enabled", kwargs, bool)
         self.boardroom_api_key = self._ensure("boardroom_api_key", kwargs, str)
         self.subgraph_api_key = self._ensure("subgraph_api_key", kwargs, str)
+        self.use_twikit = self._ensure("use_twikit", kwargs, bool)
+
         super().__init__(*args, **kwargs)
