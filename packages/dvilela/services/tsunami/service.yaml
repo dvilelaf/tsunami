@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibh5bgshii5oqjfuhwmiivfvfqy7fw5pzvarxkpe4qrgivxtc3xym
 fingerprint_ignore_patterns: []
-agent: dvilela/tsunami:0.1.0:bafybeif3zuribezd4bl7um6ndswhyn6g7gxp6kkrambud2u46xdbpjbovi
+agent: dvilela/tsunami:0.1.0:bafybeicarwrvrquwbesfrpyg57vidahrncboyedbhugvwkbup65cwvsz6y
 number_of_agents: 1
 deployment:
   agent:

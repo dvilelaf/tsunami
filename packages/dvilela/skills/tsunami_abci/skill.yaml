@@ -8,13 +8,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaicsttkv5xapta2eqove7si2pyv3zmshkqolluxpnrh3hkulqsqu
-  behaviours.py: bafybeifuiozfpwg3siw4ba7nnu4lphfvuphneatn4svumq2ryxrpnst36y
+  behaviours.py: bafybeia247dallqrhondnbs6h2wioha4vidrey7uz3hdft656kkk3swhei
   dialogues.py: bafybeidmgjji6zw6wcvhijrxb74batj2kc2lskfuqxv76duv2j7azcqwra
   fsm_specification.yaml: bafybeidlfuabsldhezjaovupkvzrtydpcimzz6r56phsi2psrtdzougu4u
   handlers.py: bafybeid3gkfdpqk55pgvn6oneikdboz22iw6cmv2ucaieh6lfccd5eu3qi
   html/index.html: bafybeia7qpqjoredervujs5naa7rawl7d7u25y5jkoszfn45znaxfthhoi
   html/surf.html: bafybeic5g7xwh5rsztxmrftkddtklghj2qewdijxm5pbb4wonp6lcjjvei
-  models.py: bafybeicl6x7sqcwudskut7ldawnaiuntfhy5irjyxitmu3qmcxowbbthhi
+  models.py: bafybeihwivkmrddtxzg5boeokwmwlzfmc2niv5ygceic5si2iqppu222lm
   payloads.py: bafybeicejv72ralhxgwzkcprgj5akehu65jfik2cpwsnrxs7zlglpdrl6u
   prompts.py: bafybeifdpqtxpqko66pkh23dz5sca6hhdtmplbqwsynxtpra25mztsxozy
   rounds.py: bafybeidmfi6v335lgvjidptqrvuruhtk5hhq3fkcubwbln7xbn2iiok7di
