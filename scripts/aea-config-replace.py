@@ -39,10 +39,7 @@ PATH_TO_VAR = {
     "models/params/args/reset_tendermint_after": "RESET_TENDERMINT_AFTER",
     "models/params/args/reset_pause_duration": "RESET_PAUSE_DURATION",
     "models/params/args/termination_from_block": "TERMINATION_FROM_BLOCK",
-    "models/params/args/fact_checker_api_key": "FACT_CHECKER_API_KEY",
-    "models/params/args/enable_posting": "ENABLE_POSTING",
     "models/params/args/on_chain_service_id": "ON_CHAIN_SERVICE_ID",
-    "models/params/args/max_tweets_per_period": "MAX_TWEETS_PER_PERIOD",
     "models/params/args/initial_block_ethereum": "INITIAL_BLOCK_ETHEREUM",
     "models/params/args/initial_block_gnosis": "INITIAL_BLOCK_GNOSIS",
     "models/params/args/event_tracking_enabled": "EVENT_TRACKING_ENABLED",
@@ -58,8 +55,7 @@ PATH_TO_VAR = {
     "models/params/args/boardroom_api_key": "BOARDROOM_API_KEY",
     "models/params/args/subgraph_api_key": "SUBGRAPH_API_KEY",
     "models/params/args/use_twikit": "USE_TWIKIT",
-    # Tweepy connection
-    "config/twitter_credentials": "TWITTER_CREDENTIALS",
+    "models/params/args/twitter_credentials": "TWITTER_CREDENTIALS",
     # Twikit connection
     "config/twikit_username": "TWIKIT_USERNAME",
     "config/twikit_email": "TWIKIT_EMAIL",
@@ -93,6 +89,9 @@ def find_and_replace(config, path, new_value):
             section_index = i
         except KeyError:
             continue
+
+    if not section_index:
+        raise ValueError(f"Error finding {path}")
 
     # To persist the changes in the config variable,
     # access iterating the path parts but the last part
