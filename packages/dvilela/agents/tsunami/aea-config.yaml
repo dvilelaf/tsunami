@@ -18,7 +18,7 @@ connections:
 - valory/twitter:0.1.0:bafybeif6g5sulx4hpm75vt776r6d7obfawsrjom3xq2fsgzdb4d3dssoy4
 - dvilela/kv_store:0.1.0:bafybeiekugvb2kan4342hliluxl3h5och3fjwqoafdyttpcn57evvyztq4
 - dvilela/llama:0.1.0:bafybeiauzzq2pxmn4brdqgdyxrrikbc5ywjpmetlajyohute5qtnn37aqq
-- dvilela/suno:0.1.0:bafybeihy2phtjwbz27ntv55wxfk754kp5tjceujzsdbppjafljoydjflhi
+- dvilela/suno:0.1.0:bafybeibo5lwiadjusgy47wa6wenhusslkuwg7hhvb2i7vsklxyggbp652i
 - valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
 - dvilela/twikit:0.1.0:bafybeifzooder66ku3o3x5mc5ur7nzafoat34qmkjncw5n2wnmirxv3juq
 contracts:
@@ -49,8 +49,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- dvilela/tsunami_abci:0.1.0:bafybeidxtul6d5v2sx6mlvcraaoibbogbjdn3jjj3ovkmt5oqtshexenai
-- dvilela/tsunami_chained_abci:0.1.0:bafybeihit2z2327jqzh377lims33nmcvfui7rao4atx5ujmtjlouwiatmm
+- dvilela/tsunami_abci:0.1.0:bafybeigbkgvzlbuagaxwg55mtacy2jmhdcxwq5uhtxqb23e5mnfgag3mba
+- dvilela/tsunami_chained_abci:0.1.0:bafybeiezdhoynjkwajy57g7qpvkvkrmcylmacxtcbnjszabh6kk7h6mbti
 default_ledger: ethereum
 required_ledgers:
 - ethereum
