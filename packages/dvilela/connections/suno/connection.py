@@ -262,7 +262,9 @@ class SunoConnection(BaseSyncConnection):
         suno_session_id = self.configuration.config.get("suno_session_id", None)
         suno_cookie = self.configuration.config.get("suno_cookie", None)
 
-        self.api = SunoAPI(suno_session_id, suno_cookie)
+        # Temporarily removed
+        # self.api = SunoAPI(suno_session_id, suno_cookie)
+        self.api = None
 
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
 
